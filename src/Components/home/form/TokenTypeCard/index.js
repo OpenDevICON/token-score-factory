@@ -14,6 +14,8 @@ const TokenTypeCard = (formik, label) => {
             <Card.Body>
                 <div className="form-header">Token Type</div>
 
+                <hr className = "form-hr" />
+
                 <AppInputField as = "select" formik = {formik} label = "Token Type" id = "tokenType" placeholder = "Name of your token" > 
                         {/* <option value="" disabled selected = "selected">Choose a token type</option> */}
                         {

@@ -8,6 +8,7 @@ const BasicTokenInformationCard = (formik, label) => {
         <Card style={{ width: '100%', marginLeft: '10px', height: '100%' }}>
             <Card.Body>
                 <div className="form-header">Basic Token Information</div>
+                <hr className = "form-hr" />
 
                 <AppInputField formik = {formik} label = "Name" id = "name" placeholder = "Name of your token"/>
                 <AppInputField formik = {formik} label = "Symbol" id = "symbol" placeholder = "Token Symbol"/>
