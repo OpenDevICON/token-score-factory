@@ -70,4 +70,15 @@
         margin-left: 10px;
         color: #5E5E5E;
     }
+
+    .terms-of-use {
+        .form-check {
+            display: flex;
+            align-items: center;
+        }
+
+        .form-check-label {
+            margin-top: 8px;
+        }
+    }
 }

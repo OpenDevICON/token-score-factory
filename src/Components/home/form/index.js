@@ -4,6 +4,7 @@ import * as Yup from 'yup';
 import BasicTokenInformationCard from './BasicTokenInformationCard';
 import TokenTypeCard from './TokenTypeCard';
 import {Row, Col} from 'react-bootstrap';
+import FinalStepsCard from './FinalStepsCard';
 
 const InputForm = () => {
 
@@ -14,7 +15,9 @@ const InputForm = () => {
       decimals: '',
       initialSupply: '',
       totalSupply: '',
-      tokenType: 'simple_irc2'
+      tokenType: 'simple_irc2',
+      network: 'testnet',
+      termsOfUseAgreement: false
     },
     validationSchema: Yup.object({
         name: Yup.string()
@@ -46,6 +49,12 @@ const InputForm = () => {
         <Col lg="6">
             <TokenTypeCard formik = {formik}/>
         </Col>
+      </Row>
+
+      <Row>
+          <Col lg="12">
+                <FinalStepsCard formik = {formik} />         
+          </Col>
       </Row>
 
 

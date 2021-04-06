@@ -59,3 +59,15 @@ export const tokenTypeMapping = [
         removeCopyright: false
     }
 ]
+
+export const networkMapping = [
+    {
+        name: 'ICON Testnet',
+        value: 'testnet'
+    },
+
+    {
+        name: 'ICON Mainnet',
+        value: 'mainnet'
+    }
+]
