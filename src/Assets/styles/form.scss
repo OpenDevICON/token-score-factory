@@ -1,0 +1,40 @@
+.form {
+    .form-header {
+        font-family: Nunito Sans;
+        font-style: normal;
+        font-weight: 800;
+        font-size: 1rem;
+        line-height: 55px;
+        color: #49B1B8;
+    }
+
+    ::placeholder {
+        color: #9A9A9A;
+    }
+
+    label {
+        font-family: Nunito Sans;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 1rem;
+        line-height: 44px;
+
+        color: #5E5E5E;
+    }
+
+    .formKey {
+        font-family: Nunito Sans;
+        font-style: italic;
+        font-weight: 800;
+        font-size: 1rem;
+        color: #5E5E5E;
+    }
+
+    .formValue {
+        font-family: Nunito Sans;
+        font-style: italic;
+        font-weight: 800;
+        font-size: 1rem;
+        color: #383838;
+    }
+}
