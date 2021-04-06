@@ -2,10 +2,9 @@ import React from 'react';
 import {Form, Col, Row} from 'react-bootstrap';
 
 const AppInputField = ({formik, label, id, placeholder, as, children}) => {
-    console.log("AppInputField", formik)
     return (
         <>
-            <Form.Group controlId="exampleForm.ControlInput1">
+            <Form.Group>
                 <Row>
                 <Col xs = {3}>
                     <Form.Label>{label}:</Form.Label>

@@ -3,13 +3,14 @@ import { Card } from 'react-bootstrap';
 import AppInputField from '../AppInputField';
 import {tokenTypeMapping} from 'Constant';
 import NameValuePair from './NameValuePair';
+import CheckedField from './CheckedField';
+import {Row, Col} from 'react-bootstrap';
 
 const TokenTypeCard = (formik, label) => {
-    console.log("formik", formik.formik);
 
     const selectedTokenMapping = tokenTypeMapping.find(tokenType => formik.formik.values.tokenType === tokenType.value);
     return (
-        <Card style={{ width: '100%', marginRight: '20px' }}>
+        <Card style={{ width: '100%', marginRight: '20px', height: '100%' }}>
             <Card.Body>
                 <div className="form-header">Token Type</div>
 
@@ -17,7 +18,7 @@ const TokenTypeCard = (formik, label) => {
                         {/* <option value="" disabled selected = "selected">Choose a token type</option> */}
                         {
                             tokenTypeMapping.map(tokenType => {
-                                return <option value={tokenType.value}>{tokenType.name}</option>
+                                return <option key = {tokenType.value} value={tokenType.value}>{tokenType.name}</option>
                             }
                                 
                                 )
@@ -27,6 +28,38 @@ const TokenTypeCard = (formik, label) => {
                 <NameValuePair name = "Supply Type" value = {selectedTokenMapping?.supplyType ?? '-'} />
                 <NameValuePair name = "Access Type" value = {selectedTokenMapping?.accessType ?? '-'} />
                 <NameValuePair name = "Transfer Type" value = {selectedTokenMapping?.transferType ?? '-'} />
+
+                <Row style = {{marginTop: '15px'}}>
+                    <Col xs = "6">
+                        <CheckedField checked = {selectedTokenMapping?.burnable} name = {"Burnable"} />
+                    </Col>
+
+                    <Col xs = "6">
+                        <CheckedField checked = {selectedTokenMapping?.mintable} name = "Mintable"  />
+                    </Col>
+                </Row>
+
+                <Row style = {{marginTop: '15px'}}>
+                    <Col xs = "6">
+                        <CheckedField checked = {selectedTokenMapping?.irc1363} name = {"IRC1363"} />
+                    </Col>
+
+                    <Col xs = "6">
+                        <CheckedField checked = {selectedTokenMapping?.tokenRecover} name = "Token Recover"  />
+                    </Col>
+
+                </Row>
+
+                <Row style = {{marginTop: '15px'}}>
+                    <Col xs = "6">
+                        <CheckedField checked = {selectedTokenMapping?.verifiedSourceCode} name = {"Verified Source Code"} />
+                    </Col>
+
+                    <Col xs = "6">
+                        <CheckedField checked = {selectedTokenMapping?.removeCopyright} name = "Remove Copyright"  />
+                    </Col>
+
+                </Row>
 
                 <button type="submit">Submit</button>
             </Card.Body>

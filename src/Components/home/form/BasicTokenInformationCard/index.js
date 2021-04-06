@@ -3,9 +3,9 @@ import { Card } from 'react-bootstrap';
 import AppInputField from '../AppInputField'
 
 const BasicTokenInformationCard = (formik, label) => {
-    console.log("formik", formik.formik)
+
     return (
-        <Card style={{ width: '100%', marginLeft: '10px' }}>
+        <Card style={{ width: '100%', marginLeft: '10px', height: '100%' }}>
             <Card.Body>
                 <div className="form-header">Basic Token Information</div>
 

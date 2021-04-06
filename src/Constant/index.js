@@ -4,7 +4,14 @@ export const tokenTypeMapping = [
         value: 'simple_irc2',
         supplyType: 'Capped',
         accessType: 'Role Based',
-        transferType: 'Unstoppable'
+        transferType: 'Unstoppable',
+
+        burnable: true,
+        mintable: false,
+        irc1363: true,
+        tokenRecover: true,
+        verifiedSourceCode: false,
+        removeCopyright: false
     },
 
     {
@@ -12,7 +19,14 @@ export const tokenTypeMapping = [
         value: 'mintable_irc2',
         supplyType: 'Uncapped',
         accessType: 'Permission Based',
-        transferType: 'Stoppable'
+        transferType: 'Stoppable',
+
+        burnable: false,
+        mintable: true,
+        irc1363: false,
+        tokenRecover: true,
+        verifiedSourceCode: false,
+        removeCopyright: true
     },
 
     {
@@ -20,7 +34,14 @@ export const tokenTypeMapping = [
         value: 'burnable_irc2',
         supplyType: 'Capped',
         accessType: 'Role Based',
-        transferType: 'Unstoppable'
+        transferType: 'Unstoppable',
+
+        burnable: false,
+        mintable: false,
+        irc1363: true,
+        tokenRecover: false,
+        verifiedSourceCode: true,
+        removeCopyright: false
     },
 
     {
@@ -28,6 +49,13 @@ export const tokenTypeMapping = [
         value: 'pausable_irc2',
         supplyType: 'Uncapped',
         accessType: 'Permission Based',
-        transferType: 'Stoppable'       
+        transferType: 'Stoppable',
+        
+        burnable: true,
+        mintable: false,
+        irc1363: true,
+        tokenRecover: false,
+        verifiedSourceCode: true,
+        removeCopyright: false
     }
 ]

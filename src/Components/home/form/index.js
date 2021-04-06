@@ -37,9 +37,8 @@ const InputForm = () => {
 
   return (
     <form onSubmit={formik.handleSubmit} className = "form">
-      <label htmlFor="firstName">First Name</label>
 
-      <Row>
+      <Row style = {{paddingTop: '10px'}}>
         <Col lg="6">
             <BasicTokenInformationCard formik = {formik}/>
         </Col>

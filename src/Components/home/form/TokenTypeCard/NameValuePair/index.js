@@ -4,7 +4,7 @@ import { Col, Row } from 'react-bootstrap';
 const NameValuePair = ({ name, value }) => {
     return (
         <>
-            <Row>
+            <Row style = {{marginTop: '5px'}}>
                 <Col xs={3}>
                     <span className = "formKey">{name}</span>
                 </Col>
