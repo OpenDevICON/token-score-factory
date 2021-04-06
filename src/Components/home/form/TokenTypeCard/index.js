@@ -54,11 +54,11 @@ const TokenTypeCard = (formik, label) => {
 
                 <Row style = {{marginTop: '15px'}}>
                     <Col xs = "6">
-                        <CheckedField checked = {selectedTokenMapping?.verifiedSourceCode} name = {"Verified Source Code"} />
+                        <CheckedField checked = {selectedTokenMapping?.verifiedSourceCode} name = {"Verified Source Code"} info = "Your source code will be automatically verified on Icon Tracker." />
                     </Col>
 
                     <Col xs = "6">
-                        <CheckedField checked = {selectedTokenMapping?.removeCopyright} name = "Remove Copyright"  />
+                        <CheckedField checked = {selectedTokenMapping?.removeCopyright} name = "Remove Copyright" info = "Remove the link pointing to this page from your contract."  />
                     </Col>
 
                 </Row>

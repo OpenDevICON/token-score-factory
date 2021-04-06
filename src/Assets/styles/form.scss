@@ -51,4 +51,23 @@
         margin-top: 0; 
         border: 0.25px solid #73DBF2
     }
+
+    .form-input-info {
+        font-family: Nunito Sans;
+        font-style: italic;
+        font-weight: normal;
+        font-size: 0.8rem;
+        color: #9A9A9A;
+        display: flex;
+        justify-content: flex-end;
+    }  
+    
+    .form-check-field-info {
+        font-family: Nunito Sans;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 0.8rem;
+        margin-left: 10px;
+        color: #5E5E5E;
+    }
 }
