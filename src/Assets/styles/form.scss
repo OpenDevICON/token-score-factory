@@ -81,4 +81,41 @@
             margin-top: 8px;
         }
     }
+
+    .charge-header {
+        display: flex;
+        justify-content: center;
+       
+        div {
+            font-family: Nunito Sans;
+            font-style: normal;
+            font-weight: 600;
+            font-size: 36px;
+            text-align: center;
+            color: #E8E8E8;
+            background: #CF4D4D;
+            border-radius: 33px;
+            padding-left: 15px;
+            padding-right: 15px;
+       }
+    }
+
+    .charge-value {
+        font-family: Nunito Sans;
+        font-style: normal;
+        font-weight: 800;
+        font-size: 1rem;
+        color: #5E5E5E;
+    }
+
+    .submit-button-container {
+        display: flex;
+        justify-content: center;
+        
+        button {
+            width: 319px;
+            height: 52px;
+            font-size: 1.4rem;
+        }
+    }
 }
