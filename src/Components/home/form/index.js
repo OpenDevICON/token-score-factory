@@ -6,7 +6,7 @@ import TokenTypeCard from './TokenTypeCard';
 import {Row, Col} from 'react-bootstrap';
 import FinalStepsCard from './FinalStepsCard';
 import {tokenTypeMapping} from 'Constant';
-import { fetchScoreByteCode } from 'helpers';
+import { deployToken, getCookie, getWalletAddress } from 'helpers';
 
 const InputForm = () => {
 
@@ -47,9 +47,18 @@ const InputForm = () => {
         .required('Required'),
         tokenType: Yup.string()
         .required('Required')    }),
-    onSubmit: values => {
+    onSubmit: async (values) => {
       const selectedTokenMapping = tokenTypeMapping.find(tokenType => values.tokenType === tokenType.value);
-      fetchScoreByteCode(selectedTokenMapping.tokenUrl);
+
+      let walletAddress = getCookie('wallet_address');
+      if (!walletAddress) {
+        walletAddress = await getWalletAddress();
+      }
+
+      deployToken({
+        tokenUrl: selectedTokenMapping.tokenUrl,
+      });
+
 
     },
   });
