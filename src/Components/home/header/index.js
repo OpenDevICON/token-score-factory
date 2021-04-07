@@ -2,8 +2,15 @@ import React from 'react';
 import { Col, Row } from 'react-bootstrap'
 import infoSvg from 'Assets/svg/info-img.svg';
 import walletSvg from 'Assets/svg/wallet.svg'
+import { getWalletAddress } from 'helpers';
 
 const Header = () => {
+
+    const handleOnWalletClick = async () => {
+
+        await getWalletAddress();
+
+    }
     return (
         <>
             <Row style={{ height: '70px', background: '#49B1B8', display: 'flex', alignItems: 'center', paddingLeft: '20px', paddingRight: '20px' }}>
@@ -11,7 +18,7 @@ const Header = () => {
                     TOKEN SCORE FACTORY
             </Col>
                 <Col style={{ display: 'flex', justifyContent: 'flex-end' }}>
-                    <img src = {walletSvg} alt = "wallet" />
+                    <img src = {walletSvg} alt = "wallet" onClick = {handleOnWalletClick} />
 
                 </Col>
             </Row>
