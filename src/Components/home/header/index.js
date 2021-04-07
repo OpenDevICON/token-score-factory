@@ -1,0 +1,30 @@
+import React from 'react';
+import { Col, Row } from 'react-bootstrap'
+
+const Header = () => {
+    return (
+        <Row style = {{ height: '70px', background: '#49B1B8', display: 'flex', alignItems: 'center', paddingLeft: '20px', paddingRight: '20px'}}>
+            <Col className = "tsf-title">
+                TOKEN SCORE FACTORY
+            </Col>
+            <Col style = {{display: 'flex', justifyContent: 'flex-end'}}>
+                <svg width="42" height="30" viewBox="0 0 72 55" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <g filter="url(#filter0_b)">
+                        <path d="M61.8621 11.2589L11.4717 15.4829C10.3031 15.5808 9.2898 14.8624 9.20724 13.8775C9.12468 12.8926 10.0043 12.0155 11.1728 11.9175L61.9334 7.66254C63.1019 7.56459 63.9815 6.68751 63.8989 5.70259C63.6514 2.74895 60.6099 0.592733 57.1056 0.886482L8.46009 4.96418C3.78721 5.35588 0.267575 8.86542 0.597724 12.804L3.58634 48.4572C3.91649 52.3958 7.97128 55.2704 12.6442 54.8787L65.1496 50.4774C68.8535 50.167 71.6637 47.5157 71.4165 44.5666L69.0256 16.044C68.7784 13.0948 65.566 10.9484 61.8621 11.2589ZM57.8298 34.9343C55.494 35.1301 53.4659 33.6923 53.3008 31.7236C53.1358 29.7549 54.8963 27.9995 57.232 27.8037C59.5678 27.6079 61.5959 29.0457 61.7609 31.0144C61.926 32.9832 60.1655 34.7385 57.8298 34.9343Z" fill="white" />
+                    </g>
+                    <defs>
+                        <filter id="filter0_b" x="-3.42371" y="-3.1403" width="78.8553" height="62.0547" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+                            <feFlood flood-opacity="0" result="BackgroundImageFix" />
+                            <feGaussianBlur in="BackgroundImage" stdDeviation="2" />
+                            <feComposite in2="SourceAlpha" operator="in" result="effect1_backgroundBlur" />
+                            <feBlend mode="normal" in="SourceGraphic" in2="effect1_backgroundBlur" result="shape" />
+                        </filter>
+                    </defs>
+                </svg>
+
+            </Col>
+        </Row>
+    )
+}
+
+export default Header;
