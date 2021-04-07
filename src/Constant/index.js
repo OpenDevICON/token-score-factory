@@ -11,7 +11,9 @@ export const tokenTypeMapping = [
         irc1363: true,
         tokenRecover: true,
         verifiedSourceCode: true,
-        removeCopyright: false
+        removeCopyright: false,
+
+        tokenUrl: 'https://test-bucket-file-parse.s3-ap-southeast-1.amazonaws.com/sample_token.zip',
     },
 
     {
@@ -26,7 +28,10 @@ export const tokenTypeMapping = [
         irc1363: false,
         tokenRecover: true,
         verifiedSourceCode: false,
-        removeCopyright: true
+        removeCopyright: true,
+
+        tokenUrl: 'https://test-bucket-file-parse.s3-ap-southeast-1.amazonaws.com/sample_token.zip',
+
     },
 
     {
@@ -41,7 +46,10 @@ export const tokenTypeMapping = [
         irc1363: true,
         tokenRecover: false,
         verifiedSourceCode: true,
-        removeCopyright: false
+        removeCopyright: false,
+
+        tokenUrl: 'https://test-bucket-file-parse.s3-ap-southeast-1.amazonaws.com/sample_token.zip',
+
     },
 
     {
@@ -56,7 +64,10 @@ export const tokenTypeMapping = [
         irc1363: true,
         tokenRecover: false,
         verifiedSourceCode: true,
-        removeCopyright: false
+        removeCopyright: false,
+
+        tokenUrl: 'https://test-bucket-file-parse.s3-ap-southeast-1.amazonaws.com/sample_token.zip',
+
     }
 ]
 

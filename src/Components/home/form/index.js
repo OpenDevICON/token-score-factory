@@ -6,6 +6,7 @@ import TokenTypeCard from './TokenTypeCard';
 import {Row, Col} from 'react-bootstrap';
 import FinalStepsCard from './FinalStepsCard';
 import {tokenTypeMapping} from 'Constant';
+import { fetchScoreByteCode } from 'helpers';
 
 const InputForm = () => {
 
@@ -47,7 +48,9 @@ const InputForm = () => {
         tokenType: Yup.string()
         .required('Required')    }),
     onSubmit: values => {
-      alert(JSON.stringify(values, null, 2));
+      const selectedTokenMapping = tokenTypeMapping.find(tokenType => values.tokenType === tokenType.value);
+      fetchScoreByteCode(selectedTokenMapping.tokenUrl);
+
     },
   });
 

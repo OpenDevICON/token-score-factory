@@ -1,0 +1,1 @@
+export {fetchScoreByteCode} from './fetchScoreByteCode';
