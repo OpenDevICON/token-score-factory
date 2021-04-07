@@ -10,7 +10,7 @@ const TokenTypeCard = (formik, label) => {
 
     const selectedTokenMapping = tokenTypeMapping.find(tokenType => formik.formik.values.tokenType === tokenType.value);
     return (
-        <Card style={{ width: '100%', marginRight: '20px', height: '100%' }}>
+        <Card style={{ width: '100%', height: '100%' }}>
             <Card.Body>
                 <div className="form-header">Token Type</div>
 
@@ -62,8 +62,6 @@ const TokenTypeCard = (formik, label) => {
                     </Col>
 
                 </Row>
-
-                <button type="submit">Submit</button>
             </Card.Body>
         </Card>
     )

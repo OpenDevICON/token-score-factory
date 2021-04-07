@@ -5,7 +5,7 @@ import AppInputField from '../AppInputField'
 const BasicTokenInformationCard = (formik, label) => {
 
     return (
-        <Card style={{ width: '100%', marginLeft: '10px', height: '100%' }}>
+        <Card style={{ width: '100%', height: '100%' }}>
             <Card.Body>
                 <div className="form-header">Basic Token Information</div>
                 <hr className = "form-hr" />

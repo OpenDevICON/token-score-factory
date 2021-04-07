@@ -39,7 +39,7 @@ const InputForm = () => {
   });
 
   return (
-    <form onSubmit={formik.handleSubmit} className = "form">
+    <form onSubmit={formik.handleSubmit} className = "form" style = {{paddingLeft: '20px', paddingRight: '20px'}} >
 
       <Row style = {{paddingTop: '10px'}}>
         <Col lg="6">
