@@ -10,7 +10,7 @@ export const tokenTypeMapping = [
         mintable: false,
         irc1363: true,
         tokenRecover: true,
-        verifiedSourceCode: false,
+        verifiedSourceCode: true,
         removeCopyright: false
     },
 
@@ -36,7 +36,7 @@ export const tokenTypeMapping = [
         accessType: 'Role Based',
         transferType: 'Unstoppable',
 
-        burnable: false,
+        burnable: true,
         mintable: false,
         irc1363: true,
         tokenRecover: false,
