@@ -41,11 +41,11 @@ const InputForm = ({setWalletAddress}) => {
         symbol: Yup.string()
         .required('Required'),
         decimals: Yup.number()
-        .required('Required'),
+        .required('Required').positive(),
         initialSupply: Yup.number()
-        .required('Required'),
+        .required('Required').positive(),
         totalSupply: Yup.number()
-        .required('Required'),
+        .required('Required').positive(),
         tokenType: Yup.string()
         .required('Required'),
         termsOfUseAgreement: Yup.boolean().isTrue('You must agree to the terms of use in order to deploy the token.')    }),
