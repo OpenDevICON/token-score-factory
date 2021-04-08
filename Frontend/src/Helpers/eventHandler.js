@@ -28,10 +28,6 @@ export class ICONEXResponse {
 export const eventHandler = (event) => {
     const { type, payload } = event.detail;
 
-    if (payload.code) {
-        NotificationManager.error(payload.message, "Transaction Failed");
-        return;
-    }
 
     switch (type) {
         case 'RESPONSE_ADDRESS':
@@ -41,7 +37,10 @@ export const eventHandler = (event) => {
             break;
 
         case 'RESPONSE_JSON-RPC':
-            console.log(payload);
+            if (payload?.code) {
+                NotificationManager.error(payload.message, "Transaction Failed");
+                return;
+            }
 
             switch (payload.id) {
                 case 6639:
