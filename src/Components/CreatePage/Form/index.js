@@ -6,7 +6,7 @@ import TokenTypeCard from './TokenTypeCard';
 import {Row, Col} from 'react-bootstrap';
 import FinalStepsCard from './FinalStepsCard';
 import {tokenTypeMapping} from 'Constant';
-import { deployToken, getCookie, getWalletAddress } from 'helpers';
+import { deployToken, getCookie, getWalletAddress } from 'Helpers';
 
 const InputForm = () => {
 

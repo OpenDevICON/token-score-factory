@@ -2,7 +2,7 @@ import React from 'react';
 import { Col, Row } from 'react-bootstrap'
 import infoSvg from 'Assets/svg/info-img.svg';
 import walletSvg from 'Assets/svg/wallet.svg'
-import { getWalletAddress } from 'helpers';
+import { getWalletAddress } from 'Helpers';
 
 const Header = () => {
 
