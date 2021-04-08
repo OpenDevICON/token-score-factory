@@ -40,7 +40,7 @@ const Header = () => {
                         </svg>
 
                         <span className = "info-desc">
-                            Easily deploy Smart Contract for a Standard, Capped, Mintable, Burnable, Payable ERC20 Token. No login. No setup. No coding required.
+                            Easily deploy Smart Contract for a Standard, Capped, Mintable, Burnable, Payable IRC Token. No login. No setup. No coding required.
                         </span>
                     </div>
                 </Col>
