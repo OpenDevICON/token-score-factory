@@ -1,4 +1,5 @@
 import {deployContractService} from './deployContractService';
+import { getTxResultService } from './getTxResultService';
 const { fetchContractContent } = require("./fetchContractContent")
 
 export const deployToken = async ({
@@ -18,6 +19,8 @@ export const deployToken = async ({
 
     const txHash = await deployContractService(contractContent, paramsObj, formValues.network);
     console.log("txHash", txHash);
+
+    const txResult = await getTxResultService(txHash, 1);
 
 
 }
