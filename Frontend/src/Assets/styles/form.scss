@@ -120,4 +120,14 @@
             font-size: 1.4rem;
         }
     }
+
+    .chargeRow {
+        margin-top: 30px;
+
+        >div {
+            justify-content: center;
+            display: flex;
+            align-items: center;
+        }
+    }
 }

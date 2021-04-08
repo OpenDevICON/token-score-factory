@@ -14,6 +14,7 @@ export const tokenTypeMapping = [
         removeCopyright: false,
 
         tokenUrl: 'https://test-bucket-file-parse.s3-ap-southeast-1.amazonaws.com/sample_token_update.zip',
+        estimatedTransactionFee: 10.62
     },
 
     {
@@ -31,6 +32,7 @@ export const tokenTypeMapping = [
         removeCopyright: true,
 
         tokenUrl: 'https://test-bucket-file-parse.s3-ap-southeast-1.amazonaws.com/sample_token_update.zip',
+        estimatedTransactionFee: 10.62
 
     },
 
@@ -49,6 +51,7 @@ export const tokenTypeMapping = [
         removeCopyright: false,
 
         tokenUrl: 'https://test-bucket-file-parse.s3-ap-southeast-1.amazonaws.com/sample_token_update.zip',
+        estimatedTransactionFee: 10.62
 
     },
 
@@ -67,6 +70,7 @@ export const tokenTypeMapping = [
         removeCopyright: false,
 
         tokenUrl: 'https://test-bucket-file-parse.s3-ap-southeast-1.amazonaws.com/sample_token_update.zip',
+        estimatedTransactionFee: 10.62
 
     }
 ]

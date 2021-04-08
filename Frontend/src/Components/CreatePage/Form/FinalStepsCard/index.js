@@ -45,21 +45,13 @@ const FinalStepsCard = (formik) => {
                         </div>
                     </div>
 
-                    <Row style = {{marginTop: '15px'}}>
-                        <Col xs = "6">
-                            <Form.Label>Commission Fee:</Form.Label>
-                        </Col>
-                        <Col xs = "6" style = {{display: 'flex', alignItems: 'center'}}>
-                            <span className = "charge-value">1 ICX</span>
-                        </Col>
-                    </Row>
 
-                    <Row>
+                    <Row className = "chargeRow">
                         <Col xs = "6">
-                            <Form.Label>Transaction Fee:</Form.Label>
+                            <Form.Label>Estimated Transaction Fee:</Form.Label>
                         </Col>
                         <Col xs = "6" style = {{display: 'flex', alignItems: 'center'}}>
-                            <span className = "charge-value">10.62 ICX</span>
+                            <span className = "charge-value">{formik.formik.values.estimatedTransactionFee} ICX</span>
                         </Col>
                     </Row>
 

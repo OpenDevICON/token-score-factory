@@ -30,7 +30,9 @@ const InputForm = ({setWalletAddress}) => {
       irc1363: false,
       tokenRecover: false,
       verifiedSourceCode: false,
-      removeCopyright: false
+      removeCopyright: false,
+
+      estimatedTransactionFee: 0
 
     },
     validationSchema: Yup.object({
@@ -77,6 +79,9 @@ const InputForm = ({setWalletAddress}) => {
       formik.setFieldValue("tokenRecover", selectedTokenMapping.tokenRecover);
       formik.setFieldValue("verifiedSourceCode", selectedTokenMapping.verifiedSourceCode);
       formik.setFieldValue("removeCopyright", selectedTokenMapping.removeCopyright);
+
+      formik.setFieldValue("estimatedTransactionFee", selectedTokenMapping.estimatedTransactionFee);
+
      // eslint-disable-next-line 
   }, [
     formik.values.tokenType])
