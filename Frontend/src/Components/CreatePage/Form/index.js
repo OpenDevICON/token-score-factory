@@ -46,7 +46,8 @@ const InputForm = ({setWalletAddress}) => {
         totalSupply: Yup.number()
         .required('Required'),
         tokenType: Yup.string()
-        .required('Required')    }),
+        .required('Required'),
+        termsOfUseAgreement: Yup.boolean().isTrue('You must agree to the terms of use in order to deploy the token.')    }),
     onSubmit: async (values) => {
       const selectedTokenMapping = tokenTypeMapping.find(tokenType => values.tokenType === tokenType.value);
 
