@@ -59,7 +59,7 @@ const FinalStepsCard = (formik) => {
                             <Form.Label>Transaction Fee:</Form.Label>
                         </Col>
                         <Col xs = "6" style = {{display: 'flex', alignItems: 'center'}}>
-                            <span className = "charge-value">0.00124 ICX</span>
+                            <span className = "charge-value">10.62 ICX</span>
                         </Col>
                     </Row>
 
