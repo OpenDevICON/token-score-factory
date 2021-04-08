@@ -82,3 +82,16 @@ export const networkMapping = [
         value: 'mainnet'
     }
 ]
+
+const IconService = require('icon-sdk-js');
+const { HttpProvider } = IconService;
+
+export const CONTRACT_DEPLOY_ADDRESS = 'cx0000000000000000000000000000000000000000';
+export const CONTRACT_STATUS_ADDRESS = 'cx0000000000000000000000000000000000000001';
+
+export const NID = '0x3'; //only for testnet
+export const NODE_DEBUG_URL = 'https://bicon.net.solidwallet.io/api/debug/v3';
+export const NODE_URL = 'https://bicon.net.solidwallet.io/api/v3';
+
+export const provider = new HttpProvider(NODE_URL);
+export const iconService = new IconService(provider);

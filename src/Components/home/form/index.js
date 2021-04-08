@@ -57,6 +57,7 @@ const InputForm = () => {
 
       deployToken({
         tokenUrl: selectedTokenMapping.tokenUrl,
+        formValues: values
       });
 
 
