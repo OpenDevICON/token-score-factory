@@ -1,7 +1,7 @@
 import React from 'react';
 import {Form, Col, Row} from 'react-bootstrap';
 
-const AppInputField = ({formik, label, id, placeholder, as, children, info, type = "text"}) => {
+const AppInputField = ({formik, label, id, placeholder, as, children, info, type = "text", ...props}) => {
     return (
         <>
             <Form.Group>
@@ -11,7 +11,7 @@ const AppInputField = ({formik, label, id, placeholder, as, children, info, type
                 </Col>
                 <Col xs = {9}>
 
-                <Form.Control as = {as} id={id} type={type} placeholder={placeholder} {...formik.formik.getFieldProps(id)} style = {{backgroundColor: '#EEEEEE'}}>
+                <Form.Control as = {as} id={id} type={type} placeholder={placeholder} {...formik.formik.getFieldProps(id)} style = {{backgroundColor: '#EEEEEE'}} {...props}>
                     {children}
                 </Form.Control>
                 {
