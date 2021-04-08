@@ -74,6 +74,7 @@ export async function deployContractService(contractContent, params = {}, select
         const txnPayload = {
             jsonrpc: '2.0',
             method: 'icx_sendTransaction',
+            id: 6639,
             params: IconConverter.toRawTransaction(txnData),
         };
         console.log(txnPayload);
