@@ -1,3 +1,4 @@
+import { NotificationManager } from "react-notifications";
 import { setCookie } from "./cookie";
 
 
@@ -27,8 +28,10 @@ export class ICONEXResponse {
 export const eventHandler = (event) => {
     const { type, payload } = event.detail;
 
-    console.log("EventDetail", event.detail)
-
+    if (payload.code) {
+        NotificationManager.error(payload.message, "Transaction Failed");
+        return;
+    }
 
     switch (type) {
         case 'RESPONSE_ADDRESS':
@@ -42,7 +45,7 @@ export const eventHandler = (event) => {
 
             switch (payload.id) {
                 case 6639:
-                    console.log("SEt txhash", payload.result)
+                    NotificationManager.info("Token Deploy Request Sent.");
                     ICONEXResponse.setTxnHash(payload.result);
                     break;
                 default:

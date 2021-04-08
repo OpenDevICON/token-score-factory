@@ -1,6 +1,7 @@
 import './App.css';
 import CreatePage from './Pages/CreatePage';
 import {Container} from 'react-bootstrap';
+import {NotificationContainer} from 'react-notifications';
 
 function App() {
   return (
@@ -9,6 +10,8 @@ function App() {
           <CreatePage/>
 
           </Container>
+
+          <NotificationContainer />
     </div>
   );
 }

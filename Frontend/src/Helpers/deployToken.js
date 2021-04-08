@@ -1,4 +1,5 @@
-import {deployContractService} from './deployContractService';
+import { NotificationManager } from 'react-notifications';
+import { deployContractService } from './deployContractService';
 import { getTxResultService } from './getTxResultService';
 const { fetchContractContent } = require("./fetchContractContent")
 
@@ -21,6 +22,9 @@ export const deployToken = async ({
     console.log("txHash", txHash);
 
     const txResult = await getTxResultService(txHash, 1);
-
-
+    if (txResult.status === 0) {
+        NotificationManager.error(txResult.failure.message, "Token Deploy Failed")
+    } else if (txResult.status === 1) {
+        NotificationManager.success("Token Deployed Successfully")
+    }
 }
