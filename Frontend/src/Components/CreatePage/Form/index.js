@@ -8,7 +8,7 @@ import FinalStepsCard from './FinalStepsCard';
 import {tokenTypeMapping} from 'Constant';
 import { deployToken, getCookie, getWalletAddress } from 'Helpers';
 
-const InputForm = () => {
+const InputForm = ({setWalletAddress}) => {
 
   const formik = useFormik({
     initialValues: {
@@ -53,6 +53,7 @@ const InputForm = () => {
       let walletAddress = getCookie('wallet_address');
       if (!walletAddress) {
         walletAddress = await getWalletAddress();
+        setWalletAddress(walletAddress);
       }
 
       deployToken({

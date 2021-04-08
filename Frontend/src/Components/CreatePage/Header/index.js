@@ -1,23 +1,34 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Col, Row } from 'react-bootstrap'
 import infoSvg from 'Assets/svg/info-img.svg';
 import walletSvg from 'Assets/svg/wallet.svg'
-import { getWalletAddress } from 'Helpers';
+import { getWalletAddress, getCookie } from 'Helpers';
 
-const Header = () => {
+const Header = ({walletAddress, setWalletAddress}) => {
+
+    useEffect(() => {
+        if(getCookie('wallet_address')) {
+            setWalletAddress(getCookie('wallet_address'))
+        }
+    }, [])
 
     const handleOnWalletClick = async () => {
 
-        await getWalletAddress();
+        let walletAddress = await getWalletAddress();
+        setWalletAddress(walletAddress);
 
     }
     return (
         <>
-            <Row style={{ height: '70px', background: '#49B1B8', display: 'flex', alignItems: 'center', paddingLeft: '20px', paddingRight: '20px' }}>
+            <Row style={{ minHeight: '70px', background: '#49B1B8', display: 'flex', alignItems: 'center', paddingLeft: '20px', paddingRight: '20px' }}>
                 <Col className="tsf-title">
                     TOKEN SCORE FACTORY
             </Col>
-                <Col style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                <Col style={{ display: 'flex', justifyContent: 'flex-end', alignItems: "center" }}>
+                    {
+                        walletAddress && 
+                        <span className = "walletAddress">{walletAddress}</span>
+                    }
                     <img src = {walletSvg} alt = "wallet" onClick = {handleOnWalletClick} />
 
                 </Col>
