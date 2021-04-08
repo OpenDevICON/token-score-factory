@@ -1,11 +1,12 @@
 import { getCookie } from "./cookie";
 import IconService from 'icon-sdk-js';
 import BigNumber from 'bignumber.js';
+import {networkMapping} from 'Constant';
 
-import { CONTRACT_DEPLOY_ADDRESS, NID, NODE_DEBUG_URL} from 'Constant';
+import { CONTRACT_DEPLOY_ADDRESS, NODE_DEBUG_URL} from 'Constant';
 
 
-async function estimateStepForDeployment (from, content) {
+async function estimateStepForDeployment (from, content, selectedNetworkData) {
     const timestampInDecimal = Date.now() * 1000;
     const timestamp = '0x' + timestampInDecimal.toString(16); //to hex string
     const txObj = {
@@ -17,7 +18,7 @@ async function estimateStepForDeployment (from, content) {
           from,
           to: CONTRACT_DEPLOY_ADDRESS, 
           timestamp,
-          nid: NID,
+          nid: selectedNetworkData.NID,
           nonce: "0x1",
           dataType: "deploy",
           data: {
@@ -47,17 +48,18 @@ async function estimateStepForDeployment (from, content) {
     }
   }
 
-export async function deployContractService(contractContent, params = {}) {
+export async function deployContractService(contractContent, params = {}, selectedNetwork) {
     try {
+      const selectedNetworkData = networkMapping.find(network => network.value === selectedNetwork)
 
-        const { IconConverter, IconBuilder, IconAmount } = IconService;
+        const { IconConverter, IconBuilder } = IconService;
         const deployBuilder = new IconBuilder.DeployTransactionBuilder();
 
-        const stepLimitInHex = await estimateStepForDeployment(getCookie('wallet_address'), contractContent);
+        const stepLimitInHex = await estimateStepForDeployment(getCookie('wallet_address'), contractContent, selectedNetworkData);
         const stepLimit = new BigNumber(stepLimitInHex).toNumber();
 
         const txnData = deployBuilder
-            .nid(NID)
+            .nid(selectedNetworkData.NID)
             .from(getCookie('wallet_address'))
             .to(CONTRACT_DEPLOY_ADDRESS)
             .stepLimit(new BigNumber(stepLimit).plus(1000000))
