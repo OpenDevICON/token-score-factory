@@ -5,10 +5,10 @@ const NameValuePair = ({ name, value }) => {
     return (
         <>
             <Row style = {{marginTop: '5px'}}>
-                <Col xs={3}>
-                    <span className = "formKey">{name}</span>
+                <Col md={3}>
+                    <span className = "formKey">{name}:</span>
                 </Col>
-                <Col xs={9}>
+                <Col md={9}>
 
                     <span className = "formValue">{value}</span>
 

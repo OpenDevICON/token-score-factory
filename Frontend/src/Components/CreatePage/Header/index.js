@@ -27,7 +27,9 @@ const Header = ({walletAddress, setWalletAddress}) => {
                 <Col style={{ display: 'flex', justifyContent: 'flex-end', alignItems: "center" }}>
                     {
                         walletAddress && 
-                        <span className = "walletAddress">{walletAddress}</span>
+                        <span className = "walletAddress">
+                            {`${walletAddress?.slice(0, 4)}...${walletAddress?.slice(walletAddress.length - 3)}`}
+                        </span>
                     }
                     <img src = {walletSvg} alt = "wallet" className = "wallet-image" onClick = {handleOnWalletClick} />
 

@@ -6,10 +6,10 @@ const AppInputField = ({formik, label, id, placeholder, as, children, info, type
         <>
             <Form.Group>
                 <Row>
-                <Col xs = {3}>
+                <Col md = {3}>
                     <Form.Label>{label}:</Form.Label>
                 </Col>
-                <Col xs = {9}>
+                <Col md = {9}>
 
                 <Form.Control as = {as} id={id} type={type} placeholder={placeholder} {...formik.formik.getFieldProps(id)} style = {{backgroundColor: '#EEEEEE'}} {...props}>
                     {children}

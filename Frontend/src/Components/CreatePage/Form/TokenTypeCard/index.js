@@ -31,32 +31,32 @@ const TokenTypeCard = (formik, label) => {
                 <NameValuePair name = "Transfer Type" value = {formik.formik.values.transferType} />
 
                 <Row style = {{marginTop: '15px'}}>
-                    <Col xs = "6">
+                    <Col md = "6">
                         <CheckedField checked = {formik.formik.values.burnable} name = {"Burnable"} />
                     </Col>
 
-                    <Col xs = "6">
+                    <Col md = "6">
                         <CheckedField checked = {formik.formik.values.mintable} name = "Mintable"  />
                     </Col>
                 </Row>
 
                 <Row style = {{marginTop: '15px'}}>
-                    <Col xs = "6">
+                    <Col md = "6">
                         <CheckedField checked = {formik.formik.values.irc1363} name = {"IRC1363"} />
                     </Col>
 
-                    <Col xs = "6">
+                    <Col md = "6">
                         <CheckedField checked = {formik.formik.values.tokenRecover} name = "Token Recover"  />
                     </Col>
 
                 </Row>
 
                 <Row style = {{marginTop: '15px'}}>
-                    <Col xs = "6">
+                    <Col md = "6">
                         <CheckedField checked = {formik.formik.values.verifiedSourceCode} name = {"Verified Source Code"} info = "Your source code will be automatically verified on Icon Tracker." />
                     </Col>
 
-                    <Col xs = "6">
+                    <Col md = "6">
                         <CheckedField checked = {formik.formik.values.removeCopyright} name = "Remove Copyright" info = "Remove the link pointing to this page from your contract."  />
                     </Col>
 
