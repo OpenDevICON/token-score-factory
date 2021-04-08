@@ -35,7 +35,6 @@ const InputForm = ({setWalletAddress}) => {
     },
     validationSchema: Yup.object({
         name: Yup.string()
-        .max(15, 'Must be 15 characters or less')
         .required('Required'),
         symbol: Yup.string()
         .required('Required'),
@@ -65,7 +64,6 @@ const InputForm = ({setWalletAddress}) => {
 
     },
   });
-
   useEffect(() => {
       const selectedTokenMapping = tokenTypeMapping.find(tokenType => formik.values.tokenType === tokenType.value);
 
@@ -79,7 +77,9 @@ const InputForm = ({setWalletAddress}) => {
       formik.setFieldValue("tokenRecover", selectedTokenMapping.tokenRecover);
       formik.setFieldValue("verifiedSourceCode", selectedTokenMapping.verifiedSourceCode);
       formik.setFieldValue("removeCopyright", selectedTokenMapping.removeCopyright);
-  }, [formik.values.tokenType])
+     // eslint-disable-next-line 
+  }, [
+    formik.values.tokenType])
 
   return (
     <form onSubmit={formik.handleSubmit} className = "form" style = {{paddingLeft: '20px', paddingRight: '20px'}} >
