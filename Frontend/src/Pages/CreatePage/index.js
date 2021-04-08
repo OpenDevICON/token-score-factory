@@ -17,7 +17,7 @@ const CreatePage = () => {
     return( 
         <>
             <Header walletAddress = {walletAddress} setWalletAddress = {setWalletAddress} />
-            <InputForm setWalletAddress = {walletAddress} />
+            <InputForm setWalletAddress = {setWalletAddress} />
         </>
     )
 }

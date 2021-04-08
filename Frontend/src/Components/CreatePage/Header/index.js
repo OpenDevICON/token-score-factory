@@ -10,7 +10,7 @@ const Header = ({walletAddress, setWalletAddress}) => {
         if(getCookie('wallet_address')) {
             setWalletAddress(getCookie('wallet_address'))
         }
-    }, [])
+    }, [setWalletAddress])
 
     const handleOnWalletClick = async () => {
 
@@ -29,7 +29,7 @@ const Header = ({walletAddress, setWalletAddress}) => {
                         walletAddress && 
                         <span className = "walletAddress">{walletAddress}</span>
                     }
-                    <img src = {walletSvg} alt = "wallet" onClick = {handleOnWalletClick} />
+                    <img src = {walletSvg} alt = "wallet" className = "wallet-image" onClick = {handleOnWalletClick} />
 
                 </Col>
             </Row>
