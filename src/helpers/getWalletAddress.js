@@ -13,6 +13,8 @@ export const customRequestAddress = new CustomEvent('ICONEX_RELAY_REQUEST', {
 const eventHandler = (event) => {
     const { type, payload } = event.detail;
 
+    console.log("EventDetail", event.detail)
+
 
     switch (type) {
         case 'RESPONSE_ADDRESS':
