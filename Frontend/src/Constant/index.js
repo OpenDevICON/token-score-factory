@@ -13,7 +13,7 @@ export const tokenTypeMapping = [
         verifiedSourceCode: true,
         removeCopyright: false,
 
-        tokenUrl: 'https://test-bucket-file-parse.s3-ap-southeast-1.amazonaws.com/sample_token.zip',
+        tokenUrl: 'https://test-bucket-file-parse.s3-ap-southeast-1.amazonaws.com/sample_token_update.zip',
     },
 
     {
@@ -30,7 +30,7 @@ export const tokenTypeMapping = [
         verifiedSourceCode: false,
         removeCopyright: true,
 
-        tokenUrl: 'https://test-bucket-file-parse.s3-ap-southeast-1.amazonaws.com/sample_token.zip',
+        tokenUrl: 'https://test-bucket-file-parse.s3-ap-southeast-1.amazonaws.com/sample_token_update.zip',
 
     },
 
@@ -48,7 +48,7 @@ export const tokenTypeMapping = [
         verifiedSourceCode: true,
         removeCopyright: false,
 
-        tokenUrl: 'https://test-bucket-file-parse.s3-ap-southeast-1.amazonaws.com/sample_token.zip',
+        tokenUrl: 'https://test-bucket-file-parse.s3-ap-southeast-1.amazonaws.com/sample_token_update.zip',
 
     },
 
@@ -66,14 +66,14 @@ export const tokenTypeMapping = [
         verifiedSourceCode: true,
         removeCopyright: false,
 
-        tokenUrl: 'https://test-bucket-file-parse.s3-ap-southeast-1.amazonaws.com/sample_token.zip',
+        tokenUrl: 'https://test-bucket-file-parse.s3-ap-southeast-1.amazonaws.com/sample_token_update.zip',
 
     }
 ]
 
 export const networkMapping = [
     {
-        name: 'ICON Testnet',
+        name: 'ICON Testnet (Yeouido)',
         value: 'testnet',
         NID: `0x3`
     },
