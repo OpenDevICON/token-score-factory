@@ -2,7 +2,7 @@ import React from 'react';
 import { Col, Row } from 'react-bootstrap';
 import iconSvg from 'Assets/svg/icon.svg';
 import rocketSvg from 'Assets/svg/rocket.svg';
-import FAQ from './FAQ';
+import FAQList from './FAQList';
 
 const HomePageContent = () => {
     return (
@@ -37,7 +37,7 @@ const HomePageContent = () => {
                 </Col>
             </Row>
 
-            <FAQ />
+            <FAQList />
 
         </>
     )

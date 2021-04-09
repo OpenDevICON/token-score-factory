@@ -9,6 +9,7 @@ import './Assets/styles/all.scss';
 import './Assets/styles/header.scss'
 import './Assets/styles/footer.scss';
 import './Assets/styles/homepagecontent.scss';
+import './Assets/styles/faq.scss';
 import 'react-notifications/lib/notifications.css';
 
 ReactDOM.render(

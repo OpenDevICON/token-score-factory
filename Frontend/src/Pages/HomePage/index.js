@@ -4,10 +4,10 @@ import React from 'react';
 
 const HomePage = () => {
     return(
-        <>
+        <div style = {{background: 'white'}}>
             <HomePageHeader />
             <HomePageContent />
-        </>
+        </div>
     )
 }
 
