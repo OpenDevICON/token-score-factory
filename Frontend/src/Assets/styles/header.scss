@@ -40,6 +40,8 @@
             font-size: 1.5rem;
             color: #BBD8DC;
             margin-left: 10px;
+            display: flex;
+            flex-direction: column;
         }
 
         @media screen and (max-width: 992px) {
