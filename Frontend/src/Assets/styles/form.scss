@@ -1,6 +1,9 @@
 .form {
+    @media screen and (min-width: 992px) {
+        margin-top: -87px;
+        margin-bottom: -50px;
+    }
 
-    margin-top: -87px;
     .form-header {
         font-family: Nunito Sans;
         font-style: normal;

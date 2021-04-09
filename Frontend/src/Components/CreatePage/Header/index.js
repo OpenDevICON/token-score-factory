@@ -37,7 +37,7 @@ const Header = ({walletAddress, setWalletAddress}) => {
             </Row>
 
             <Row className="info-header">
-                <Col lg="4">
+                <Col lg="4" className = "tsf-info-image-container">
                     <img src = {infoSvg} alt = "tsf info" />
 
                 </Col>
@@ -47,7 +47,7 @@ const Header = ({walletAddress, setWalletAddress}) => {
                         CREATE YOUR OWN IRC TOKENS WITH EASE
                     </div>
 
-                    <div style = {{display: 'flex', alignItems: 'center', marginTop: '80px'}}>
+                    <div className = "info-desc-container">
                         <svg width="23" height="99" viewBox="0 0 23 99" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <line x1="11.5" y1="-5.02681e-07" x2="11.5" y2="99" stroke="#B6D3D3" stroke-width="23" />
                         </svg>
