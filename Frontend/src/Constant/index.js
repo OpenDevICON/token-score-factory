@@ -78,25 +78,33 @@ export const tokenTypeMapping = [
 export const networkMapping = [
     {
         name: 'ICON Testnet (Yeouido)',
-        value: 'testnet',
-        NID: `0x3`
+        value: 'yeouido',
+        NID: `0x3`,
+        NODE_URL: 'https://bicon.net.solidwallet.io/api/v3',
+        NODE_DEBUG_URL: 'https://bicon.net.solidwallet.io/api/debug/v3',
+        CONTRACT_DEPLOY_ADDRESS: 'cx0000000000000000000000000000000000000000',
+        CONTRACT_STATUS_ADDRESS: 'cx0000000000000000000000000000000000000001',
+    },
+
+    {
+        name: 'ICON Testnet (Pagoda)',
+        value: 'pagoda',
+        NID: `0x50`,
+        NODE_URL: 'https://zicon.net.solidwallet.io/api/v3',
+        NODE_DEBUG_URL: 'https://zicon.net.solidwallet.io/api/debug/v3',
+        CONTRACT_DEPLOY_ADDRESS: 'cx0000000000000000000000000000000000000000',
+        CONTRACT_STATUS_ADDRESS: 'cx0000000000000000000000000000000000000001',
     },
 
     {
         name: 'ICON Mainnet',
         value: 'mainnet',
-        NID: `0x1`
+        NID: `0x1`,
+        NODE_URL: 'https://ctz.solidwallet.io/api/v3',
+        NODE_DEBUG_URL: 'https://ctz.solidwallet.io/api/debug/v3',
+        CONTRACT_DEPLOY_ADDRESS: 'cx0000000000000000000000000000000000000000',
+        CONTRACT_STATUS_ADDRESS: 'cx0000000000000000000000000000000000000001',
+
     }
 ]
 
-const IconService = require('icon-sdk-js');
-const { HttpProvider } = IconService;
-
-export const CONTRACT_DEPLOY_ADDRESS = 'cx0000000000000000000000000000000000000000';
-export const CONTRACT_STATUS_ADDRESS = 'cx0000000000000000000000000000000000000001';
-
-export const NODE_DEBUG_URL = 'https://bicon.net.solidwallet.io/api/debug/v3';
-export const NODE_URL = 'https://bicon.net.solidwallet.io/api/v3';
-
-export const provider = new HttpProvider(NODE_URL);
-export const iconService = new IconService(provider);

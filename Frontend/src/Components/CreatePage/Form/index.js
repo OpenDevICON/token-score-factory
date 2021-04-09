@@ -18,7 +18,7 @@ const InputForm = ({setWalletAddress}) => {
       initialSupply: '',
       totalSupply: '',
       tokenType: 'simple_irc2',
-      network: 'testnet',
+      network: 'yeouido',
       termsOfUseAgreement: false,
 
       supplyType: '-',

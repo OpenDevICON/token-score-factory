@@ -1,3 +1,4 @@
+import { networkMapping } from 'Constant';
 import { NotificationManager } from 'react-notifications';
 import { deployContractService } from './deployContractService';
 import { getTxResultService } from './getTxResultService';
@@ -18,10 +19,12 @@ export const deployToken = async ({
     console.log("Contract Content", contractContent);
     console.log("Params Object", paramsObj);
 
-    const txHash = await deployContractService(contractContent, paramsObj, formValues.network);
+    const selectedNetworkData = networkMapping.find(network => network.value === formValues.network);
+
+    const txHash = await deployContractService(contractContent, paramsObj, selectedNetworkData);
     console.log("txHash", txHash);
 
-    const txResult = await getTxResultService(txHash, 1);
+    const txResult = await getTxResultService(txHash, 1, selectedNetworkData);
     if (txResult.status === 0) {
         NotificationManager.error(txResult.failure.message, "Token Deploy Failed")
     } else if (txResult.status === 1) {

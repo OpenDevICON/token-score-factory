@@ -1,9 +1,6 @@
 import { getCookie } from "./cookie";
 import IconService from 'icon-sdk-js';
 import BigNumber from 'bignumber.js';
-import {networkMapping} from 'Constant';
-
-import { CONTRACT_DEPLOY_ADDRESS, NODE_DEBUG_URL} from 'Constant';
 import { ICONEXResponse } from "./eventHandler";
 
 
@@ -17,7 +14,7 @@ async function estimateStepForDeployment(from, content, selectedNetworkData) {
     params: {
       version: '0x3',
       from,
-      to: CONTRACT_DEPLOY_ADDRESS,
+      to: selectedNetworkData.CONTRACT_DEPLOY_ADDRESS,
       timestamp,
       nid: selectedNetworkData.NID,
       nonce: "0x1",
@@ -30,7 +27,7 @@ async function estimateStepForDeployment(from, content, selectedNetworkData) {
   }
 
   try {
-    const responsePromise = await fetch(NODE_DEBUG_URL,
+    const responsePromise = await fetch(selectedNetworkData.NODE_DEBUG_URL,
       {
         method: 'POST',
         body: JSON.stringify(txObj),
@@ -49,13 +46,11 @@ async function estimateStepForDeployment(from, content, selectedNetworkData) {
   }
 }
 
-export async function deployContractService(contractContent, params = {}, selectedNetwork) {
+export async function deployContractService(contractContent, params = {}, selectedNetworkData) {
 
   return new Promise(async (resolve, reject) => {
 
     try {
-
-      const selectedNetworkData = networkMapping.find(network => network.value === selectedNetwork)
 
       const { IconConverter, IconBuilder } = IconService;
       const deployBuilder = new IconBuilder.DeployTransactionBuilder();
@@ -66,7 +61,7 @@ export async function deployContractService(contractContent, params = {}, select
       const txnData = deployBuilder
         .nid(selectedNetworkData.NID)
         .from(getCookie('wallet_address'))
-        .to(CONTRACT_DEPLOY_ADDRESS)
+        .to(selectedNetworkData.CONTRACT_DEPLOY_ADDRESS)
         .stepLimit(new BigNumber(stepLimit).plus(1000000))
         .version(IconConverter.toBigNumber(3))
         .timestamp(Date.now() * 1000)
