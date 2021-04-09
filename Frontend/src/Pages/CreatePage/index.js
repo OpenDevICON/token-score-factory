@@ -1,22 +1,12 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import InputForm from '../../Components/CreatePage/Form';
-import Header from '../../Components/CreatePage/Header';
-import { getCookie } from 'Helpers';
+import CreatePageHeader from '../../Components/CreatePage/CreatePageHeader';
 
-const CreatePage = () => {
-
-    let [walletAddress, setWalletAddress] = React.useState(null);
-
-    useEffect(() => {
-        console.log("Cookie wallet", getCookie('wallet_address'))
-        if(getCookie('wallet_address')) {
-            setWalletAddress(getCookie('wallet_address'))
-        }
-    }, [])
+const CreatePage = ({walletAddress, setWalletAddress}) => {
 
     return( 
         <>
-            <Header walletAddress = {walletAddress} setWalletAddress = {setWalletAddress} />
+            <CreatePageHeader walletAddress = {walletAddress} setWalletAddress = {setWalletAddress} />
             <InputForm setWalletAddress = {setWalletAddress} />
         </>
     )
