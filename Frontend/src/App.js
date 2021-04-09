@@ -5,21 +5,36 @@ import { NotificationContainer } from 'react-notifications';
 import Footer from 'Components/Footer';
 import Header from 'Components/Header';
 import { useState } from 'react';
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+} from "react-router-dom";
+import HomePage from 'Pages/HomePage';
 
 function App() {
 
   const [walletAddress, setWalletAddress] = useState(null);
   return (
     <div style={{ backgroundColor: '#EDEDED', width: '100%', minHeight: '100%' }} >
-      <Container fluid>
-        <Header walletAddress={walletAddress} setWalletAddress={setWalletAddress} />
-        <CreatePage walletAddress={walletAddress} setWalletAddress={setWalletAddress} />
+      <Router>
+        <Container fluid>
+          <Header walletAddress={walletAddress} setWalletAddress={setWalletAddress} />
+          <Switch>
+            <Route path="/create">
+              <CreatePage walletAddress={walletAddress} setWalletAddress={setWalletAddress} />
+            </Route>
+            <Route path="/">
+              <HomePage />
+            </Route>
+          </Switch>
 
-      </Container>
-      <Footer />
+        </Container>
+        <Footer />
 
 
-      <NotificationContainer />
+        <NotificationContainer />
+      </Router>
     </div>
   );
 }
