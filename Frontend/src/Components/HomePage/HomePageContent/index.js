@@ -2,6 +2,7 @@ import React from 'react';
 import { Col, Row } from 'react-bootstrap';
 import iconSvg from 'Assets/svg/icon.svg';
 import rocketSvg from 'Assets/svg/rocket.svg';
+import FAQ from './FAQ';
 
 const HomePageContent = () => {
     return (
@@ -12,7 +13,7 @@ const HomePageContent = () => {
 
             <Row>
                 <Col className="homepage-info">
-                    <img src={iconSvg} />
+                    <img src={iconSvg} alt="" />
                     <span className="homepage-info-title">Install ICONex Wallet</span>
                     <span className="homepage-info-content">You need to have ICONex wallet with some ICX to pay for transaction fees.</span>
                 </Col>
@@ -29,12 +30,14 @@ const HomePageContent = () => {
                 </Col>
 
                 <Col className="homepage-info">
-                    <img src={rocketSvg} />
+                    <img src={rocketSvg} alt="" />
                     <span className="homepage-info-title">Deploy Token</span>
                     <span className="homepage-info-content">Deploy your token to your preferred ICON network.</span>
 
                 </Col>
             </Row>
+
+            <FAQ />
 
         </>
     )
