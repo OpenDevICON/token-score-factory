@@ -3,7 +3,10 @@ import React from 'react';
 import { Row } from 'react-bootstrap';
 import FAQ from './FAQ';
 
+
 const FAQList = () => {
+    
+    let [showAnswerIndex, setShowAnswerIndex] = React.useState(0);
     return (
         <>
             <Row className="homepage-header-container">
@@ -11,7 +14,8 @@ const FAQList = () => {
             </Row>
             <Row className="homepage-header-container faq">
                 {
-                    faqList.map(faq => <FAQ faq={faq} />)
+                    faqList.map((faq, index) => <FAQ faq={faq} showAnswer={index === showAnswerIndex} 
+                            setShowAnswer={() => setShowAnswerIndex(index)}  />)
                 }
             </Row>
         </>
