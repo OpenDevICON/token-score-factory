@@ -1,5 +1,4 @@
 import React from 'react';
-import { Row } from 'react-bootstrap';
 
 const FAQ = ({ faq, showAnswer, setShowAnswer }) => {
     return (

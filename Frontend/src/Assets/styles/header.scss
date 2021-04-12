@@ -5,6 +5,10 @@
     font-size: 1.5rem;
     color: #E9E9E9;
     text-shadow: 0px 4px 4px rgb(0 0 0 / 25%);
+
+    &:hover {
+        color: #E9E9E9 !important;
+    }
 }
 
 
@@ -86,4 +90,26 @@
 
 .wallet-image {
     cursor: pointer;
+}
+
+.nav-link {
+    font-family: Nunito Sans;
+    font-style: normal;
+    font-weight: 800;
+    font-size: 1.2rem;
+    line-height: 55px;
+    color: #DADADA;
+
+    &.active {
+        color: #555C5E;
+        &:hover {
+            color: #555C5E;
+        }
+
+    }
+
+    &:hover {
+        color: #DADADA;
+        text-decoration: underline;
+    }
 }

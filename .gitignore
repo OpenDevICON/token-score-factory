@@ -21,3 +21,5 @@ Frontend/.env.production.local
 Frontend/npm-debug.log*
 Frontend/yarn-debug.log*
 Frontend/yarn-error.log*
+
+.vercel

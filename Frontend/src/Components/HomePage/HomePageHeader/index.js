@@ -25,7 +25,7 @@ const HomePageHeader = () => {
                         </svg>
 
                         <span className="info-desc">
-                            <span>Easily deploy Smart Contract for a Standard, Capped, Mintable, Burnable, Payable IRC Token. No login. No setup. No coding required.</span>
+                            <span>Create IRC Tokens on the ICON blockchain. You can deploy your favourite tokens without writing a single line of code.</span>
                             <Link to="/create">
                                 <Button variant="primary">CREATE NOW</Button>
                             </Link>

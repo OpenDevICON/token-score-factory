@@ -2,8 +2,12 @@ import React, { useEffect } from 'react';
 import { Col, Row } from 'react-bootstrap';
 import walletSvg from 'Assets/svg/wallet.svg'
 import { getCookie, getWalletAddress } from 'Helpers';
+import { Link, useLocation } from 'react-router-dom';
+import ClassName from 'classnames';
 
 const Header = ({walletAddress, setWalletAddress}) => {
+
+    let location = useLocation();
 
     useEffect(() => {
         console.log("Cookie wallet", getCookie('wallet_address'))
@@ -20,10 +24,16 @@ const Header = ({walletAddress, setWalletAddress}) => {
     }
     return (
         <Row style={{ minHeight: '70px', background: '#49B1B8', display: 'flex', alignItems: 'center', paddingLeft: '20px', paddingRight: '20px' }}>
-        <Col className="tsf-title">
-            TOKEN SCORE FACTORY
+        <Col sm = "4">
+            <Link to = '/' className="tsf-title">
+                TOKEN SCORE FACTORY
+            </Link>
         </Col>
-        <Col style={{ display: 'flex', justifyContent: 'flex-end', alignItems: "center" }}>
+        <Col className="tsf-title" sm = "4" style={{ display: 'flex', justifyContent: 'center', alignItems: "center" }}>
+            <Link to ='/' className = {ClassName('nav-link', {active: (location.pathname === '/')})}> Home </Link>
+            <Link to ='/create' className = {ClassName('nav-link', {active: (location.pathname === '/create')})} > Create </Link>
+        </Col>
+        <Col style={{ display: 'flex', justifyContent: 'flex-end', alignItems: "center" }} sm = "4">
             {
                 walletAddress && 
                 <span className = "walletAddress">
