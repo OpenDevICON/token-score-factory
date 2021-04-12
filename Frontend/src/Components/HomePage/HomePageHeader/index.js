@@ -27,7 +27,7 @@ const HomePageHeader = () => {
                         <span className="info-desc">
                             <span>Create IRC Tokens on the ICON blockchain. You can deploy your favourite tokens without writing a single line of code.</span>
                             <Link to="/create">
-                                <Button variant="primary">CREATE NOW</Button>
+                                <Button variant="primary" size="lg">CREATE NOW</Button>
                             </Link>
                         </span>
 
