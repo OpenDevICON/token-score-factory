@@ -56,7 +56,6 @@
     .info-desc-container {
         display: flex;
         align-items: center;
-        margin-top: 20px;
 
         @media screen and (max-width: 992px) {
             margin-top: 0;
@@ -80,7 +79,7 @@
         padding-right: 100px;
 
         @media screen and (min-width: 992px) {
-            margin-top: 25px;
+            margin-top: 15px;
         }
     }
 
@@ -90,6 +89,12 @@
         
         @media screen and (min-width: 992px) {
             justify-content: flex-start;
+        }
+    }
+
+    .info-icon-container {
+        @media screen and (min-width: 992px) {
+            margin-left: 70px
         }
     }
 
