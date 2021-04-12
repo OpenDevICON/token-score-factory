@@ -8,7 +8,7 @@ const HomePageHeader = () => {
 
     return (
         <>
-            <Row className="info-header">
+            <Row className="info-header info-header-homepage">
                 <Col lg="4" className="tsf-info-image-container">
                     <img src={infoSvg} alt="tsf info" />
 
@@ -27,7 +27,7 @@ const HomePageHeader = () => {
                         <span className="info-desc">
                             <span>Create IRC Tokens on the ICON blockchain. You can deploy your favourite tokens without writing a single line of code.</span>
                             <Link to="/create">
-                                <Button variant="primary" size="lg">CREATE NOW</Button>
+                                <Button variant="primary" size="lg" style = {{marginBottom: '10px'}}>CREATE NOW</Button>
                             </Link>
                         </span>
 
