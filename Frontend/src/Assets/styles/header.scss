@@ -66,23 +66,22 @@
         }
     }
 
-
-
-
-}
-
-.info-header-homepage {
-    min-height: 350px;
-}
-
-.tsf-info-image-container {
-    display: flex;
-    align-items: center;
-    margin-top: 10px;
-    @media screen and (max-width: 992px) {
-        justify-content: center;
+    .tsf-info-image-container {
+        display: flex;
+        align-items: center;
+        margin-top: 10px;
+        @media screen and (max-width: 992px) {
+            justify-content: center;
+        }
+    
     }
 
+
+
+
+}
+.info-header-homepage {
+    min-height: 350px;
 }
 
 .walletAddress {

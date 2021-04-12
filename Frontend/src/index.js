@@ -3,13 +3,13 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import 'bootstrap/dist/css/bootstrap.min.css';
 import './Assets/styles/form.scss';
 import './Assets/styles/all.scss';
 import './Assets/styles/header.scss'
 import './Assets/styles/footer.scss';
 import './Assets/styles/homepagecontent.scss';
 import './Assets/styles/faq.scss';
+import './Assets/styles/homepageheader.scss'
 import 'react-notifications/lib/notifications.css';
 
 ReactDOM.render(

@@ -1,3 +1,10 @@
+$theme-colors: (
+    "create-button":  #237378
+
+);
+
+@import "node_modules/bootstrap/scss/bootstrap";
+
 html, body {
     min-height: 100%
 }
