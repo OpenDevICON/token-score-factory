@@ -18,4 +18,10 @@
         color: #FF541E;
         margin-left: 10px;
     }
+
+    .footer-middle-col {
+        @media screen and (min-width: 992px) {
+            padding-top: 30px;    
+        }
+    }
 }

@@ -14,7 +14,7 @@ const FinalStepsCard = (formik) => {
 
                 <hr className="form-hr" />
                 <Row>
-                <Col lg="6" style = {{marginTop: '75px'}}>
+                <Col lg="6" className = "final-steps-left">
 
                     <AppInputField as="select" formik={formik} label="Network" id="network" placeholder="Name of your token" >
                         {/* <option value="" disabled selected = "selected">Choose a token type</option> */}

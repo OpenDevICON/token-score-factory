@@ -10,7 +10,7 @@ const Footer = () => {
                     <a target="_blank" href="/" className="footer-text">Terms of Use</a>
                 </Col>
 
-                <Col lg="4" style={{ display: 'flex', flexDirection: 'column', paddingTop: '30px' }}>
+                <Col lg="4" style={{ display: 'flex', flexDirection: 'column'}} className="footer-middle-col">
                     <span className="footer-text">Developed By:</span>
                     <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                         <img src={ibrizSvg} alt="" />

@@ -90,7 +90,7 @@ const InputForm = ({setWalletAddress}) => {
     <form onSubmit={formik.handleSubmit} className = "form" style = {{paddingLeft: '20px', paddingRight: '20px'}} >
 
       <Row style = {{paddingTop: '10px'}}>
-        <Col lg="6">
+        <Col lg="6" className = "basic-token-info-col">
             <BasicTokenInformationCard formik = {formik}/>
         </Col>
 

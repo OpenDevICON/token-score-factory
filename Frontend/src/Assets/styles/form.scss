@@ -1,4 +1,5 @@
 .form {
+    margin-top: 10px;
     @media screen and (min-width: 992px) {
         margin-top: -87px;
         margin-bottom: -50px;
@@ -134,4 +135,18 @@
             align-items: center;
         }
     }
+
+    .final-steps-left {
+        @media screen and (min-width: 992px) {
+
+            margin-top: 75px;
+        }
+    }
+
+    .basic-token-info-col {
+        @media screen and (max-width: 992px) {
+            margin-bottom: 20px;      
+        }
+    }
+
 }
