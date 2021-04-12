@@ -20,6 +20,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    margin-bottom: 5px;
 
     @media screen and (min-width: 992px) {
         margin-top: 20px;
@@ -32,6 +33,7 @@
         font-size: 1rem;
         text-align: center;
         color: #555C5E;
+        margin-top: 5px;
 
     }
 

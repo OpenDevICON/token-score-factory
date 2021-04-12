@@ -43,6 +43,11 @@
             margin-left: 10px;
             display: flex;
             flex-direction: column;
+
+            @media screen and (max-width: 992px) {
+                text-align: center;
+                
+            }
         }
 
         @media screen and (max-width: 992px) {

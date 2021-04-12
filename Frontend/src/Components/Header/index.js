@@ -23,13 +23,13 @@ const Header = ({walletAddress, setWalletAddress}) => {
 
     }
     return (
-        <Row style={{background: '#49B1B8', display: 'flex', alignItems: 'center', paddingLeft: '20px', paddingRight: '20px' }}>
+        <Row style={{background: '#49B1B8', display: 'flex', alignItems: 'center', paddingLeft: '20px', paddingRight: '20px' }} className = "header-main">
         <Col sm = "4">
             <Link to = '/' className="tsf-title">
                 TOKEN SCORE FACTORY
             </Link>
         </Col>
-        <Col className="" sm = "4" style={{ display: 'flex', justifyContent: 'center', alignItems: "center", height: '60px' }}>
+        <Col className="nav-links-container" sm = "4" style={{ display: 'flex', justifyContent: 'center', alignItems: "center", height: '60px' }}>
             <Link to ='/' className = {ClassName('nav-link', {active: (location.pathname === '/')})}> Home </Link>
             <Link to ='/create' className = {ClassName('nav-link', {active: (location.pathname === '/create')})} > Create </Link>
         </Col>

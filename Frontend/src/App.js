@@ -16,13 +16,13 @@ function App() {
 
   const [walletAddress, setWalletAddress] = useState(null);
   return (
-    <div style={{ backgroundColor: '#EDEDED', width: '100%', minHeight: '100%' }} >
+    <div style={{ width: '100%', minHeight: '100%' }} >
       <Router>
         <Container fluid>
           <Header walletAddress={walletAddress} setWalletAddress={setWalletAddress} />
           <Switch>
             <Route path="/create">
-              <CreatePage walletAddress={walletAddress} setWalletAddress={setWalletAddress} />
+              <CreatePage walletAddress={walletAddress} setWalletAddress={setWalletAddress} style = {{backgroundColor: '#EDEDED'}} />
             </Route>
             <Route path="/">
               <HomePage />
