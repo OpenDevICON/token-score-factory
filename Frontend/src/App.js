@@ -6,23 +6,23 @@ import Footer from 'Components/Footer';
 import Header from 'Components/Header';
 import { useState } from 'react';
 import {
-  BrowserRouter as Router,
   Switch,
   Route,
+  useLocation,
 } from "react-router-dom";
 import HomePage from 'Pages/HomePage';
 
 function App() {
 
+  const location = useLocation();
   const [walletAddress, setWalletAddress] = useState(null);
   return (
-    <div style={{ width: '100%', minHeight: '100%' }} >
-      <Router>
+    <div style={{ width: '100%', minHeight: '100%', backgroundColor: location.pathname === '/create'?'#EDEDED':'white'}} >
         <Container fluid>
           <Header walletAddress={walletAddress} setWalletAddress={setWalletAddress} />
           <Switch>
             <Route path="/create">
-              <CreatePage walletAddress={walletAddress} setWalletAddress={setWalletAddress} style = {{backgroundColor: '#EDEDED'}} />
+              <CreatePage walletAddress={walletAddress} setWalletAddress={setWalletAddress} />
             </Route>
             <Route path="/">
               <HomePage />
@@ -34,7 +34,6 @@ function App() {
 
 
         <NotificationContainer />
-      </Router>
     </div>
   );
 }

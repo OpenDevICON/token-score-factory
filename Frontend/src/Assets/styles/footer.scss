@@ -1,6 +1,5 @@
 .footer {
     background: #49B1B8;
-    min-height: 150px;
     padding-top: -50px;
 
     .footer-text {
@@ -22,6 +21,12 @@
     .footer-middle-col {
         @media screen and (min-width: 992px) {
             padding-top: 30px;    
+        }
+    }
+
+    .footer-middle-col-home {
+        @media screen and (min-width: 992px) {
+            padding-top: 5px;    
         }
     }
 }

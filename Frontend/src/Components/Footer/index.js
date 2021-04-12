@@ -1,8 +1,11 @@
 import React from 'react';
 import { Col, Row } from 'react-bootstrap';
 import ibrizSvg from 'Assets/svg/ibriz.svg';
+import { useLocation } from 'react-router';
 
 const Footer = () => {
+
+    const location = useLocation();
     return (
         <div className="footer">
             <Row>
@@ -10,7 +13,7 @@ const Footer = () => {
                     <a target="_blank" href="/" className="footer-text">Terms of Use</a>
                 </Col>
 
-                <Col lg="4" style={{ display: 'flex', flexDirection: 'column'}} className="footer-middle-col">
+                <Col lg="4" style={{ display: 'flex', flexDirection: 'column'}} className={location.pathname === '/' ? "footer-middle-col-home": "footer-middle-col"}>
                     <span className="footer-text">Developed By:</span>
                     <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                         <img src={ibrizSvg} alt="" />
