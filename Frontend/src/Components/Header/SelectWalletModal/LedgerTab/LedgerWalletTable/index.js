@@ -1,6 +1,5 @@
 import { WALLET_TYPE } from 'Constant';
 import React from 'react';
-import { Table } from 'react-bootstrap';
 
 const LedgerWalletTable = ({ walletAddress, setWalletAddress, walletPaths, walletAddresses, currPage, setCurrPage, closeModal, callBackAfterSelectingWalletAddress }) => {
     console.log(currPage);
@@ -21,33 +20,21 @@ const LedgerWalletTable = ({ walletAddress, setWalletAddress, walletPaths, walle
 
     return (
         <>
-            <Table striped bordered size="sm">
-                <thead className="ledger-table-header">
-                    <tr>
-                        <th> </th>
-                        <th>Wallet Address</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {walletAddresses.map((addr, id) => {
-                        return (
-                            <tr key={id}>
-                                <td>
-                                    <input
-                                        type="radio"
-                                        value={addr}
-                                        checked={addr === walletAddress}
-                                        onChange={() =>
-                                            handleAddressChange(addr, walletPaths[id])
-                                        }
-                                    />
-                                </td>
-                                <td>{addr}</td>
-                            </tr>
-                        );
-                    })}
-                </tbody>
-            </Table>
+            <div
+                className="table-row table-header"
+            >
+                Select a wallet address
+            </div>
+            {walletAddresses.map((addr, id) => {
+                return (
+                    <div key={id} onClick={() => handleAddressChange(addr, walletPaths[id])}
+                        className="table-row"
+                    // checked={addr === walletAddress}
+                    >
+                        {addr}
+                    </div>
+                );
+            })}
             <span className="table-page">
                 <button
                     className="table-page-btn"

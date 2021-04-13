@@ -3,27 +3,21 @@ import Transport from '@ledgerhq/hw-transport-u2f';
 import AppIcx from '@ledgerhq/hw-app-icx';
 import { NotificationManager } from 'react-notifications';
 import LedgerWalletTable from './LedgerWalletTable';
+import { Spinner } from 'react-bootstrap';
 
 const BASE_PATH = `44'/4801368'/0'/0'`;
 
-const tableStyle = {
-    display: 'block',
-    maxHeight: '250px',
-    overflowY: 'overlay',
-    marginTop: '5px',
-    marginBottom: '5px',
-};
-
 //------------------------------------------------------------------
 const LedgerTab = ({
-    walletAddress, 
+    walletAddress,
     setWalletAddress,
     onClose,
     callBackAfterSelectingWalletAddress
 }) => {
     const [isConnected, setIsConnected] = useState(false);
+    const [isConnecting, setIsConnecting] = useState(false);
     const [icx, setIcx] = useState(null);
-    // const [wallets, setWallets] = useState(['hx9038432859428523','hx9038432859428523','hx9038432859428523','hx9038432859428523', 'hx49854929ae83', 'hx328549854893594', 'hx894325982589']);
+    // const [walletAddresses, setWalletAddresses] = useState(['hx9038432859428523','hx9038432859428523','hx9038432859428523','hx9038432859428523', 'hx49854929ae83', 'hx328549854893594', 'hx894325982589']);
     const [walletAddresses, setWalletAddresses] = useState([]);
     const [walletPaths, setWalletPaths] = useState([]);
     const [currPage, setCurrPage] = useState(1);
@@ -67,7 +61,7 @@ const LedgerTab = ({
     const connectToLedger = () => {
         let suppressError = false;
 
-        // setIsConnecting(true);
+        setIsConnecting(true);
         Transport.create()
             .then(async (transport) => {
                 transport.setDebugMode(false);
@@ -82,7 +76,7 @@ const LedgerTab = ({
                     //our func here
                     await loadAddresses(suppressError, icx);
 
-                    // setIsConnecting(false);
+                    setIsConnecting(false);
                 } catch (error) {
                     if (suppressError) {
                         console.warn('Failed connecting to Ledger.', error.message);
@@ -93,34 +87,52 @@ const LedgerTab = ({
                         console.error(error);
                     }
                     setIsConnected(false);
-                    // setIsConnecting(false);
+                    setIsConnecting(false);
                 }
             })
             .catch((error) => {
                 NotificationManager.error(error?.message, "Transport channel could not be established")
-                // setIsConnecting(false);
+                setIsConnecting(false);
                 setIsConnected(false);
                 onClose();
             });
     };
 
     return (
-        <div className="stake-tab">
+        <div className="ledger-tab">
 
             {walletAddresses.length > 0 && (
-                <div style={tableStyle}>
+                <div className="ledger-table">
                     <LedgerWalletTable
-                    walletAddress={walletAddress}
-                    setWalletAddress = {setWalletAddress}
-                    walletPaths={walletPaths}
-                    walletAddresses={walletAddresses}
-                    currPage={currPage}
-                    setCurrPage={setCurrPage}
-                    closeModal={onClose}
-                    callBackAfterSelectingWalletAddress = {() => callBackAfterSelectingWalletAddress()}
-                     />
+                        walletAddress={walletAddress}
+                        setWalletAddress={setWalletAddress}
+                        walletPaths={walletPaths}
+                        walletAddresses={walletAddresses}
+                        currPage={currPage}
+                        setCurrPage={setCurrPage}
+                        closeModal={onClose}
+                        callBackAfterSelectingWalletAddress={() => {
+                            if (callBackAfterSelectingWalletAddress && callBackAfterSelectingWalletAddress instanceof Function) {
+                                callBackAfterSelectingWalletAddress();
+                            }
+                        }}
+                    />
                 </div>
             )}
+
+            {
+                walletAddresses.length < 1 && isConnecting &&
+                (
+                    <div className="please-wait">
+                        <Spinner animation="border" role="status" style={{ display: 'flex', justifyContent: 'center' }}>
+                            <span className="sr-only">Loading...</span>
+                        </Spinner>
+                        <div style={{ color: '#DDDDDD' }}
+                        >Please wait</div>
+                    </div>
+                )
+            }
+
         </div>
     );
 };

@@ -69,14 +69,20 @@ function SelectWalletModal({ walletAddress, setWalletAddress, callBackAfterSelec
                 {
                     (selectedWalletType === WALLET_TYPE.LEDGER) &&
                     <Row>
-                        <LedgerTab
-                            onClose={() => props.onHide()}
-                            walletAddress={walletAddress}
-                            setWalletAddress={setWalletAddress}
-                            callBackAfterSelectingWalletAddress = {() => callBackAfterSelectingWalletAddress()} />
+                        <Col>
+                            <LedgerTab
+                                onClose={() => props.onHide()}
+                                walletAddress={walletAddress}
+                                setWalletAddress={setWalletAddress}
+                                callBackAfterSelectingWalletAddress={() => {
+                                    if (callBackAfterSelectingWalletAddress && callBackAfterSelectingWalletAddress instanceof Function) {
+                                        callBackAfterSelectingWalletAddress();
+                                    }
+                                }} />
+                        </Col>
+
                     </Row>
                 }
-
             </Modal.Body>
         </Modal>
     );

@@ -32,7 +32,7 @@ export const deployToken = async ({
             NotificationManager.success("Token Deployed Successfully")
         }
     } catch(err) {
-        NotificationManager.error(err, "Error Deplying Token")
+        NotificationManager.error(err.message, "Error Deplying Token")
     }
 
 }
