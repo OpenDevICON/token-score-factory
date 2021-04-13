@@ -108,3 +108,8 @@ export const networkMapping = [
     }
 ]
 
+export const WALLET_TYPE = {
+    LEDGER: 'ledger',
+    ICONEX: 'iconex'
+};
+

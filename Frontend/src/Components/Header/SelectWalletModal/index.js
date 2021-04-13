@@ -3,11 +3,7 @@ import { Modal, Row, Col, Button } from 'react-bootstrap';
 import ledgerImg from 'Assets/images/ledgern.png';
 import iconImg from 'Assets/images/iconn.png';
 import { getWalletAddress } from 'Helpers';
-
-export const WALLET_TYPE = {
-    LEDGER: 'ledger',
-    ICONEX: 'iconex'
-};
+import { WALLET_TYPE } from 'Constant';
 
 const iconStyle = {
     height: '1.5em',
@@ -28,8 +24,11 @@ function SelectWalletModal({ walletAddress, setWalletAddress, ...props }) {
         setSelectedWalletType(walletType);
 
         if (walletType === WALLET_TYPE.ICONEX) {
-            let walletAddress = await getWalletAddress();
+            let walletAddress = await getWalletAddress();          
             setWalletAddress(walletAddress);
+            localStorage.setItem('wallet_address', walletAddress, 12 * 2 * 100);
+            localStorage.setItem('wallet_type', WALLET_TYPE.ICONEX);
+            props.onHide();
 
         } else if (walletType === WALLET_TYPE.ICONEX) {
 

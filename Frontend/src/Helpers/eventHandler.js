@@ -31,7 +31,6 @@ export const eventHandler = (event) => {
         case 'RESPONSE_ADDRESS':
             console.log("login", payload);
             ICONEXResponse.setWalletAddress(payload);
-            localStorage.setItem('wallet_address', payload, 12 * 2 * 100);
             break;
 
         case 'RESPONSE_JSON-RPC':
