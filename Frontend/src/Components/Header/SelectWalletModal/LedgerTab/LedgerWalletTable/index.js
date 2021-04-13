@@ -2,7 +2,7 @@ import { WALLET_TYPE } from 'Constant';
 import React from 'react';
 import { Table } from 'react-bootstrap';
 
-const LedgerWalletTable = ({ walletAddress, setWalletAddress, walletPaths, walletAddresses, currPage, setCurrPage, closeModal }) => {
+const LedgerWalletTable = ({ walletAddress, setWalletAddress, walletPaths, walletAddresses, currPage, setCurrPage, closeModal, callBackAfterSelectingWalletAddress }) => {
     console.log(currPage);
 
     const handleAddressChange = (walletAddress, ledgerPath) => {
@@ -12,6 +12,9 @@ const LedgerWalletTable = ({ walletAddress, setWalletAddress, walletPaths, walle
         localStorage.setItem('wallet_address', walletAddress, 12 * 2 * 100);
         localStorage.setItem('wallet_type', WALLET_TYPE.LEDGER);
         localStorage.setItem('ledger_path', ledgerPath);
+        if (callBackAfterSelectingWalletAddress && callBackAfterSelectingWalletAddress instanceof Function){
+            callBackAfterSelectingWalletAddress();
+        }
         closeModal();
 
     };

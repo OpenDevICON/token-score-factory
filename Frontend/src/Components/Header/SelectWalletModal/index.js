@@ -17,7 +17,7 @@ const selectWalletStyle = {
     paddingBottom: '10px'
 };
 
-function SelectWalletModal({ walletAddress, setWalletAddress, ...props }) {
+function SelectWalletModal({ walletAddress, setWalletAddress, callBackAfterSelectingWalletAddress, ...props }) {
 
     const [selectedWalletType, setSelectedWalletType] = useState("");
 
@@ -29,6 +29,9 @@ function SelectWalletModal({ walletAddress, setWalletAddress, ...props }) {
             setWalletAddress(walletAddress);
             localStorage.setItem('wallet_address', walletAddress, 12 * 2 * 100);
             localStorage.setItem('wallet_type', WALLET_TYPE.ICONEX);
+            if (callBackAfterSelectingWalletAddress && callBackAfterSelectingWalletAddress instanceof Function){
+                callBackAfterSelectingWalletAddress();
+            }
             props.onHide();
 
         } else if (walletType === WALLET_TYPE.LEDGER) {
@@ -77,7 +80,8 @@ function SelectWalletModal({ walletAddress, setWalletAddress, ...props }) {
                         <LedgerTab
                             onClose={() => props.onHide()}
                             walletAddress={walletAddress}
-                            setWalletAddress={setWalletAddress} />
+                            setWalletAddress={setWalletAddress}
+                            callBackAfterSelectingWalletAddress = {() => callBackAfterSelectingWalletAddress()} />
                     </Row>
                 }
 

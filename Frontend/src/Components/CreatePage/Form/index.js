@@ -6,9 +6,12 @@ import TokenTypeCard from './TokenTypeCard';
 import {Row, Col} from 'react-bootstrap';
 import FinalStepsCard from './FinalStepsCard';
 import {tokenTypeMapping} from 'Constant';
-import { deployToken, getWalletAddress } from 'Helpers';
+import { deployToken } from 'Helpers';
+import SelectWalletModal from 'Components/Header/SelectWalletModal';
 
-const InputForm = ({setWalletAddress}) => {
+const InputForm = ({walletAddress, setWalletAddress}) => {
+
+  const [selectWalletModalShow, setSelectWalletModalShow] = React.useState(false);
 
   const formik = useFormik({
     initialValues: {
@@ -50,22 +53,22 @@ const InputForm = ({setWalletAddress}) => {
         .required('Required'),
         termsOfUseAgreement: Yup.boolean().isTrue('You must agree to the terms of use in order to deploy the token.')    }),
     onSubmit: async (values) => {
-      const selectedTokenMapping = tokenTypeMapping.find(tokenType => values.tokenType === tokenType.value);
-
       let walletAddress = localStorage.getItem('wallet_address');
       if (!walletAddress) {
-        walletAddress = await getWalletAddress();
-        setWalletAddress(walletAddress);
+        setSelectWalletModalShow(true);
+      } else {
+        deployTokenWithFormValues();
       }
-
-      deployToken({
-        tokenUrl: selectedTokenMapping.tokenUrl,
-        formValues: values
-      });
-
-
     },
   });
+
+  function deployTokenWithFormValues () {
+    const selectedTokenMapping = tokenTypeMapping.find(tokenType => formik.values.tokenType === tokenType.value);
+    deployToken({
+      tokenUrl: selectedTokenMapping.tokenUrl,
+      formValues: formik.values
+    });
+  }
   useEffect(() => {
       const selectedTokenMapping = tokenTypeMapping.find(tokenType => formik.values.tokenType === tokenType.value);
 
@@ -104,6 +107,16 @@ const InputForm = ({setWalletAddress}) => {
                 <FinalStepsCard formik = {formik} />         
           </Col>
       </Row>
+
+      <SelectWalletModal
+          show={selectWalletModalShow}
+          onHide={() => setSelectWalletModalShow(false)}
+          walletAddress={walletAddress}
+          setWalletAddress={setWalletAddress}
+          callBackAfterSelectingWalletAddress = {() => {
+            deployTokenWithFormValues();
+          }}
+      />
 
 
 

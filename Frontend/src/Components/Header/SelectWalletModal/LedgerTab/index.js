@@ -19,7 +19,8 @@ const tableStyle = {
 const LedgerTab = ({
     walletAddress, 
     setWalletAddress,
-    onClose
+    onClose,
+    callBackAfterSelectingWalletAddress
 }) => {
     const [isConnecting, setIsConnecting] = useState(false);
     const [isConnected, setIsConnected] = useState(false);
@@ -128,6 +129,7 @@ const LedgerTab = ({
                     currPage={currPage}
                     setCurrPage={setCurrPage}
                     closeModal={onClose}
+                    callBackAfterSelectingWalletAddress = {() => callBackAfterSelectingWalletAddress()}
                      />
                 </div>
             )}
