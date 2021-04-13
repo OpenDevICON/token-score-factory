@@ -1,7 +1,9 @@
-import IconService from 'icon-sdk-js';
+import IconService, {HttpProvider, IconConverter, IconUtil} from 'icon-sdk-js';
 import BigNumber from 'bignumber.js';
 import { ICONEXResponse } from "./eventHandler";
-
+import { WALLET_TYPE } from 'Constant';
+import Transport from '@ledgerhq/hw-transport-u2f';
+import AppIcx from '@ledgerhq/hw-app-icx';
 
 async function estimateStepForDeployment(from, content, selectedNetworkData) {
   const timestampInDecimal = Date.now() * 1000;
@@ -45,6 +47,19 @@ async function estimateStepForDeployment(from, content, selectedNetworkData) {
   }
 }
 
+const signTransaction = async (transaction, walletPath) => {
+  const rawTransaction = IconConverter.toRawTransaction(transaction);
+  const hashKey = IconUtil.generateHashKey(rawTransaction);
+  const transport = await Transport.create();
+  const icx = new AppIcx(transport);
+  const { signedRawTxBase64 } = await icx.signTransaction(walletPath, hashKey);
+  rawTransaction.signature = signedRawTxBase64;
+  return {
+    getProperties: () => rawTransaction,
+    getSignature: () => signedRawTxBase64
+  };
+}
+
 export async function deployContractService(contractContent, params = {}, selectedNetworkData) {
 
   return new Promise(async (resolve, reject) => {
@@ -70,28 +85,45 @@ export async function deployContractService(contractContent, params = {}, select
         .params(params)
         .build();
 
-      const txnPayload = {
-        jsonrpc: '2.0',
-        method: 'icx_sendTransaction',
-        id: 6639,
-        params: IconConverter.toRawTransaction(txnData),
-      };
-      console.log(txnPayload);
-      window.parent.dispatchEvent(
-        new CustomEvent('ICONEX_RELAY_REQUEST', {
-          detail: {
-            type: 'REQUEST_JSON-RPC',
-            payload: txnPayload,
-          },
-        }),
-      );
-      ICONEXResponse.setTxnHash(null);
-      let interval = setInterval(() => {
-        if (ICONEXResponse.getTxnHash()) {
-          resolve(ICONEXResponse.getTxnHash());
-          clearInterval(interval);
+      const walletType = localStorage.getItem('wallet_type');
+      if(walletType === WALLET_TYPE.ICONEX) {
+        const txnPayload = {
+          jsonrpc: '2.0',
+          method: 'icx_sendTransaction',
+          id: 6639,
+          params: IconConverter.toRawTransaction(txnData),
+        };
+        console.log(txnPayload);
+        window.parent.dispatchEvent(
+          new CustomEvent('ICONEX_RELAY_REQUEST', {
+            detail: {
+              type: 'REQUEST_JSON-RPC',
+              payload: txnPayload,
+            },
+          }),
+        );
+        ICONEXResponse.setTxnHash(null);
+        let interval = setInterval(() => {
+          if (ICONEXResponse.getTxnHash()) {
+            resolve(ICONEXResponse.getTxnHash());
+            clearInterval(interval);
+          }
+        }, 1000)
+      } else if (walletType === WALLET_TYPE.LEDGER) {
+        const provider = new HttpProvider(selectedNetworkData.NODE_URL);
+        const iconService = new IconService(provider);  
+        const walletPath = localStorage.getItem('ledger_path');
+        const signedTransaction = await signTransaction(txnData, walletPath);
+        console.log("Signed tx = ", signedTransaction);
+        try{
+          const res = await iconService.sendTransaction(signedTransaction).execute();
+          resolve(res);
+        } catch(err) {
+          console.log(`ERROR MESSAGE FROM LEDGER WALLET:: ${JSON.stringify(err)}`);
+          reject(`ERROR MESSAGE FROM LEDGER WALLET:: ${JSON.stringify(err)}`);
         }
-      }, 1000)
+      }
+
 
     } catch (err) {
       reject(err);
