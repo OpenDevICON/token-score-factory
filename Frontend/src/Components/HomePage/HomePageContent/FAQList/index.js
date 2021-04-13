@@ -14,7 +14,7 @@ const FAQList = () => {
             </Row>
             <Row className="homepage-header-container faq">
                 {
-                    faqList.map((faq, index) => <FAQ faq={faq} showAnswer={index === showAnswerIndex} 
+                    faqList.map((faq, index) => <FAQ faq={faq} key={index} showAnswer={index === showAnswerIndex} 
                             setShowAnswer={() => setShowAnswerIndex(index)}  />)
                 }
             </Row>

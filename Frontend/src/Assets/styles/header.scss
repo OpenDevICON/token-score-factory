@@ -22,6 +22,10 @@
         flex-direction: column;
         align-items: flex-end;
 
+        @media screen and (max-width: 992px) {
+            margin-bottom: 5px;
+        }
+
         .info-title {
             text-align: end;
             font-family: Nunito Sans;
@@ -46,6 +50,10 @@
             margin-left: 10px;
             display: flex;
             flex-direction: column;
+
+            @media screen and (max-width: 1102px) {
+                font-size: 1.4rem;
+            }
         }
 
         @media screen and (max-width: 992px) {
