@@ -6,14 +6,8 @@ import { getWalletAddress } from 'Helpers';
 import { WALLET_TYPE } from 'Constant';
 import LedgerTab from './LedgerTab';
 
-const iconStyle = {
-    height: '1.5em',
-    display: 'inline'
-};
-
 const selectWalletStyle = {
     margin: '20px',
-    borderBottom: '1px solid #ffff',
     paddingBottom: '10px'
 };
 
@@ -42,15 +36,11 @@ function SelectWalletModal({ walletAddress, setWalletAddress, callBackAfterSelec
     return (
         <Modal
             {...props}
-            size="lg"
+            size="mdlg"
             aria-labelledby="contained-modal-title-vcenter"
             centered
+            className="select-wallet"
         >
-            <Modal.Header closeButton>
-                <Modal.Title id="contained-modal-title-vcenter">
-                    Select Wallet Type
-                 </Modal.Title>
-            </Modal.Header>
             <Modal.Body>
                 <Row style={selectWalletStyle}>
                     <Col className="select-wallet-col">
@@ -58,8 +48,9 @@ function SelectWalletModal({ walletAddress, setWalletAddress, callBackAfterSelec
                             active={selectedWalletType === WALLET_TYPE.LEDGER}
                             onClick={() => { handleSelectWalletType(WALLET_TYPE.LEDGER) }}
                             variant="info"
+                            className="ledger-button wallet-button"
                         >
-                            <img style={iconStyle} src={ledgerImg} alt="" />
+                            <img src={ledgerImg} alt="" />
                             {/* {' '}Ledger */}
                         </Button>
                     </Col>
@@ -68,8 +59,9 @@ function SelectWalletModal({ walletAddress, setWalletAddress, callBackAfterSelec
                             active={selectedWalletType === WALLET_TYPE.ICONEX}
                             onClick={() => { handleSelectWalletType(WALLET_TYPE.ICONEX) }}
                             variant="info"
+                            className="iconex-button wallet-button"
                         >
-                            <img style={iconStyle} src={iconImg} alt="" />
+                            <img src={iconImg} alt="" />
                         </Button>
                     </Col>
                 </Row>
@@ -86,9 +78,6 @@ function SelectWalletModal({ walletAddress, setWalletAddress, callBackAfterSelec
                 }
 
             </Modal.Body>
-            <Modal.Footer>
-                Hello
-        </Modal.Footer>
         </Modal>
     );
 }

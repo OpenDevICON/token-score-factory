@@ -3,6 +3,12 @@ $theme-colors: (
 
 );
 
+@media screen and (min-width: 650px) {
+    .modal-mdlg {
+      max-width: 350px !important;
+    }
+  }
+
 @import "node_modules/bootstrap/scss/bootstrap";
 
 html, body {
