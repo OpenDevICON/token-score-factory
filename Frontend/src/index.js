@@ -9,9 +9,10 @@ import './Assets/styles/header.scss'
 import './Assets/styles/footer.scss';
 import './Assets/styles/homepagecontent.scss';
 import './Assets/styles/faq.scss';
-import './Assets/styles/homepageheader.scss'
+import './Assets/styles/homepageheader.scss';
+import './Assets/styles/selectwalletmodal.scss';
 import 'react-notifications/lib/notifications.css';
-import {BrowserRouter as Router} from 'react-router-dom'
+import { BrowserRouter as Router } from 'react-router-dom'
 
 ReactDOM.render(
   <React.StrictMode>
