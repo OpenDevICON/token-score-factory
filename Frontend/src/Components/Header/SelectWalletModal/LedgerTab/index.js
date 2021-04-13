@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Transport from '@ledgerhq/hw-transport-u2f';
 import AppIcx from '@ledgerhq/hw-app-icx';
-import { Button, Spinner } from 'react-bootstrap';
 import { NotificationManager } from 'react-notifications';
 import LedgerWalletTable from './LedgerWalletTable';
 
@@ -22,7 +21,6 @@ const LedgerTab = ({
     onClose,
     callBackAfterSelectingWalletAddress
 }) => {
-    const [isConnecting, setIsConnecting] = useState(false);
     const [isConnected, setIsConnected] = useState(false);
     const [icx, setIcx] = useState(null);
     // const [wallets, setWallets] = useState(['hx9038432859428523','hx9038432859428523','hx9038432859428523','hx9038432859428523', 'hx49854929ae83', 'hx328549854893594', 'hx894325982589']);
@@ -30,6 +28,11 @@ const LedgerTab = ({
     const [walletPaths, setWalletPaths] = useState([]);
     const [currPage, setCurrPage] = useState(1);
     const addressPerPage = 4;
+
+    useEffect(() => {
+        connectToLedger();
+        // eslint-disable-next-line
+    }, [])
 
     useEffect(() => {
         if (isConnected) {
@@ -64,7 +67,7 @@ const LedgerTab = ({
     const connectToLedger = () => {
         let suppressError = false;
 
-        setIsConnecting(true);
+        // setIsConnecting(true);
         Transport.create()
             .then(async (transport) => {
                 transport.setDebugMode(false);
@@ -79,7 +82,7 @@ const LedgerTab = ({
                     //our func here
                     await loadAddresses(suppressError, icx);
 
-                    setIsConnecting(false);
+                    // setIsConnecting(false);
                 } catch (error) {
                     if (suppressError) {
                         console.warn('Failed connecting to Ledger.', error.message);
@@ -90,12 +93,12 @@ const LedgerTab = ({
                         console.error(error);
                     }
                     setIsConnected(false);
-                    setIsConnecting(false);
+                    // setIsConnecting(false);
                 }
             })
             .catch((error) => {
                 NotificationManager.error(error?.message, "Transport channel could not be established")
-                setIsConnecting(false);
+                // setIsConnecting(false);
                 setIsConnected(false);
                 onClose();
             });
@@ -103,21 +106,6 @@ const LedgerTab = ({
 
     return (
         <div className="stake-tab">
-            <span>Make sure your Ledger device is connected and is unlocked with ICON app running.</span>
-            {Array(2)
-                .fill(0)
-                .map((v, id) => (
-                    <br key={id} />
-                ))}
-            <Button
-                className="connect-btn"
-                disabled={isConnected || isConnecting}
-                variant="info"
-                onClick={connectToLedger}
-            >
-                {isConnecting && <Spinner animation="border" />}
-                Connect To Ledger
-            </Button>
 
             {walletAddresses.length > 0 && (
                 <div style={tableStyle}>

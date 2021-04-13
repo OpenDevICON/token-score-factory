@@ -108,7 +108,9 @@ const InputForm = ({walletAddress, setWalletAddress}) => {
           </Col>
       </Row>
 
-      <SelectWalletModal
+      {
+        selectWalletModalShow && 
+          <SelectWalletModal
           show={selectWalletModalShow}
           onHide={() => setSelectWalletModalShow(false)}
           walletAddress={walletAddress}
@@ -117,9 +119,8 @@ const InputForm = ({walletAddress, setWalletAddress}) => {
             deployTokenWithFormValues();
           }}
       />
-
-
-
+      }
+      
     </form>
   );
 };

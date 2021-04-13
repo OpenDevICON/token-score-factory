@@ -45,12 +45,15 @@ const Header = ({ walletAddress, setWalletAddress }) => {
 
             </Col>
 
-            <SelectWalletModal
+            {
+                selectWalletModalShow && 
+                <SelectWalletModal
                 show={selectWalletModalShow}
                 onHide={() => setSelectWalletModalShow(false)}
                 walletAddress={walletAddress}
                 setWalletAddress={setWalletAddress}
             />
+            }
         </Row>
     )
 
