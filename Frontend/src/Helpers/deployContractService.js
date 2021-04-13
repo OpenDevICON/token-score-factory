@@ -1,4 +1,3 @@
-import { getCookie } from "./cookie";
 import IconService from 'icon-sdk-js';
 import BigNumber from 'bignumber.js';
 import { ICONEXResponse } from "./eventHandler";
@@ -55,12 +54,12 @@ export async function deployContractService(contractContent, params = {}, select
       const { IconConverter, IconBuilder } = IconService;
       const deployBuilder = new IconBuilder.DeployTransactionBuilder();
 
-      const stepLimitInHex = await estimateStepForDeployment(getCookie('wallet_address'), contractContent, selectedNetworkData);
+      const stepLimitInHex = await estimateStepForDeployment(localStorage.getItem('wallet_address'), contractContent, selectedNetworkData);
       const stepLimit = new BigNumber(stepLimitInHex).toNumber();
 
       const txnData = deployBuilder
         .nid(selectedNetworkData.NID)
-        .from(getCookie('wallet_address'))
+        .from(localStorage.getItem('wallet_address'))
         .to(selectedNetworkData.CONTRACT_DEPLOY_ADDRESS)
         .stepLimit(new BigNumber(stepLimit).plus(1000000))
         .version(IconConverter.toBigNumber(3))

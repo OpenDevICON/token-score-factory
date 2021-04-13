@@ -6,7 +6,7 @@ import TokenTypeCard from './TokenTypeCard';
 import {Row, Col} from 'react-bootstrap';
 import FinalStepsCard from './FinalStepsCard';
 import {tokenTypeMapping} from 'Constant';
-import { deployToken, getCookie, getWalletAddress } from 'Helpers';
+import { deployToken, getWalletAddress } from 'Helpers';
 
 const InputForm = ({setWalletAddress}) => {
 
@@ -52,7 +52,7 @@ const InputForm = ({setWalletAddress}) => {
     onSubmit: async (values) => {
       const selectedTokenMapping = tokenTypeMapping.find(tokenType => values.tokenType === tokenType.value);
 
-      let walletAddress = getCookie('wallet_address');
+      let walletAddress = localStorage.getItem('wallet_address');
       if (!walletAddress) {
         walletAddress = await getWalletAddress();
         setWalletAddress(walletAddress);

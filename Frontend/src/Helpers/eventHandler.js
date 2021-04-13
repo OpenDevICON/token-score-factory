@@ -1,6 +1,4 @@
 import { NotificationManager } from "react-notifications";
-import { setCookie } from "./cookie";
-
 
 export class ICONEXResponse {
     static walletAddress;
@@ -33,7 +31,7 @@ export const eventHandler = (event) => {
         case 'RESPONSE_ADDRESS':
             console.log("login", payload);
             ICONEXResponse.setWalletAddress(payload);
-            setCookie('wallet_address', payload, 12 * 2 * 100);
+            localStorage.setItem('wallet_address', payload, 12 * 2 * 100);
             break;
 
         case 'RESPONSE_JSON-RPC':
