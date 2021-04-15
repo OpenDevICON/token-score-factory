@@ -99,7 +99,13 @@
     margin-right: 5px;
     color: white;
     cursor: pointer;
+
+    &:hover {
+        text-decoration: underline;
+    }
 }
+
+
 
 .wallet-image {
     cursor: pointer;
