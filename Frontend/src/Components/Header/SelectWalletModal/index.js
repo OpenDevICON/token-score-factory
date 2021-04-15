@@ -97,14 +97,16 @@ function SelectWalletModal({ walletAddress, setWalletAddress, callBackAfterSelec
                     setIsConnecting(false);
                 } catch (error) {
                     if (suppressError) {
-                        console.warn('Failed connecting to Ledger.', error.message);
+                        console.warn('Failed connecting to Ledger with suppress error', error.message);
                         // NotificationManager.error(error.message instanceof string , "Connecting to Ledger Failed")
-                        NotificationManager.error("Connecting to Ledger Failed")
+                        NotificationManager.error("Connecting to Ledger Failed");
+                        props.onHide();
                     }
                     else {
-                        // NotificationManager.error(error, "Connecting to Ledger Failed")
-                        NotificationManager.error("Connecting to Ledger Failed")
-                        console.error(error);
+                        console.warn('Failed connecting to ledger', error)
+                        NotificationManager.error(error.message, "Connecting to Ledger Failed")
+                        // NotificationManager.error("Connecting to Ledger Failed")
+                        props.onHide();
                     }
                     setIsConnected(false);
                     setIsConnecting(false);
@@ -131,6 +133,7 @@ function SelectWalletModal({ walletAddress, setWalletAddress, callBackAfterSelec
                     <Col className="select-wallet-col">
                         <Button
                             active={selectedWalletType === WALLET_TYPE.LEDGER}
+                            disabled={isConnected || isConnecting}
                             onClick={() => { handleSelectWalletType(WALLET_TYPE.LEDGER) }}
                             variant="info"
                             className="ledger-button wallet-button"
@@ -142,6 +145,7 @@ function SelectWalletModal({ walletAddress, setWalletAddress, callBackAfterSelec
                     <Col className="select-wallet-col">
                         <Button
                             active={selectedWalletType === WALLET_TYPE.ICONEX}
+                            disabled={isConnected || isConnecting}
                             onClick={() => { handleSelectWalletType(WALLET_TYPE.ICONEX) }}
                             variant="info"
                             className="iconex-button wallet-button"
