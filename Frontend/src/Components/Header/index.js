@@ -40,7 +40,7 @@ const Header = ({ walletAddress, setWalletAddress }) => {
                     walletAddress &&
                     <span className="walletAddress" onClick={() => {
                         navigator.clipboard.writeText(walletAddress)
-                        NotificationManager.info("Wallet Address copied to clipboard", "", 100)
+                        NotificationManager.info("Wallet Address copied to clipboard", "", 200)
 
                     }
                     }>
