@@ -4,6 +4,7 @@ import walletSvg from 'Assets/svg/wallet.svg'
 import { Link, useLocation } from 'react-router-dom';
 import ClassName from 'classnames';
 import SelectWalletModal from './SelectWalletModal';
+import NotificationManager from 'react-notifications/lib/NotificationManager';
 
 const Header = ({ walletAddress, setWalletAddress }) => {
 
@@ -37,7 +38,12 @@ const Header = ({ walletAddress, setWalletAddress }) => {
             <Col style={{ display: 'flex', justifyContent: 'flex-end', alignItems: "center" }} sm="4">
                 {
                     walletAddress &&
-                    <span className="walletAddress">
+                    <span className="walletAddress" onClick={() => {
+                        navigator.clipboard.writeText(walletAddress)
+                        NotificationManager.info("Wallet Address copied to clipboard", "", 100)
+
+                    }
+                    }>
                         {`${walletAddress?.slice(0, 4)}...${walletAddress?.slice(walletAddress.length - 3)}`}
                     </span>
                 }
@@ -46,13 +52,13 @@ const Header = ({ walletAddress, setWalletAddress }) => {
             </Col>
 
             {
-                selectWalletModalShow && 
+                selectWalletModalShow &&
                 <SelectWalletModal
-                show={selectWalletModalShow}
-                onHide={() => setSelectWalletModalShow(false)}
-                walletAddress={walletAddress}
-                setWalletAddress={setWalletAddress}
-            />
+                    show={selectWalletModalShow}
+                    onHide={() => setSelectWalletModalShow(false)}
+                    walletAddress={walletAddress}
+                    setWalletAddress={setWalletAddress}
+                />
             }
         </Row>
     )
