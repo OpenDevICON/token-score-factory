@@ -1,5 +1,6 @@
 import React from 'react';
 import { Modal, Row, Col } from 'react-bootstrap';
+import checkImg from 'Assets/images/check.png';
 
 function DeployResultModal({ deployResult, ...props }) {
     return (
@@ -17,11 +18,11 @@ function DeployResultModal({ deployResult, ...props }) {
                         {
                             deployResult.success ?
                                 <>
-                                    <img src="https://o.remove.bg/downloads/b0690281-4a68-4b19-8679-6cca5f8df8bf/169-1695521_kisspng-computer-icons-check-mark-presentation-symbol-ok-removebg-preview.png" />
+                                    <img src={checkImg} alt="" />
                                 Token Deployed Successfully
                             </> :
                                 <>
-                                    <img src="https://o.remove.bg/downloads/b0690281-4a68-4b19-8679-6cca5f8df8bf/169-1695521_kisspng-computer-icons-check-mark-presentation-symbol-ok-removebg-preview.png" />
+                                    <img src={checkImg} alt=""  />
                                 Token Deploy Failed
                             </>
                         }
@@ -47,7 +48,7 @@ function DeployResultModal({ deployResult, ...props }) {
                         <Row className="result-row">
                             <Col lg="3" className="result-row-key">Transaction Hash:</Col>
                             <Col lg="9" className="result-row-value">
-                                <a href={`${deployResult?.selectedNetworkData?.TRACKER_URL}transaction/${deployResult.txHash}`} target="_blank">{deployResult.txHash}</a>
+                                <a href={`${deployResult?.selectedNetworkData?.TRACKER_URL}transaction/${deployResult.txHash}`} target="_blank" rel="noreferrer noopener">{deployResult.txHash}</a>
                             </Col>
                         </Row> : null
                 }
@@ -57,7 +58,7 @@ function DeployResultModal({ deployResult, ...props }) {
                         <Row className="result-row">
                             <Col lg="3" className="result-row-key">Score Address:</Col>
                             <Col lg="9" className="result-row-value">
-                                <a href={`${deployResult?.selectedNetworkData?.TRACKER_URL}contract/${deployResult.scoreAddress}`} target="_blank">{deployResult.scoreAddress}</a>
+                                <a href={`${deployResult?.selectedNetworkData?.TRACKER_URL}contract/${deployResult.scoreAddress}`} target="_blank" rel="noreferrer noopener">{deployResult.scoreAddress}</a>
                             </Col>
 
                         </Row> : null

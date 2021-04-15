@@ -30,7 +30,7 @@ export const deployToken = async ({
             NotificationManager.error(txResult.failure.message, "Token Deploy Failed");
             throw Error(txResult.failure.message);
         } else if (txResult.status === 1) {
-            NotificationManager.success("Token Deployed Successfully")
+            // NotificationManager.success("Token Deployed Successfully")
             return (
                 {
                     txHash,
