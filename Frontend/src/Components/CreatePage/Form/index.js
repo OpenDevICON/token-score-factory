@@ -47,7 +47,7 @@ const InputForm = ({walletAddress, setWalletAddress}) => {
         symbol: Yup.string()
         .required('Required'),
         decimals: Yup.number()
-        .required('Required').positive(),
+        .required('Required').positive().max(21),
         initialSupply: Yup.number()
         .required('Required').positive(),
         totalSupply: Yup.number()
