@@ -62,12 +62,17 @@ const InputForm = ({walletAddress, setWalletAddress}) => {
     },
   });
 
-  function deployTokenWithFormValues () {
-    const selectedTokenMapping = tokenTypeMapping.find(tokenType => formik.values.tokenType === tokenType.value);
-    deployToken({
-      tokenUrl: selectedTokenMapping.tokenUrl,
-      formValues: formik.values
-    });
+  async function deployTokenWithFormValues () {
+    try {
+      const selectedTokenMapping = tokenTypeMapping.find(tokenType => formik.values.tokenType === tokenType.value);
+      const deployResult = await deployToken({
+        tokenUrl: selectedTokenMapping.tokenUrl,
+        formValues: formik.values
+      });
+      console.log("Deploy Result-", deployResult);
+    } catch(e) {
+      console.log("Error", e)
+    }
   }
   useEffect(() => {
       const selectedTokenMapping = tokenTypeMapping.find(tokenType => formik.values.tokenType === tokenType.value);
