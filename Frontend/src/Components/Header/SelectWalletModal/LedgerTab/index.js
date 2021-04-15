@@ -80,10 +80,12 @@ const LedgerTab = ({
                 } catch (error) {
                     if (suppressError) {
                         console.warn('Failed connecting to Ledger.', error.message);
-                        NotificationManager.error(error.message, "Connecting to Ledger Failed")
+                        // NotificationManager.error(error.message instanceof string , "Connecting to Ledger Failed")
+                        NotificationManager.error("Connecting to Ledger Failed")
                     }
                     else {
-                        NotificationManager.error(error, "Connecting to Ledger Failed")
+                        // NotificationManager.error(error, "Connecting to Ledger Failed")
+                        NotificationManager.error("Connecting to Ledger Failed")
                         console.error(error);
                     }
                     setIsConnected(false);
