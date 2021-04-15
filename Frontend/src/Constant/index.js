@@ -82,6 +82,7 @@ export const networkMapping = [
         NID: `0x3`,
         NODE_URL: 'https://bicon.net.solidwallet.io/api/v3',
         NODE_DEBUG_URL: 'https://bicon.net.solidwallet.io/api/debug/v3',
+        TRACKER_URL: 'https://bicon.tracker.solidwallet.io/',
         CONTRACT_DEPLOY_ADDRESS: 'cx0000000000000000000000000000000000000000',
         CONTRACT_STATUS_ADDRESS: 'cx0000000000000000000000000000000000000001',
     },
@@ -92,6 +93,7 @@ export const networkMapping = [
         NID: `0x50`,
         NODE_URL: 'https://zicon.net.solidwallet.io/api/v3',
         NODE_DEBUG_URL: 'https://zicon.net.solidwallet.io/api/debug/v3',
+        TRACKER_URL: 'https://zicon.tracker.solidwallet.io/',
         CONTRACT_DEPLOY_ADDRESS: 'cx0000000000000000000000000000000000000000',
         CONTRACT_STATUS_ADDRESS: 'cx0000000000000000000000000000000000000001',
     },
@@ -102,6 +104,7 @@ export const networkMapping = [
         NID: `0x1`,
         NODE_URL: 'https://ctz.solidwallet.io/api/v3',
         NODE_DEBUG_URL: 'https://ctz.solidwallet.io/api/debug/v3',
+        TRACKER_URL: 'https://tracker.icon.foundation/',
         CONTRACT_DEPLOY_ADDRESS: 'cx0000000000000000000000000000000000000000',
         CONTRACT_STATUS_ADDRESS: 'cx0000000000000000000000000000000000000001',
 

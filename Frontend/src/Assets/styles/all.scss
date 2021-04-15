@@ -7,6 +7,10 @@ $theme-colors: (
     .modal-mdlg {
       max-width: 350px !important;
     }
+
+    .modal-lgxl {
+      max-width: 815px !important;
+    }
   }
 
 @import "node_modules/bootstrap/scss/bootstrap";

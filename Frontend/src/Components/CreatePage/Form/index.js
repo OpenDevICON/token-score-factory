@@ -5,13 +5,16 @@ import BasicTokenInformationCard from './BasicTokenInformationCard';
 import TokenTypeCard from './TokenTypeCard';
 import {Row, Col} from 'react-bootstrap';
 import FinalStepsCard from './FinalStepsCard';
-import {tokenTypeMapping} from 'Constant';
+import {networkMapping, tokenTypeMapping} from 'Constant';
 import { deployToken } from 'Helpers';
 import SelectWalletModal from 'Components/Header/SelectWalletModal';
+import DeployResultModal from './DeployResultModal';
 
 const InputForm = ({walletAddress, setWalletAddress}) => {
 
   const [selectWalletModalShow, setSelectWalletModalShow] = React.useState(false);
+  const [deployResultModalShow, setDeployResultModalShow] = React.useState(false);
+  const [deployResult, setDeployResult] = React.useState({});
 
   const formik = useFormik({
     initialValues: {
@@ -64,14 +67,24 @@ const InputForm = ({walletAddress, setWalletAddress}) => {
 
   async function deployTokenWithFormValues () {
     try {
+      setDeployResult({});
       const selectedTokenMapping = tokenTypeMapping.find(tokenType => formik.values.tokenType === tokenType.value);
+      const selectedNetworkData = networkMapping.find(network => network.value === formik.values.network);
       const deployResult = await deployToken({
         tokenUrl: selectedTokenMapping.tokenUrl,
         formValues: formik.values
       });
       console.log("Deploy Result-", deployResult);
+      setDeployResultModalShow(true);
+      setDeployResult({...deployResult,
+                      selectedNetworkData,
+                      success: true });
     } catch(e) {
-      console.log("Error", e)
+      console.log("Error1", e.message)
+      // setDeployResultModalShow(true);
+      // setDeployResult({...deployResult,
+      //                 errorMessage: e.message,
+      //                 success: false });
     }
   }
   useEffect(() => {
@@ -125,6 +138,11 @@ const InputForm = ({walletAddress, setWalletAddress}) => {
           }}
       />
       }
+
+      <DeployResultModal
+        show={deployResultModalShow}
+        onHide={() => setDeployResultModalShow(false)}
+        deployResult={deployResult} />
       
     </form>
   );
