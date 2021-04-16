@@ -13,7 +13,6 @@ export class ICONEXResponse {
     }
 
     static getTxnHash() {
-        console.log("Getting txn hash", this.TxnHash);
         return this.TxnHash
     }
 
