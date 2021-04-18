@@ -93,11 +93,17 @@
         display: flex;
         justify-content: center;
        
+        @media(max-width: 768px) {
+            > div {
+              font-size: x-large !important;
+            }
+        }
+
         div {
             font-family: Nunito Sans;
             font-style: normal;
             font-weight: 600;
-            font-size: 36px;
+            font-size: 30px;
             text-align: center;
             color: #E8E8E8;
             background: #CF4D4D;
