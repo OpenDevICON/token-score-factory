@@ -40,7 +40,6 @@ export const deployToken = async ({
     
         const txResult = await getTxResultService(txHash, 1, selectedNetworkData);
         if (txResult.status === 0) {
-            NotificationManager.error(txResult.failure.message, "Token Deploy Failed");
             throw Error(txResult.failure.message);
         } else if (txResult.status === 1) {
             // NotificationManager.success("Token Deployed Successfully")

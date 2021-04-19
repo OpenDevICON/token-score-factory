@@ -17,6 +17,10 @@
     background: #3D4B4B;
     padding-right: 20px;
 
+    @media(max-width: 768px) {
+        padding-bottom: 20px;
+    }
+
     .header-info-container {
         display: flex;
         flex-direction: column;
@@ -90,6 +94,10 @@
 }
 .info-header-homepage {
     min-height: 350px;
+
+    @media(max-width: 992px) {
+        padding-bottom: 20px;
+    }
 }
 
 .walletAddress {
