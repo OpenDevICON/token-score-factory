@@ -40,12 +40,15 @@ export const eventHandler = (event) => {
 
             switch (payload.id) {
                 case 6639:
-                    NotificationManager.info("Token Deploy Request Sent.");
                     ICONEXResponse.setTxnHash(payload.result);
                     break;
                 default:
                     break;
             }
+            break;
+
+        case 'CANCEL_JSON-RPC':
+            ICONEXResponse.setTxnHash(-1);
             break;
         
         default:

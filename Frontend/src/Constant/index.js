@@ -280,3 +280,7 @@ export const WALLET_TYPE = {
     ICONEX: 'iconex'
 };
 
+export const ERROR_MESSAGES = {
+    USER_CANCELLED_TRANSACTION: 'User Cancelled Transaction'
+}
+

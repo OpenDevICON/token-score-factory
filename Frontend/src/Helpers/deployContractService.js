@@ -1,7 +1,7 @@
 import IconService, {HttpProvider, IconConverter, IconUtil} from 'icon-sdk-js';
 import BigNumber from 'bignumber.js';
 import { ICONEXResponse } from "./eventHandler";
-import { WALLET_TYPE } from 'Constant';
+import { ERROR_MESSAGES, WALLET_TYPE } from 'Constant';
 import Transport from '@ledgerhq/hw-transport-u2f';
 import AppIcx from '@ledgerhq/hw-app-icx';
 
@@ -104,9 +104,13 @@ export async function deployContractService(contractContent, params = {}, select
         );
         ICONEXResponse.setTxnHash(null);
         let interval = setInterval(() => {
-          if (ICONEXResponse.getTxnHash()) {
-            resolve(ICONEXResponse.getTxnHash());
+          if(ICONEXResponse.getTxnHash() === -1) {
             clearInterval(interval);
+            reject({
+                message: ERROR_MESSAGES.USER_CANCELLED_TRANSACTION});
+          } else if (ICONEXResponse.getTxnHash()) {
+            clearInterval(interval);
+            resolve(ICONEXResponse.getTxnHash());
           }
         }, 1000)
       } else if (walletType === WALLET_TYPE.LEDGER) {

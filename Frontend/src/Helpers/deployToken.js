@@ -1,4 +1,4 @@
-import { networkMapping, tokenTypeMapping } from 'Constant';
+import { networkMapping, tokenTypeMapping, ERROR_MESSAGES } from 'Constant';
 import { NotificationManager } from 'react-notifications';
 import { deployContractService } from './deployContractService';
 import { getTxResultService } from './getTxResultService';
@@ -37,7 +37,8 @@ export const deployToken = async ({
     
         const txHash = await deployContractService(contractContent, paramsObj, selectedNetworkData);
         console.log("txHash", txHash);
-    
+        NotificationManager.info("Token Deploy Request Sent.");
+
         const txResult = await getTxResultService(txHash, 1, selectedNetworkData);
         if (txResult.status === 0) {
             throw Error(txResult.failure.message);
@@ -51,7 +52,9 @@ export const deployToken = async ({
             )
         }
     } catch(err) {
-        NotificationManager.error(err.message, "Error Deplying Token")
+        if(err.message !== ERROR_MESSAGES.USER_CANCELLED_TRANSACTION) {
+            NotificationManager.error(err.message, "Error Deplying Token")
+        }
         throw Error(err.message);
     }
 
