@@ -15,7 +15,7 @@ const TokenTypeCard = (formik, label) => {
 
                 <hr className = "form-hr" />
 
-                <AppInputField as = "select" formik = {formik} label = "Token Type" id = "tokenType" placeholder = "Name of your token" > 
+                <AppInputField as = "select" formik = {formik} label = "Token Type" id = "tokenType" placeholder = "Name of your token" alwaysShow > 
                         {/* <option value="" disabled selected = "selected">Choose a token type</option> */}
                         {
                             tokenTypeMapping.map(tokenType => {
