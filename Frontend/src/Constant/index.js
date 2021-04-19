@@ -14,7 +14,8 @@ export const tokenTypeMapping = [
         removeCopyright: false,
 
         tokenUrl: 'https://test-bucket-file-parse.s3-ap-southeast-1.amazonaws.com/sample_token_update.zip',
-        estimatedTransactionFee: 10.62
+        estimatedTransactionFee: 10.62,
+        tokenInformation: ['name', 'symbol', 'decimals', 'initialSupply', 'totalSupply']
     },
 
     {
@@ -32,7 +33,8 @@ export const tokenTypeMapping = [
         removeCopyright: true,
 
         tokenUrl: 'https://test-bucket-file-parse.s3-ap-southeast-1.amazonaws.com/sample_token_update.zip',
-        estimatedTransactionFee: 10.62
+        estimatedTransactionFee: 10.62,
+        tokenInformation: ['name', 'symbol', 'decimals', 'initialSupply', 'totalSupply']
 
     },
 
@@ -51,7 +53,8 @@ export const tokenTypeMapping = [
         removeCopyright: false,
 
         tokenUrl: 'https://test-bucket-file-parse.s3-ap-southeast-1.amazonaws.com/sample_token_update.zip',
-        estimatedTransactionFee: 10.62
+        estimatedTransactionFee: 10.62,
+        tokenInformation: ['name', 'symbol', 'decimals', 'initialSupply', 'totalSupply']
 
     },
 
@@ -70,9 +73,170 @@ export const tokenTypeMapping = [
         removeCopyright: false,
 
         tokenUrl: 'https://test-bucket-file-parse.s3-ap-southeast-1.amazonaws.com/sample_token_update.zip',
-        estimatedTransactionFee: 10.62
+        estimatedTransactionFee: 10.62,
+        tokenInformation: ['name', 'symbol', 'decimals', 'initialSupply', 'totalSupply']
 
-    }
+    },
+
+    {
+        name: 'Simple IRC3',
+        value: 'simple_irc3',
+        supplyType: 'Capped',
+        accessType: 'Role Based',
+        transferType: 'Unstoppable',
+
+        burnable: true,
+        mintable: false,
+        irc1363: true,
+        tokenRecover: true,
+        verifiedSourceCode: true,
+        removeCopyright: false,
+
+        tokenUrl: 'https://test-bucket-file-parse.s3-ap-southeast-1.amazonaws.com/sample_token_update.zip',
+        estimatedTransactionFee: 10.62,
+        tokenInformation: ['name', 'symbol']
+
+    },
+
+    {
+        name: 'Metadata IRC3',
+        value: 'metdata_irc3',
+        supplyType: 'Uncapped',
+        accessType: 'Permission Based',
+        transferType: 'Stoppable',
+
+        burnable: false,
+        mintable: true,
+        irc1363: false,
+        tokenRecover: true,
+        verifiedSourceCode: false,
+        removeCopyright: true,
+
+        tokenUrl: 'https://test-bucket-file-parse.s3-ap-southeast-1.amazonaws.com/sample_token_update.zip',
+        estimatedTransactionFee: 10.62,
+        tokenInformation: ['name', 'symbol']
+
+    },
+
+    {
+        name: 'Enumerable IRC3',
+        value: 'enumerable_irc3',
+        supplyType: 'Uncapped',
+        accessType: 'Permission Based',
+        transferType: 'Stoppable',
+        
+        burnable: true,
+        mintable: false,
+        irc1363: true,
+        tokenRecover: false,
+        verifiedSourceCode: true,
+        removeCopyright: false,
+
+        tokenUrl: 'https://test-bucket-file-parse.s3-ap-southeast-1.amazonaws.com/sample_token_update.zip',
+        estimatedTransactionFee: 10.62,
+        tokenInformation: ['name', 'symbol']
+
+    },
+
+    {
+        name: 'Full IRC3',
+        value: 'full_irc3',
+        supplyType: 'Uncapped',
+        accessType: 'Permission Based',
+        transferType: 'Stoppable',
+        
+        burnable: true,
+        mintable: false,
+        irc1363: true,
+        tokenRecover: false,
+        verifiedSourceCode: true,
+        removeCopyright: false,
+
+        tokenUrl: 'https://test-bucket-file-parse.s3-ap-southeast-1.amazonaws.com/sample_token_update.zip',
+        estimatedTransactionFee: 10.62,
+        tokenInformation: ['name', 'symbol']
+
+    },
+
+    {
+        name: 'Mintable IRC3',
+        value: 'mintable_irc3',
+        supplyType: 'Uncapped',
+        accessType: 'Permission Based',
+        transferType: 'Stoppable',
+
+        burnable: false,
+        mintable: true,
+        irc1363: false,
+        tokenRecover: true,
+        verifiedSourceCode: false,
+        removeCopyright: true,
+
+        tokenUrl: 'https://test-bucket-file-parse.s3-ap-southeast-1.amazonaws.com/sample_token_update.zip',
+        estimatedTransactionFee: 10.62,
+        tokenInformation: ['name', 'symbol']
+
+    },
+
+    {
+        name: 'Metadata Mintable IRC3',
+        value: 'metadata_mintable_irc3',
+        supplyType: 'Uncapped',
+        accessType: 'Permission Based',
+        transferType: 'Stoppable',
+        
+        burnable: true,
+        mintable: false,
+        irc1363: true,
+        tokenRecover: false,
+        verifiedSourceCode: true,
+        removeCopyright: false,
+
+        tokenUrl: 'https://test-bucket-file-parse.s3-ap-southeast-1.amazonaws.com/sample_token_update.zip',
+        estimatedTransactionFee: 10.62,
+        tokenInformation: ['name', 'symbol']
+
+    },
+
+    {
+        name: 'Burnable IRC3',
+        value: 'burnable_irc3',
+        supplyType: 'Capped',
+        accessType: 'Role Based',
+        transferType: 'Unstoppable',
+
+        burnable: true,
+        mintable: false,
+        irc1363: true,
+        tokenRecover: false,
+        verifiedSourceCode: true,
+        removeCopyright: false,
+
+        tokenUrl: 'https://test-bucket-file-parse.s3-ap-southeast-1.amazonaws.com/sample_token_update.zip',
+        estimatedTransactionFee: 10.62,
+        tokenInformation: ['name', 'symbol']
+
+    },
+
+    {
+        name: 'Pausable IRC3',
+        value: 'pausable_irc3',
+        supplyType: 'Uncapped',
+        accessType: 'Permission Based',
+        transferType: 'Stoppable',
+        
+        burnable: true,
+        mintable: false,
+        irc1363: true,
+        tokenRecover: false,
+        verifiedSourceCode: true,
+        removeCopyright: false,
+
+        tokenUrl: 'https://test-bucket-file-parse.s3-ap-southeast-1.amazonaws.com/sample_token_update.zip',
+        estimatedTransactionFee: 10.62,
+        tokenInformation: ['name', 'symbol']
+
+    },
 ]
 
 export const networkMapping = [

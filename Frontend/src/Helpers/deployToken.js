@@ -1,4 +1,4 @@
-import { networkMapping } from 'Constant';
+import { networkMapping, tokenTypeMapping } from 'Constant';
 import { NotificationManager } from 'react-notifications';
 import { deployContractService } from './deployContractService';
 import { getTxResultService } from './getTxResultService';
@@ -9,12 +9,25 @@ export const deployToken = async ({
     formValues
 }) => {
     try {
+        const selectedTokenMapping = tokenTypeMapping.find(tokenType => formValues.tokenType === tokenType.value);
+
+        const getTokenInformation = (key) => {
+            return selectedTokenMapping.tokenInformation.includes(key) ? formValues[key] : undefined;
+        }
+
+        const getTokenInformationNumericValues = (key) => {
+            let tokenInfo = getTokenInformation(key);
+            return tokenInfo ? `${tokenInfo}` : undefined;
+        }
+
         let contractContent = await fetchContractContent(tokenUrl);
+
         const paramsObj = {
-            '_name': formValues.name,
-            '_symbol': formValues.symbol,
-            '_decimals': `${formValues.decimals}`,
-            '_initialSupply': `${formValues.initialSupply}`,
+            '_name': getTokenInformation('name'),
+            '_symbol': getTokenInformation('symbol'),
+            '_decimals': getTokenInformationNumericValues('decimals'),
+            '_initialSupply': getTokenInformationNumericValues('initialSupply'),
+            // '_totalSupply': getTokenInformationNumericValues('tokenSupply'),
         };
     
         console.log("Contract Content", contractContent);
