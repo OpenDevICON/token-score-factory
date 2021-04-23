@@ -117,10 +117,6 @@ class PausableIRC2(IconScoreBase):
     def isPaused(self) -> bool:
         return self._paused.get()
 
-    @external(readonly=True)
-    def cap(self) -> str:
-        return self._cap.get()
-
     @external
     def transfer(self, _to: Address, _value: int, _data: bytes = None):
         if _data is None:
