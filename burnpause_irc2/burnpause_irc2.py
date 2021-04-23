@@ -191,5 +191,5 @@ class BurnPauseIRC2(IconScoreBase):
 
     def _beforeTokenTransfer(self, _from: Address, _to: Address, _value: int):
         # If paused, it returns false. 
-        if self._paused.get:
+        if self._paused.get():
             revert("Token operations paused")
