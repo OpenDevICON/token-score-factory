@@ -1,6 +1,7 @@
 from iconservice import *
 
 TAG = 'MintableIRC2'
+DEFAULT_CAP_VALUE = 2 ** 256 - 1
 
 # An interface of ICON Token Standard, IRC-2
 class TokenStandard(ABC):
@@ -45,6 +46,7 @@ class MintableIRC2(IconScoreBase):
     _DECIMALS = 'decimals'
     _TOTAL_SUPPLY = 'total_supply'
     _BALANCES = 'balances'
+    _CAP = 'cap'
 
     @eventlog(indexed=3)
     def Transfer(self, _from: Address, _to: Address, _value: int, _data: bytes):
@@ -61,8 +63,9 @@ class MintableIRC2(IconScoreBase):
         self._decimals = VarDB(self._DECIMALS, db, value_type=int)
         self._balances = DictDB(self._BALANCES, db, value_type=int)
         self._total_supply = VarDB(self._TOTAL_SUPPLY, db, value_type=int)
+        self._cap = VarDB(self._CAP, db, value_type=int)
 
-    def on_install(self, _name:str, _symbol:str, _initialSupply: int, _decimals: int) -> None:
+    def on_install(self, _name:str, _symbol:str, _initialSupply: int, _decimals: int, _cap: int = DEFAULT_CAP_VALUE) -> None:
         super().on_install()
 
         if (len(_symbol) <= 0):
@@ -77,12 +80,23 @@ class MintableIRC2(IconScoreBase):
         if _decimals < 0:
             revert("Decimals cannot be less than zero")
 
+        if _cap <= 0:
+            revert("Cap cannot be zero or less")
+
+        if _cap != DEFAULT_CAP_VALUE:
+            if _initialSupply >= _cap:
+                revert("Cannot exceed cap limit")
+
         total_supply = _initialSupply * 10 ** _decimals
+        total_cap = _cap * 10 ** _decimals
+
         Logger.debug(f'on_install: total_supply={total_supply}', TAG)
+        Logger.debug(f'on_install: total_cap={total_cap}', TAG)
 
         self._name.set(_name)
         self._symbol.set(_symbol)
         self._total_supply.set(total_supply)
+        self._cap.set(total_cap)
         self._decimals.set(_decimals)
         self._balances[self.msg.sender] = total_supply
 
@@ -108,6 +122,10 @@ class MintableIRC2(IconScoreBase):
     @external(readonly=True)
     def balanceOf(self, _owner: Address) -> int:
         return self._balances[_owner]
+
+    @external(readonly=True)
+    def cap(self) -> int:
+        return self._cap.get()
 
     @external
     def transfer(self, _to: Address, _value: int, _data: bytes = None):
@@ -147,9 +165,15 @@ class MintableIRC2(IconScoreBase):
     def _mint(self, _to: Address, _value: int) -> None:
         if (self.msg.sender != self.owner):
             revert("Only owner can call mint method")
+
+        self._beforeTokenMint(0, _to, _value)
         
         self._total_supply.set(self._total_supply.get() + _value)
         self._balances[self.address] +=  _value
         self._transfer(self.address, _to, _value, b'mint')
         
         self.Mint(_to, _value)
+
+    def _beforeTokenMint(self, _from: Address, _to: Address, _value: int):
+        if ((self._total_supply.get() + _value) >= self._cap.get()):
+            revert("Cap limit exceeded")
