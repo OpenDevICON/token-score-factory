@@ -39,8 +39,8 @@ class TokenFallbackInterface(InterfaceScore):
 
 
 class BasicIRC2(IconScoreBase, TokenStandard):
-    _NAME = 'token_name'
-    _SYMBOL = 'token_symbol'
+    _NAME = '_name'
+    _SYMBOL = '_symbol'
     _DECIMALS = 'decimals'
     _TOTAL_SUPPLY = 'total_supply'
     _BALANCES = 'balances'
@@ -60,7 +60,7 @@ class BasicIRC2(IconScoreBase, TokenStandard):
     def on_install(self, _name:str, _symbol:str, _initialSupply: int, _decimals: int) -> None:
         super().on_install()
 
-         if (len(_symbol) <= 0):
+        if (len(_symbol) <= 0):
             revert("Symbol of token should have at least one character")
 
         if (len(_name) <= 0):
