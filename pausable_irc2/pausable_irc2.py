@@ -48,6 +48,14 @@ class PausableIRC2(IconScoreBase):
     _BALANCES = 'balances'
     _PAUSED = 'paused'
 
+    @eventlog(indexed=1)
+    def Paused(self, status: bool):
+        pass
+
+    @eventlog(indexed=3)
+    def Transfer(self, _from: Address, _to: Address, _value: int, _data: bytes):
+        pass
+
     def __init__(self, db: IconScoreDatabase) -> None:
         super().__init__(db)
         self._name = VarDB(self._NAME, db, value_type=str)
@@ -127,7 +135,7 @@ class PausableIRC2(IconScoreBase):
             revert("Token is already in paused state")
 
         self._paused.set(True)
-        self.Paused()
+        self.Paused(True)
 
     @external
     def unpause(self) -> None:
@@ -137,7 +145,7 @@ class PausableIRC2(IconScoreBase):
             revert("Token is already in unpaused state")
 
         self._paused.set(False)
-        self.Unpaused()
+        self.Paused(False)
 
 
     def _transfer(self, _from: Address, _to: Address, _value: int, _data: bytes):
