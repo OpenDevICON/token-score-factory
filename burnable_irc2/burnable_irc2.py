@@ -56,6 +56,11 @@ class BurnableIRC2(IconScoreBase):
 
     def __init__(self, db: IconScoreDatabase) -> None:
         super().__init__(db)
+        self._name = VarDB(self._NAME, db, value_type=str)
+        self._symbol = VarDB(self._SYMBOL, db, value_type=str)
+        self._decimals = VarDB(self._DECIMALS, db, value_type=int)
+        self._balances = DictDB(self._BALANCES, db, value_type=int)
+        self._total_supply = VarDB(self._TOTAL_SUPPLY, db, value_type=int)
 
     def on_install(self, _name:str, _symbol:str, _initialSupply: int, _decimals: int) -> None:
         super().on_install()
