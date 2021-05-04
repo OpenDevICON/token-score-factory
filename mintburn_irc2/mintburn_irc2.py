@@ -2,6 +2,7 @@ from iconservice import *
 
 TAG = 'MintBurnIRC2'
 DEFAULT_CAP_VALUE = 2 ** 256 - 1
+EOA_ZERO = Address.from_string('hx' + '0' * 40)
 
 # An interface of ICON Token Standard, IRC-2
 class TokenStandard(ABC):
@@ -50,14 +51,6 @@ class MintBurnIRC2(IconScoreBase):
 
     @eventlog(indexed=3)
     def Transfer(self, _from: Address, _to: Address, _value: int, _data: bytes):
-        pass
-
-    @eventlog(indexed=1)
-    def Mint(self, _to: Address, _value: int):
-        pass
-
-    @eventlog(indexed=1)
-    def Burn(self, _to: Address, _value: int):
         pass
 
     def __init__(self, db: IconScoreDatabase) -> None:
@@ -139,11 +132,15 @@ class MintBurnIRC2(IconScoreBase):
 
     @external
     def mint(self, _value: int) -> None:
-        self._mint(self.msg.sender, _value)
+        if _data is None:
+            _data = b'None'
+        self._mint(self.msg.sender, _value, _data)
 
     @external
     def mintTo(self, _to: Address, _value: int) -> None:
-        self._mint(_to, _value)
+        if _data is None:
+            _data = b'None'
+        self._mint(_to, _value, _data)
 
     @external
     def burn(self, _value: int) -> None:
@@ -174,17 +171,23 @@ class MintBurnIRC2(IconScoreBase):
         self.Transfer(_from, _to, _value, _data)
         Logger.debug(f'Transfer({_from}, {_to}, {_value}, {_data})', TAG)
 
-    def _mint(self, _to: Address, _value: int) -> None:
+    def _mint(self, _to: Address, _value: int, _data: bytes) -> None:
         if (self.msg.sender != self.owner):
             revert("Only owner can call mint method")
 
-        self._beforeTokenMint(0, _to, _value)
+        if ((self._total_supply.get() + _value) >= self._cap.get()):
+            revert("Cap limit exceeded")
         
         self._total_supply.set(self._total_supply.get() + _value)
-        self._balances[self.address] +=  _value
-        self._transfer(self.address, _to, _value, b'mint')
+        self._balances[_to] +=  _value
+
+        if _to.is_contract:
+            # If the recipient is SCORE,
+            #   then calls `tokenFallback` to hand over control.
+            recipient_score = self.create_interface_score(_to, TokenFallbackInterface)
+            recipient_score.tokenFallback(_from, _value, _data)
         
-        self.Mint(_to, _value)
+        self.Transfer(EOA_ZERO, _to, _value, _data)
 
     def _burn(self, _from: Address, _value: int) -> None:
         if (self.msg.sender != self.owner):
@@ -193,8 +196,4 @@ class MintBurnIRC2(IconScoreBase):
         self._total_supply.set(self._total_supply.get() - _value)
         self._balances[_from] -=  _value
 
-        self.Burn(_from, _value)
-
-    def _beforeTokenMint(self, _from: Address, _to: Address, _value: int):
-        if ((self._total_supply.get() + _value) >= self._cap.get()):
-            revert("Cap limit exceeded")
+        self.Transfer(_from, EOA_ZERO, _value, b'burn')

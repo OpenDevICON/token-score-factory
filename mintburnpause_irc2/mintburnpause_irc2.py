@@ -2,6 +2,7 @@ from iconservice import *
 
 TAG = 'MintBurnPauseIRC2'
 DEFAULT_CAP_VALUE = 2 ** 256 - 1
+EOA_ZERO = Address.from_string('hx' + '0' * 40)
 
 # An interface of ICON Token Standard, IRC-2
 class TokenStandard(ABC):
@@ -54,14 +55,6 @@ class MintBurnPauseIRC2(IconScoreBase):
         pass
 
     @eventlog(indexed=1)
-    def Mint(self, _to: Address, _value: int):
-        pass
-
-    @eventlog(indexed=1)
-    def Burn(self, _to: Address, _value: int):
-        pass
-
-    @eventlog(indexed=1)
     def Paused(self, status: bool):
         pass
 
@@ -94,9 +87,8 @@ class MintBurnPauseIRC2(IconScoreBase):
         if _cap <= 0:
             revert("Cap cannot be zero or less")
 
-        if _cap != DEFAULT_CAP_VALUE:
-            if _initialSupply >= _cap:
-                revert("Cannot exceed cap limit")
+        if _initialSupply >= _cap:
+            revert("Cannot exceed cap limit")
 
         total_supply = _initialSupply * 10 ** _decimals
         total_cap = _cap * 10 ** _decimals
@@ -151,11 +143,15 @@ class MintBurnPauseIRC2(IconScoreBase):
 
     @external
     def mint(self, _value: int) -> None:
-        self._mint(self.msg.sender, _value)
+        if _data is None:
+            _data = b'None'
+        self._mint(self.msg.sender, _value, _data)
 
     @external
     def mintTo(self, _to: Address, _value: int) -> None:
-        self._mint(_to, _value)
+        if _data is None:
+            _data = b'None'
+        self._mint(_to, _value, _data)
 
     @external
     def burn(self, _value: int) -> None:
@@ -169,7 +165,7 @@ class MintBurnPauseIRC2(IconScoreBase):
     def pause(self) -> None:
         if self.msg.sender != self.owner:
             revert("Token can be paused by owner only")
-        if self._paused.get() == True:
+        if self._paused.get():
             revert("Token is already in paused state")
 
         self._paused.set(True)
@@ -179,7 +175,7 @@ class MintBurnPauseIRC2(IconScoreBase):
     def unpause(self) -> None:
         if self.msg.sender != self.owner:
             revert("Token can be unpaused by owner only")
-        if self._paused.get() == False:
+        if not self._paused.get():
             revert("Token is already in unpaused state")
 
         self._paused.set(False)
@@ -208,23 +204,28 @@ class MintBurnPauseIRC2(IconScoreBase):
         self.Transfer(_from, _to, _value, _data)
         Logger.debug(f'Transfer({_from}, {_to}, {_value}, {_data})', TAG)
 
-    def _mint(self, _to: Address, _value: int) -> None:
+    def _mint(self, _to: Address, _value: int, _data: bytes) -> None:
         if (self.msg.sender != self.owner):
             revert("Only owner can call mint method")
 
-        self._beforeTokenTransfer(0, _to, _value)
+        self._beforeTokenTransfer(EOA_ZERO, _to, _value)
         
         self._total_supply.set(self._total_supply.get() + _value)
-        self._balances[self.address] +=  _value
-        self._transfer(self.address, _to, _value, b'mint')
+        self._balances[_to] +=  _value
         
-        self.Mint(_to, _value)
+        if _to.is_contract:
+            # If the recipient is SCORE,
+            #   then calls `tokenFallback` to hand over control.
+            recipient_score = self.create_interface_score(_to, TokenFallbackInterface)
+            recipient_score.tokenFallback(_from, _value, _data)
+        
+        self.Transfer(EOA_ZERO, _to, _value, _data)
 
-    def _burn(self, _from: Address, _value: int) -> None:
+    def _burn(self, _from: Address, _value: int,) -> None:
         if (self.msg.sender != self.owner):
             revert("Only owner can call burn method")
 
-        self._beforeTokenTransfer(_from, 0, _value)
+        self._beforeTokenTransfer(_from, EOA_ZERO, _value)
         
         self._total_supply.set(self._total_supply.get() - _value)
         self._balances[_from] -=  _value

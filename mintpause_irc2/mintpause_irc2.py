@@ -2,6 +2,7 @@ from iconservice import *
 
 TAG = 'MintPauseIRC2'
 DEFAULT_CAP_VALUE = 2 ** 256 - 1
+EOA_ZERO = Address.from_string('hx' + '0' * 40)
 
 # An interface of ICON Token Standard, IRC-2
 class TokenStandard(ABC):
@@ -90,9 +91,8 @@ class MintPauseIRC2(IconScoreBase):
         if _cap <= 0:
             revert("Cap cannot be zero or less")
 
-        if _cap != DEFAULT_CAP_VALUE:
-            if _initialSupply >= _cap:
-                revert("Cannot exceed cap limit")
+        if _initialSupply >= _cap:
+            revert("Cannot exceed cap limit")
 
         total_supply = _initialSupply * 10 ** _decimals
         total_cap = _cap * 10 ** _decimals
@@ -146,12 +146,16 @@ class MintPauseIRC2(IconScoreBase):
         self._transfer(self.msg.sender, _to, _value, _data)
 
     @external
-    def mint(self, _value: int) -> None:
-        self._mint(self.msg.sender, _value)
+    def mint(self, _value: int, _data: bytes) -> None:
+        if _data is None:
+            _data = b'None'
+        self._mint(self.msg.sender, _value, _data)
 
     @external
-    def mintTo(self, _to: Address, _value: int) -> None:
-        self._mint(_to, _value)
+    def mintTo(self, _to: Address, _value: int, _data: bytes) -> None:
+        if _data is None:
+            _data = b'None'
+        self._mint(_to, _value, _data)
 
     @external
     def pause(self) -> None:
@@ -196,17 +200,22 @@ class MintPauseIRC2(IconScoreBase):
         self.Transfer(_from, _to, _value, _data)
         Logger.debug(f'Transfer({_from}, {_to}, {_value}, {_data})', TAG)
 
-    def _mint(self, _to: Address, _value: int) -> None:
+    def _mint(self, _to: Address, _value: int, _data: bytes) -> None:
         if (self.msg.sender != self.owner):
             revert("Only owner can call mint method")
 
-        self._beforeTokenTransfer(0, _to, _value)
+        self._beforeTokenTransfer(EOA_ZERO, _to, _value)
         
         self._total_supply.set(self._total_supply.get() + _value)
-        self._balances[self.address] +=  _value
-        self._transfer(self.address, _to, _value, b'mint')
+        self._balances[_to] +=  _value
+
+        if _to.is_contract:
+            # If the recipient is SCORE,
+            #   then calls `tokenFallback` to hand over control.
+            recipient_score = self.create_interface_score(_to, TokenFallbackInterface)
+            recipient_score.tokenFallback(_from, _value, _data)
         
-        self.Mint(_to, _value)
+        self.Transfer(EOA_ZERO, _to, _value, _data)
 
     def _beforeTokenTransfer(self, _from: Address, _to: Address, _value: int):
         if self._paused.get():
