@@ -1,6 +1,7 @@
 from iconservice import *
 
 TAG = 'BurnPauseIRC2'
+EOA_ZERO = Address.from_string('hx' + '0' * 40)
 
 # An interface of ICON Token Standard, IRC-2
 class TokenStandard(ABC):
@@ -131,10 +132,6 @@ class BurnPauseIRC2(IconScoreBase):
         self._burn(self.msg.sender, _value)
 
     @external
-    def burnFrom(self, _from: Address, _value: int) -> None:
-        self._burn(_from, _value)
-
-    @external
     def pause(self) -> None:
         if self.msg.sender != self.owner:
             revert("Token can be paused by owner only")
@@ -154,7 +151,6 @@ class BurnPauseIRC2(IconScoreBase):
         self._paused.set(False)
         self.Paused(False)
 
-
     def _transfer(self, _from: Address, _to: Address, _value: int, _data: bytes):
 
         # Checks the sending value and balance.
@@ -163,7 +159,8 @@ class BurnPauseIRC2(IconScoreBase):
         if self._balances[_from] < _value:
             revert("Out of balance")
 
-        self._beforeTokenTransfer(_from, _to, _value)
+        if self._paused.get():
+            revert("Token operations paused")
 
         self._balances[_from] = self._balances[_from] - _value
         self._balances[_to] = self._balances[_to] + _value
@@ -179,17 +176,13 @@ class BurnPauseIRC2(IconScoreBase):
         Logger.debug(f'Transfer({_from}, {_to}, {_value}, {_data})', TAG)
 
     def _burn(self, _from: Address, _value: int) -> None:
-        if (self.msg.sender != self.owner):
-            revert("Only owner can call burn method")
+        if self.balanceOf(_from) < _value:
+            revert('The amount greater than the balance in the account cannot be burned.')
 
-        self._beforeTokenTransfer(_from, 0, _value)
+        if self._paused.get():
+            revert("Token operations paused")
 
         self._total_supply.set(self._total_supply.get() - _value)
         self._balances[_from] -=  _value
 
-        self.Burn(_from, _value)
-
-    def _beforeTokenTransfer(self, _from: Address, _to: Address, _value: int):
-        # If paused, it returns false. 
-        if self._paused.get():
-            revert("Token operations paused")
+        self.Transfer(_from, EOA_ZERO, _value, b'burn')
