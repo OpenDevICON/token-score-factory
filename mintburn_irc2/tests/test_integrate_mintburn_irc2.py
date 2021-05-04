@@ -120,6 +120,24 @@ class TestTest(IconIntegrateTestBase):
         tx_result = self.process_transaction(signed_transaction, self.icon_service)
         return tx_result
 
+    def run_mintTo(self, params, wallet):
+        _call_transaction = CallTransactionBuilder() \
+            .from_(wallet.get_address()) \
+            .to(self._score_address) \
+            .step_limit(100_000_000_000) \
+            .nid(3) \
+            .nonce(100) \
+            .method("mintTo") \
+            .params(params) \
+            .build()
+
+        signed_transaction = SignedTransaction(_call_transaction, wallet)
+
+        # process the transaction in local
+        tx_result = self.process_transaction(signed_transaction, self.icon_service)
+        return tx_result
+
+
     def run_burn(self, params, wallet):
         _call_transaction = CallTransactionBuilder() \
             .from_(wallet.get_address()) \
@@ -162,6 +180,33 @@ class TestTest(IconIntegrateTestBase):
         tx_result_new = self.run_mint(param3, self._test1)
         self.assertEqual(False, tx_result_new['status'])
 
+    def test_mintTo(self):
+        amt_to_mint = 10 * 10 ** 18
+
+        param2 = {
+            "_to": self._test2.get_address(),
+            "_value": amt_to_mint
+        }
+
+        balance_b4_mint = self.run_balanceOf(self._test2.get_address())
+        supply_b4_mint = self.run_totalSupply()
+        tx_result = self.run_mintTo(param2, self._test1)
+        self.assertEqual(True, tx_result['status'])
+        balance_after_mint = self.run_balanceOf(self._test2.get_address())
+        supply_after_mint = self.run_totalSupply()
+
+        self.assertEqual(amt_to_mint, int(balance_after_mint, 0) - int(balance_b4_mint, 0))
+        self.assertEqual(amt_to_mint, int(supply_after_mint, 0) - int(supply_b4_mint, 0))
+
+    def test_mintTo_by_other(self):
+        param = {
+            "_to": self._test2.get_address(),
+            "_value": 10 * 10 ** 18
+        }
+
+        tx_result = self.run_mintTo(param, self._test2)
+        self.assertEqual(False, tx_result['status'])
+        
     def test_mint_by_other(self):
         param = {
             "_value": 10 * 10 ** 18
