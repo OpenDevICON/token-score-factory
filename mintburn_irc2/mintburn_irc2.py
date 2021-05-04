@@ -80,9 +80,8 @@ class MintBurnIRC2(IconScoreBase):
         if _cap <= 0:
             revert("Cap cannot be zero or less")
 
-        if _cap != DEFAULT_CAP_VALUE:
-            if _initialSupply >= _cap:
-                revert("Cannot exceed cap limit")
+        if _initialSupply >= _cap:
+            revert("Cannot exceed cap limit")
 
         total_supply = _initialSupply * 10 ** _decimals
         total_cap = _cap * 10 ** _decimals
@@ -131,13 +130,13 @@ class MintBurnIRC2(IconScoreBase):
         self._transfer(self.msg.sender, _to, _value, _data)
 
     @external
-    def mint(self, _value: int) -> None:
+    def mint(self, _value: int, _data: bytes) -> None:
         if _data is None:
             _data = b'None'
         self._mint(self.msg.sender, _value, _data)
 
     @external
-    def mintTo(self, _to: Address, _value: int) -> None:
+    def mintTo(self, _to: Address, _value: int, _data: bytes) -> None:
         if _data is None:
             _data = b'None'
         self._mint(_to, _value, _data)
