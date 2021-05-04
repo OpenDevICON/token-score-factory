@@ -142,13 +142,13 @@ class MintBurnPauseIRC2(IconScoreBase):
         self._transfer(self.msg.sender, _to, _value, _data)
 
     @external
-    def mint(self, _value: int) -> None:
+    def mint(self, _value: int, _data: bytes = None) -> None:
         if _data is None:
             _data = b'None'
         self._mint(self.msg.sender, _value, _data)
 
     @external
-    def mintTo(self, _to: Address, _value: int) -> None:
+    def mintTo(self, _to: Address, _value: int, _data: bytes = None) -> None:
         if _data is None:
             _data = b'None'
         self._mint(_to, _value, _data)
@@ -230,7 +230,7 @@ class MintBurnPauseIRC2(IconScoreBase):
         self._total_supply.set(self._total_supply.get() - _value)
         self._balances[_from] -=  _value
 
-        self.Burn(_from, _value)
+        self.Transfer(_from, EOA_ZERO, _value, b'burn')
 
     def _beforeTokenTransfer(self, _from: Address, _to: Address, _value: int):
         if self._paused.get():
