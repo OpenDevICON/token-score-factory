@@ -146,13 +146,13 @@ class MintPauseIRC2(IconScoreBase):
         self._transfer(self.msg.sender, _to, _value, _data)
 
     @external
-    def mint(self, _value: int, _data: bytes) -> None:
+    def mint(self, _value: int, _data: bytes = None) -> None:
         if _data is None:
             _data = b'None'
         self._mint(self.msg.sender, _value, _data)
 
     @external
-    def mintTo(self, _to: Address, _value: int, _data: bytes) -> None:
+    def mintTo(self, _to: Address, _value: int, _data: bytes = None) -> None:
         if _data is None:
             _data = b'None'
         self._mint(_to, _value, _data)
