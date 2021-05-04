@@ -222,8 +222,8 @@ class MintBurnPauseIRC2(IconScoreBase):
         self.Transfer(EOA_ZERO, _to, _value, _data)
 
     def _burn(self, _from: Address, _value: int,) -> None:
-        if (self.msg.sender != self.owner):
-            revert("Only owner can call burn method")
+        if self.balanceOf(_from) < _value:
+            revert('The amount greater than the balance in the account cannot be burned.')
 
         self._beforeTokenTransfer(_from, EOA_ZERO, _value)
         
