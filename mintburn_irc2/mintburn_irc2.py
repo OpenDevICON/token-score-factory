@@ -130,13 +130,13 @@ class MintBurnIRC2(IconScoreBase):
         self._transfer(self.msg.sender, _to, _value, _data)
 
     @external
-    def mint(self, _value: int, _data: bytes) -> None:
+    def mint(self, _value: int, _data: bytes = None ) -> None:
         if _data is None:
             _data = b'None'
         self._mint(self.msg.sender, _value, _data)
 
     @external
-    def mintTo(self, _to: Address, _value: int, _data: bytes) -> None:
+    def mintTo(self, _to: Address, _value: int, _data: bytes = None) -> None:
         if _data is None:
             _data = b'None'
         self._mint(_to, _value, _data)
@@ -189,8 +189,8 @@ class MintBurnIRC2(IconScoreBase):
         self.Transfer(EOA_ZERO, _to, _value, _data)
 
     def _burn(self, _from: Address, _value: int) -> None:
-        if (self.msg.sender != self.owner):
-            revert("Only owner can call burn method")
+        if self.balanceOf(_from) < _value:
+            revert('The amount greater than the balance in the account cannot be burned')
         
         self._total_supply.set(self._total_supply.get() - _value)
         self._balances[_from] -=  _value
