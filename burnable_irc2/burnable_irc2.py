@@ -119,10 +119,6 @@ class BurnableIRC2(IconScoreBase):
     def burn(self, _value: int) -> None:
         self._burn(self.msg.sender, _value)
 
-    @external
-    def burnFrom(self, _from: Address, _value: int) -> None:
-        self._burn(_from, _value)
-
     def _burn(self, _from: Address, _value: int) -> None:
         if (self.msg.sender != self.owner):
             revert("Only owner can call burn method")
@@ -133,7 +129,7 @@ class BurnableIRC2(IconScoreBase):
         self.Burn(_from, _value)
 
     def _transfer(self, _from: Address, _to: Address, _value: int, _data: bytes):
-
+        
         # Checks the sending value and balance.
         if _value < 0:
             revert("Transferring value cannot be less than zero")

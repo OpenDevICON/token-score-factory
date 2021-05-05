@@ -158,10 +158,6 @@ class MintBurnPauseIRC2(IconScoreBase):
         self._burn(self.msg.sender, _value)
 
     @external
-    def burnFrom(self, _from: Address, _value: int) -> None:
-        self._burn(_from, _value)
-
-    @external
     def pause(self) -> None:
         if self.msg.sender != self.owner:
             revert("Token can be paused by owner only")
