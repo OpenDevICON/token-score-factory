@@ -4,9 +4,9 @@ import {Form, Col, Row} from 'react-bootstrap';
 const AppInputField = ({formik, label, id, placeholder, as, children, info, type = "text", ...props}) => {
     return (
         <>
-            <Form.Group>
+            <Form.Group style={{marginBottom: '0.6rem'}}>
                 <Row>
-                <Col md = {3}>
+                <Col md = {3} style={{display: 'flex', alignItems: 'center'}}>
                     <Form.Label>{label}:</Form.Label>
                 </Col>
                 <Col md = {9}>

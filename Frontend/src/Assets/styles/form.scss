@@ -156,3 +156,7 @@
     }
 
 }
+
+.form-control:disabled, .form-control[readonly] {
+    opacity: 0.7 !important;
+}

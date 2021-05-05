@@ -29,7 +29,7 @@ const FinalStepsCard = (formik) => {
                     </AppInputField>
 
                     <Form.Group className = "terms-of-use">
-                        <Form.Check type="checkbox" label = "I have thoroughly read and agreed to Token Score Factory’s Terms of Use."
+                        <Form.Check type="checkbox" label = " I have thoroughly read and agreed to Token Score Factory’s Terms of Use."
                             {...formik.formik.getFieldProps('termsOfUseAgreement')}/>
 
                         {formik.formik.touched['termsOfUseAgreement'] && formik.formik.errors['termsOfUseAgreement'] ? (

@@ -6,10 +6,11 @@ export const tokenTypeMapping = [
         accessType: 'Role Based',
         transferType: 'Unstoppable',
 
-        burnable: true,
+        burnable: false,
         mintable: false,
         irc1363: true,
-        tokenRecover: true,
+        pausable: false,
+        tokenRecover: false,
         verifiedSourceCode: true,
         removeCopyright: false,
 
@@ -26,8 +27,9 @@ export const tokenTypeMapping = [
 
         burnable: false,
         mintable: true,
+        pausable: false,
         irc1363: false,
-        tokenRecover: true,
+        tokenRecover: false,
         verifiedSourceCode: false,
         removeCopyright: true,
 
@@ -47,6 +49,7 @@ export const tokenTypeMapping = [
         mintable: false,
         irc1363: true,
         tokenRecover: false,
+        pausable: false,
         verifiedSourceCode: true,
         removeCopyright: false,
 
@@ -58,13 +61,14 @@ export const tokenTypeMapping = [
     {
         name: 'Pausable IRC2',
         value: 'pausable_irc2',
-        supplyType: 'Uncapped',
+        supplyType: 'Capped',
         accessType: 'Permission Based',
         transferType: 'Stoppable',
         
-        burnable: true,
+        burnable: false,
         mintable: false,
         irc1363: true,
+        pausable: true,
         tokenRecover: false,
         verifiedSourceCode: true,
         removeCopyright: false,
@@ -72,7 +76,87 @@ export const tokenTypeMapping = [
         tokenUrl: 'https://test-bucket-file-parse.s3-ap-southeast-1.amazonaws.com/sample_token_update.zip',
         estimatedTransactionFee: 10.62
 
-    }
+    },
+
+    {
+        name: 'Mintable + Burnable IRC2',
+        value: 'mintable_burnable_irc2',
+        supplyType: 'Uncapped',
+        accessType: 'Permission Based',
+        transferType: 'Stoppable',
+        
+        burnable: true,
+        mintable: true,
+        irc1363: true,
+        pausable: false,
+        tokenRecover: false,
+        verifiedSourceCode: true,
+        removeCopyright: false,
+
+        tokenUrl: 'https://test-bucket-file-parse.s3-ap-southeast-1.amazonaws.com/sample_token_update.zip',
+        estimatedTransactionFee: 10.62
+
+    },
+
+    {
+        name: 'Mintable + Pausable IRC2',
+        value: 'mintable_pausable_irc2',
+        supplyType: 'Uncapped',
+        accessType: 'Permission Based',
+        transferType: 'Stoppable',
+        
+        burnable: false,
+        mintable: true,
+        irc1363: true,
+        pausable: true,
+        tokenRecover: false,
+        verifiedSourceCode: true,
+        removeCopyright: false,
+
+        tokenUrl: 'https://test-bucket-file-parse.s3-ap-southeast-1.amazonaws.com/sample_token_update.zip',
+        estimatedTransactionFee: 10.62
+
+    },
+
+    {
+        name: 'Burnable + Pausable IRC2',
+        value: 'burnable_pausable_irc2',
+        supplyType: 'Uncapped',
+        accessType: 'Permission Based',
+        transferType: 'Stoppable',
+        
+        burnable: false,
+        mintable: true,
+        irc1363: true,
+        pausable: true,
+        tokenRecover: false,
+        verifiedSourceCode: true,
+        removeCopyright: false,
+
+        tokenUrl: 'https://test-bucket-file-parse.s3-ap-southeast-1.amazonaws.com/sample_token_update.zip',
+        estimatedTransactionFee: 10.62
+
+    },
+
+    {
+        name: 'Mintable + Burnable + Pausable IRC2',
+        value: 'mintable_burnable_pausable_irc2',
+        supplyType: 'Uncapped',
+        accessType: 'Permission Based',
+        transferType: 'Stoppable',
+        
+        burnable: true,
+        mintable: true,
+        irc1363: true,
+        pausable: true,
+        tokenRecover: false,
+        verifiedSourceCode: true,
+        removeCopyright: false,
+
+        tokenUrl: 'https://test-bucket-file-parse.s3-ap-southeast-1.amazonaws.com/sample_token_update.zip',
+        estimatedTransactionFee: 10.62
+
+    },
 ]
 
 export const networkMapping = [

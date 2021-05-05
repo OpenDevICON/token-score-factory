@@ -11,10 +11,10 @@ const CheckedField = ({ checked, name, info }) => {
                     {checked ? <img src = {checkedsvg} alt = "checked" /> : 
                         <img src = {uncheckedsvg} alt = "unchecked" />}
                 </Col>
-                <Col xs="10">
+                <Col xs="10" style={{paddingLeft: '0px'}}>
                     <span style = {{display: 'flex', flexDirection: 'column'}}>
                         {
-                            <span className="form-check-field-name">{name}</span>
+                            <span className="form-check-field-name" style = {{marginLeft: '0px'}}>{name}</span>
 
                         }
 
