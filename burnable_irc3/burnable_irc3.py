@@ -160,6 +160,7 @@ class BurnableIRC3(IconScoreBase):
 
     @external
     def burn(self, _tokenId: int) -> None:
+        # this implementation allows minter to re-mint a burned token
 
         if not self._token_exists(_tokenId):
             revert("Trying to burn non existent token")
@@ -176,6 +177,19 @@ class BurnableIRC3(IconScoreBase):
         del self._token_URIs[_tokenId]
 
         self.Transfer(owner, EOA_ZERO, _tokenId)
+
+    @external
+    def setTokenURI(self, _tokenId: int, _tokenURI: str = None) -> None:
+        if not self._token_exists(_tokenId):
+            revert("Trying to set URI for non existent token")
+
+        if self.msg.sender != self.ownerOf(_tokenId):
+            revert("Changing URI of token that is not own")
+
+        if _tokenURI is None:
+            _tokenURI = ""
+
+        self._token_URIs[_tokenId] = _tokenURI
 
     def _transfer(self, _from: Address, _to: Address, _tokenId: int ) -> None:
         # check if token exists

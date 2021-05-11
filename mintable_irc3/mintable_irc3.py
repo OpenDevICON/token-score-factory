@@ -157,6 +157,18 @@ class MintableIRC3(IconScoreBase):
         self._token_URIs[_tokenId] = _tokenURI
         self.Transfer(EOA_ZERO, _to, _tokenId)
 
+    @external
+    def setTokenURI(self, _tokenId: int, _tokenURI: str = None) -> None:
+        if not self._token_exists(_tokenId):
+            revert("Trying to set URI for non existent token")
+
+        if self.msg.sender != self.ownerOf(_tokenId):
+            revert("Changing URI of token that is not own")
+
+        if _tokenURI is None:
+            _tokenURI = ""
+        self._token_URIs[_tokenId] = _tokenURI
+
     def _transfer(self, _from: Address, _to: Address, _tokenId: int ) -> None:
         # check if token exists
         self._token_exists(_tokenId)
