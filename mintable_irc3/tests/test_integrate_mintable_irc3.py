@@ -148,6 +148,23 @@ class TestTest(IconIntegrateTestBase):
         tx_result = self.process_transaction(signed_transaction, self.icon_service)
         return tx_result
 
+    def call_setTokenURI(self, params, wallet):
+        _call_transaction = CallTransactionBuilder() \
+            .from_(wallet.get_address()) \
+            .to(self._score_address) \
+            .step_limit(100_000_000_000) \
+            .nid(3) \
+            .nonce(100) \
+            .method("setTokenURI") \
+            .params(params) \
+            .build()
+
+        signed_transaction = SignedTransaction(_call_transaction, wallet)
+
+        # process the transaction in local
+        tx_result = self.process_transaction(signed_transaction, self.icon_service)
+        return tx_result
+
     def call_approve(self,params, wallet):
         _call_transaction = CallTransactionBuilder() \
             .from_(wallet.get_address()) \
@@ -235,6 +252,18 @@ class TestTest(IconIntegrateTestBase):
         tx_result_new = self.call_mint(mint_params, self._test1)
         self.assertEqual(False, tx_result_new['status'])
 
+        new_uri_text = 'something-new'
+
+        newURI_params = {
+            '_tokenId': 1,
+            '_tokenURI': new_uri_text
+        }
+
+        tx_newuri = self.call_setTokenURI(newURI_params, self._test1)
+        newuri = self.call_getTokenURI(ownerof_param)
+        self.assertEqual(True, tx_newuri['status'])
+        self.assertEqual(newuri, new_uri_text)
+
     def test_call_mint_ntimes(self):
         for i in range(10):
             mint_params = {
@@ -315,3 +344,37 @@ class TestTest(IconIntegrateTestBase):
         }
         owner = self.call_ownerOf(ownerof_param)
         self.assertEqual(owner, self._test2.get_address())
+
+    def test_approver_cannot_change_uri(self):
+        uri_text = 'some-random-ipfs-link-or-sth-idk'
+        mint_params = {
+            '_to': self._test1.get_address(),
+            '_tokenId': 1,
+            '_tokenURI': uri_text
+        }
+        self.call_mint(mint_params, self._test1)
+
+        approve_params = {
+            '_to': self._test2.get_address(),
+            '_tokenId': 1
+        }
+        self.call_approve(approve_params, self._test1)
+        # approved to test2
+
+        # check if test2 can change uri
+        new_uri_text = 'something-new'
+
+        newURI_params = {
+            '_tokenId': 1,
+            '_tokenURI': new_uri_text
+        }
+
+        tx_newuri = self.call_setTokenURI(newURI_params, self._test2)
+        self.assertEqual(False, tx_newuri['status'])
+
+        _param = {
+            '_tokenId': 1
+        }
+
+        newuri = self.call_getTokenURI(_param)
+        self.assertEqual(uri_text, newuri)
