@@ -3,6 +3,8 @@ __pycache__/
 *.py[cod]
 *$py.class
 precommit/
+.score/
+.statedb/
 
 # C extensions
 *.so
@@ -26,6 +28,7 @@ share/python-wheels/
 .installed.cfg
 *.egg
 MANIFEST
+*.zip
 
 # PyInstaller
 #  Usually these files are written by a python script from a template
@@ -78,6 +81,7 @@ target/
 
 # Jupyter Notebook
 .ipynb_checkpoints
+*.ipynb
 
 # IPython
 profile_default/
@@ -118,8 +122,6 @@ venv.bak/
 .spyderproject
 .spyproject
 
-/Untitled.ipynb
-
 # Rope project settings
 .ropeproject
 
@@ -139,4 +141,3 @@ dmypy.json
 
 # Cython debug symbols
 cython_debug/
-
