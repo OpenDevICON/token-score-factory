@@ -51,8 +51,7 @@ const InputForm = ({walletAddress, setWalletAddress}) => {
         .required('Required').positive().max(21),
         initialSupply: Yup.number()
         .required('Required').positive(),
-        totalSupply: Yup.number()
-        .required('Required').positive().when('initialSupply', (initialSupply, schema) => {
+        totalSupply: Yup.number().positive().when('initialSupply', (initialSupply, schema) => {
           return schema.test({
             test: totalSupply => !!initialSupply && (totalSupply > initialSupply || totalSupply === initialSupply),
             message: "Total Supply should be equal to or greater than initial supply."
@@ -115,7 +114,7 @@ const InputForm = ({walletAddress, setWalletAddress}) => {
     formik.values.tokenType])
 
     useEffect(() => {
-      if(formik.values.supplyType === 'Capped') {
+      if(formik.values.supplyType === 'Fixed') {
         formik.setFieldValue("totalSupply", formik.values.initialSupply);
       }
      // eslint-disable-next-line 

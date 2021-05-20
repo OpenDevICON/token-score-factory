@@ -53,7 +53,8 @@ const TokenTypeCard = (formik, label) => {
 
                 <Row style = {{marginTop: '15px'}}>
                     <Col md = "12">
-                        <CheckedField checked = {formik.formik.values.tokenRecover} name = "Token Recover"  />
+                        <CheckedField checked = {formik.formik.values.tokenRecover} name = "Token Recover"
+                            info="Allow the contract owner to recover tokens sent to contract."  />
                     </Col>
                 </Row>
 

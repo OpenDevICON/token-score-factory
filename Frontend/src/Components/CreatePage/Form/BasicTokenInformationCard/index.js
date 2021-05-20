@@ -14,7 +14,7 @@ const BasicTokenInformationCard = (formik, label) => {
                 <AppInputField formik = {formik} label = "Symbol" id = "symbol" placeholder = "Token Symbol" info = "Usually 3-5 chars"/>
                 <AppInputField type = "number" formik = {formik} label = "Decimals" id = "decimals" placeholder = "Decimal Precision of Token" info = "Eg: 18" min = {0}/>
                 <AppInputField type = "number" formik = {formik} label = "Initial Supply" id = "initialSupply" placeholder = "Initial Token Supply" info = "This amount of tokens will be available in your wallet" min = {0}/>
-                <AppInputField type = "number" formik = {formik} label = "Total Supply" id = "totalSupply" placeholder = "Total Token Supply" info = "Maximum number ot tokens that can be created" min = {0} disabled={formik.formik.values.supplyType === 'Capped'}/>
+                <AppInputField type = "number" formik = {formik} label = "Total Supply" id = "totalSupply" placeholder = "Total Token Supply" info = "Maximum number ot tokens that can be created" min = {0} disabled={formik.formik.values.supplyType === 'Fixed'}/>
 
             </Card.Body>
         </Card>
