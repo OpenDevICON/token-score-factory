@@ -16,7 +16,7 @@ const FinalStepsCard = (formik) => {
                 <Row>
                 <Col lg="6" className = "final-steps-left">
 
-                    <AppInputField as="select" formik={formik} label="Network" id="network" placeholder="Name of your token" >
+                    <AppInputField as="select" formik={formik} label="Network" id="network" placeholder="Name of your token" alwaysShow >
                         {/* <option value="" disabled selected = "selected">Choose a token type</option> */}
                         {
                             networkMapping.map(network => {

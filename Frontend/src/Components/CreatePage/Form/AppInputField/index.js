@@ -1,9 +1,15 @@
+import { tokenTypeMapping } from 'Constant';
 import React from 'react';
-import {Form, Col, Row} from 'react-bootstrap';
+import { Form, Col, Row } from 'react-bootstrap';
 
-const AppInputField = ({formik, label, id, placeholder, as, children, info, type = "text", ...props}) => {
+const AppInputField = ({ formik, label, id, placeholder, as, children, info, type = "text", alwaysShow = false, ...props }) => {
+
+    const selectedTokenMapping = tokenTypeMapping.find(tokenType => formik.formik.values.tokenType === tokenType.value);
+
     return (
         <>
+        {
+        (selectedTokenMapping.tokenInformation.includes(id) || alwaysShow) &&
             <Form.Group style={{marginBottom: '0.6rem'}}>
                 <Row>
                 <Col md = {3} style={{display: 'flex', alignItems: 'center'}}>
@@ -24,7 +30,7 @@ const AppInputField = ({formik, label, id, placeholder, as, children, info, type
                 </Col>
                 </Row>
             </Form.Group>
-
+        }
         </>
 
     )

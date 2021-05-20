@@ -15,6 +15,7 @@ const InputForm = ({walletAddress, setWalletAddress}) => {
   const [selectWalletModalShow, setSelectWalletModalShow] = React.useState(false);
   const [deployResultModalShow, setDeployResultModalShow] = React.useState(false);
   const [deployResult, setDeployResult] = React.useState({});
+  const [selectedTokenMapping, setSelectedTokenMapping] = React.useState();
 
   const formik = useFormik({
     initialValues: {
@@ -43,15 +44,15 @@ const InputForm = ({walletAddress, setWalletAddress}) => {
 
     },
     validationSchema: Yup.object({
-        name: Yup.string()
+        name: selectedTokenMapping?.tokenInformation.includes('name') && Yup.string()
         .required('Required'),
-        symbol: Yup.string()
+        symbol: selectedTokenMapping?.tokenInformation.includes('symbol') && Yup.string()
         .required('Required'),
-        decimals: Yup.number()
+        decimals: selectedTokenMapping?.tokenInformation.includes('decimals') && Yup.number()
         .required('Required').positive().max(21),
-        initialSupply: Yup.number()
+        initialSupply: selectedTokenMapping?.tokenInformation.includes('initialSupply') && Yup.number()
         .required('Required').positive(),
-        totalSupply: Yup.number().positive().when('initialSupply', (initialSupply, schema) => {
+        totalSupply: selectedTokenMapping?.tokenInformation.includes('totalSupply') && Yup.number().positive().when('initialSupply', (initialSupply, schema) => {
           return schema.test({
             test: totalSupply => !!initialSupply && (totalSupply > initialSupply || totalSupply === initialSupply),
             message: "Total Supply should be equal to or greater than initial supply."
@@ -94,7 +95,7 @@ const InputForm = ({walletAddress, setWalletAddress}) => {
   }
   useEffect(() => {
       const selectedTokenMapping = tokenTypeMapping.find(tokenType => formik.values.tokenType === tokenType.value);
-
+      setSelectedTokenMapping(selectedTokenMapping);
       formik.setFieldValue("supplyType", selectedTokenMapping.supplyType);
       formik.setFieldValue("accessType", selectedTokenMapping.accessType);
       formik.setFieldValue("transferType", selectedTokenMapping.transferType);
