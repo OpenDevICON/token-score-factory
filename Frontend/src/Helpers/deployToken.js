@@ -27,7 +27,7 @@ export const deployToken = async ({
             '_symbol': getTokenInformation('symbol'),
             '_decimals': getTokenInformationNumericValues('decimals'),
             '_initialSupply': getTokenInformationNumericValues('initialSupply'),
-            // '_totalSupply': getTokenInformationNumericValues('tokenSupply'),
+            '_cap': getTokenInformationNumericValues('totalSupply'),
         };
     
         console.log("Contract Content", contractContent);

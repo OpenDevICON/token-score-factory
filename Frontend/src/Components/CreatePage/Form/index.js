@@ -28,17 +28,19 @@ const InputForm = ({walletAddress, setWalletAddress}) => {
       network: 'yeouido',
       termsOfUseAgreement: false,
 
-      supplyType: '-',
+      supplyType: '',
       accessType: '-',
       transferType: '-',
 
-      burnable: false,
-      mintable: false,
-      pausable: false,
-      irc1363: false,
-      tokenRecover: false,
-      verifiedSourceCode: false,
-      removeCopyright: false,
+      burnable: undefined,
+      mintable: undefined,
+      pausable: undefined,
+      irc1363: undefined,
+      tokenRecover: undefined,
+      verifiedSourceCode: undefined,
+      removeCopyright: undefined,
+
+      onlyOwnerCanMint: false,
 
       estimatedTransactionFee: 0
 
@@ -54,7 +56,7 @@ const InputForm = ({walletAddress, setWalletAddress}) => {
         .required('Required').positive(),
         totalSupply: selectedTokenMapping?.tokenInformation.includes('totalSupply') && Yup.number().positive().when('initialSupply', (initialSupply, schema) => {
           return schema.test({
-            test: totalSupply => !!initialSupply && (totalSupply > initialSupply || totalSupply === initialSupply),
+            test: totalSupply => !totalSupply || (!!initialSupply && (totalSupply > initialSupply || totalSupply === initialSupply)),
             message: "Total Supply should be equal to or greater than initial supply."
           })
         }),
@@ -77,7 +79,7 @@ const InputForm = ({walletAddress, setWalletAddress}) => {
       const selectedTokenMapping = tokenTypeMapping.find(tokenType => formik.values.tokenType === tokenType.value);
       const selectedNetworkData = networkMapping.find(network => network.value === formik.values.network);
       const deployResult = await deployToken({
-        tokenUrl: selectedTokenMapping.tokenUrl,
+        tokenUrl: (!['mintable_irc3', 'burnable_irc3'].includes(formik.values.tokenType) || !formik.values.onlyOwnerCanMint) ? selectedTokenMapping.tokenUrl : selectedTokenMapping.tokenUrlOnlyOwner,
         formValues: formik.values
       });
       console.log("Deploy Result-", deployResult);
@@ -103,6 +105,8 @@ const InputForm = ({walletAddress, setWalletAddress}) => {
       formik.setFieldValue("burnable", selectedTokenMapping.burnable);
       formik.setFieldValue("mintable", selectedTokenMapping.mintable);
       formik.setFieldValue("pausable", selectedTokenMapping.pausable);
+      formik.setFieldValue("approval", selectedTokenMapping.approval);
+      formik.setFieldValue("tokenUri", selectedTokenMapping.tokenUri);
       formik.setFieldValue("irc1363", selectedTokenMapping.irc1363);
       formik.setFieldValue("tokenRecover", selectedTokenMapping.tokenRecover);
       formik.setFieldValue("verifiedSourceCode", selectedTokenMapping.verifiedSourceCode);
