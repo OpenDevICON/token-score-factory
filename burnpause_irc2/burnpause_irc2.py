@@ -56,10 +56,6 @@ class BurnPauseIRC2(IconScoreBase):
     def Transfer(self, _from: Address, _to: Address, _value: int, _data: bytes):
         pass
 
-    @eventlog(indexed=1)
-    def Burn(self, _to: Address, _value: int):
-        pass
-
     def __init__(self, db: IconScoreDatabase) -> None:
         super().__init__(db)
         self._name = VarDB(self._NAME, db, value_type=str)

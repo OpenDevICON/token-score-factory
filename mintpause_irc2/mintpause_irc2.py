@@ -55,10 +55,6 @@ class MintPauseIRC2(IconScoreBase):
         pass
 
     @eventlog(indexed=1)
-    def Mint(self, _to: Address, _value: int):
-        pass
-
-    @eventlog(indexed=1)
     def Paused(self, status: bool):
         pass
 

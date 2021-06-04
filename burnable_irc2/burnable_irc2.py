@@ -1,6 +1,7 @@
 from iconservice import *
 
 TAG = 'BurnableIRC2'
+EOA_ZERO = Address.from_string('hx' + '0' * 40)
 
 # An interface of ICON Token Standard, IRC-2
 class TokenStandard(ABC):
@@ -48,10 +49,6 @@ class BurnableIRC2(IconScoreBase):
 
     @eventlog(indexed=3)
     def Transfer(self, _from: Address, _to: Address, _value: int, _data: bytes):
-        pass
-
-    @eventlog(indexed=1)
-    def Burn(self, _to: Address, _value: int):
         pass
 
     def __init__(self, db: IconScoreDatabase) -> None:
@@ -126,7 +123,7 @@ class BurnableIRC2(IconScoreBase):
         self._total_supply.set(self._total_supply.get() - _value)
         self._balances[_from] -=  _value
 
-        self.Burn(_from, _value)
+        self.Transfer(_from, EOA_ZERO, _value, b'burn')
 
     def _transfer(self, _from: Address, _to: Address, _value: int, _data: bytes):
         
