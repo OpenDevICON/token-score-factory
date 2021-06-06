@@ -42,7 +42,8 @@ const InputForm = ({walletAddress, setWalletAddress}) => {
 
       onlyOwnerCanMint: false,
 
-      estimatedTransactionFee: 0
+      estimatedTransactionFee: 0,
+      estimatedTransactionFeeOnlyOwner: 0
 
     },
     validationSchema: Yup.object({
@@ -51,12 +52,12 @@ const InputForm = ({walletAddress, setWalletAddress}) => {
         symbol: selectedTokenMapping?.tokenInformation.includes('symbol') && Yup.string()
         .required('Required'),
         decimals: selectedTokenMapping?.tokenInformation.includes('decimals') && Yup.number()
-        .required('Required').positive().max(21),
+        .required('Required').positive().max(77),
         initialSupply: selectedTokenMapping?.tokenInformation.includes('initialSupply') && Yup.number()
         .required('Required').positive(),
         totalSupply: selectedTokenMapping?.tokenInformation.includes('totalSupply') && Yup.number().positive().when('initialSupply', (initialSupply, schema) => {
           return schema.test({
-            test: totalSupply => !totalSupply || (!!initialSupply && (totalSupply > initialSupply || totalSupply === initialSupply)),
+            test: totalSupply => selectedTokenMapping.supplyType === 'Fixed' || !totalSupply || !initialSupply || (initialSupply && (totalSupply >= initialSupply)),
             message: "Total Supply should be equal to or greater than initial supply."
           })
         }),
@@ -113,6 +114,7 @@ const InputForm = ({walletAddress, setWalletAddress}) => {
       formik.setFieldValue("removeCopyright", selectedTokenMapping.removeCopyright);
 
       formik.setFieldValue("estimatedTransactionFee", selectedTokenMapping.estimatedTransactionFee);
+      formik.setFieldValue("estimatedTransactionFeeOnlyOwner", selectedTokenMapping.estimatedTransactionFeeOnlyOwner);
 
      // eslint-disable-next-line 
   }, [

@@ -27,7 +27,7 @@ export const deployToken = async ({
             '_symbol': getTokenInformation('symbol'),
             '_decimals': getTokenInformationNumericValues('decimals'),
             '_initialSupply': getTokenInformationNumericValues('initialSupply'),
-            '_cap': getTokenInformationNumericValues('totalSupply'),
+            '_cap': selectedTokenMapping.supplyType !== 'Fixed' ? getTokenInformationNumericValues('totalSupply') : undefined,
         };
     
         console.log("Contract Content", contractContent);

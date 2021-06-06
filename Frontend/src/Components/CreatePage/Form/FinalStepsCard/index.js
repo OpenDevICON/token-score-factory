@@ -51,7 +51,7 @@ const FinalStepsCard = (formik) => {
                             <Form.Label>Estimated Transaction Fee:</Form.Label>
                         </Col>
                         <Col xs = "6" style = {{display: 'flex', alignItems: 'center'}}>
-                            <span className = "charge-value">{formik.formik.values.estimatedTransactionFee} ICX</span>
+                            <span className = "charge-value">{(!['mintable_irc3', 'burnable_irc3'].includes(formik.formik.values.tokenType) || !formik.formik.values.onlyOwnerCanMint) ? formik.formik.values.estimatedTransactionFee : formik.formik.values.estimatedTransactionFeeOnlyOwner} ICX</span>
                         </Col>
                     </Row>
 

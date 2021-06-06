@@ -14,8 +14,8 @@ export const tokenTypeMapping = [
         verifiedSourceCode: true,
         removeCopyright: false,
 
-        tokenUrl: 'https://test-bucket-file-parse.s3-ap-southeast-1.amazonaws.com/sample_token_update.zip',
-        estimatedTransactionFee: 10.62,
+        tokenUrl: 'https://raw.githubusercontent.com/OpenDevICON/token-score-factory/master/zips/basic_irc2.zip',
+        estimatedTransactionFee: 13.24,
         tokenInformation: ['name', 'symbol', 'decimals', 'initialSupply', 'totalSupply']
     },
 
@@ -34,8 +34,8 @@ export const tokenTypeMapping = [
         verifiedSourceCode: false,
         removeCopyright: true,
 
-        tokenUrl: 'https://test-bucket-file-parse.s3-ap-southeast-1.amazonaws.com/sample_token_update.zip',
-        estimatedTransactionFee: 10.62,
+        tokenUrl: 'https://raw.githubusercontent.com/OpenDevICON/token-score-factory/master/zips/mintable_irc2.zip',
+        estimatedTransactionFee: 13.37,
         tokenInformation: ['name', 'symbol', 'decimals', 'initialSupply', 'totalSupply']
 
     },
@@ -55,8 +55,8 @@ export const tokenTypeMapping = [
         verifiedSourceCode: true,
         removeCopyright: false,
 
-        tokenUrl: 'https://test-bucket-file-parse.s3-ap-southeast-1.amazonaws.com/sample_token_update.zip',
-        estimatedTransactionFee: 10.62,
+        tokenUrl: 'https://raw.githubusercontent.com/OpenDevICON/token-score-factory/master/zips/burnable_irc2.zip',
+        estimatedTransactionFee: 13.31,
         tokenInformation: ['name', 'symbol', 'decimals', 'initialSupply', 'totalSupply']
 
     },
@@ -76,8 +76,8 @@ export const tokenTypeMapping = [
         verifiedSourceCode: true,
         removeCopyright: false,
 
-        tokenUrl: 'https://test-bucket-file-parse.s3-ap-southeast-1.amazonaws.com/sample_token_update.zip',
-        estimatedTransactionFee: 10.62,
+        tokenUrl: 'https://raw.githubusercontent.com/OpenDevICON/token-score-factory/master/zips/pausable_irc2.zip',
+        estimatedTransactionFee: 13.35,
         tokenInformation: ['name', 'symbol', 'decimals', 'initialSupply', 'totalSupply']
 
     },
@@ -97,8 +97,8 @@ export const tokenTypeMapping = [
         verifiedSourceCode: true,
         removeCopyright: false,
 
-        tokenUrl: 'https://test-bucket-file-parse.s3-ap-southeast-1.amazonaws.com/sample_token_update.zip',
-        estimatedTransactionFee: 10.62,
+        tokenUrl: 'https://raw.githubusercontent.com/OpenDevICON/token-score-factory/master/zips/mintburn_irc2.zip',
+        estimatedTransactionFee: 13.40,
         tokenInformation: ['name', 'symbol', 'decimals', 'initialSupply', 'totalSupply']
 
     },
@@ -118,8 +118,8 @@ export const tokenTypeMapping = [
         verifiedSourceCode: true,
         removeCopyright: false,
 
-        tokenUrl: 'https://test-bucket-file-parse.s3-ap-southeast-1.amazonaws.com/sample_token_update.zip',
-        estimatedTransactionFee: 10.62,
+        tokenUrl: 'https://raw.githubusercontent.com/OpenDevICON/token-score-factory/master/zips/mintpause_irc2.zip',
+        estimatedTransactionFee: 13.45,
         tokenInformation: ['name', 'symbol', 'decimals', 'initialSupply', 'totalSupply']
 
     },
@@ -131,16 +131,16 @@ export const tokenTypeMapping = [
         accessType: 'Permission Based',
         transferType: 'Stoppable',
         
-        burnable: false,
-        mintable: true,
+        burnable: true,
+        mintable: false,
         irc1363: true,
         pausable: true,
         tokenRecover: false,
         verifiedSourceCode: true,
         removeCopyright: false,
 
-        tokenUrl: 'https://test-bucket-file-parse.s3-ap-southeast-1.amazonaws.com/sample_token_update.zip',
-        estimatedTransactionFee: 10.62,
+        tokenUrl: 'https://raw.githubusercontent.com/OpenDevICON/token-score-factory/master/zips/burnpause_irc2.zip',
+        estimatedTransactionFee: 13.39,
         tokenInformation: ['name', 'symbol', 'decimals', 'initialSupply', 'totalSupply']
 
     },
@@ -160,8 +160,8 @@ export const tokenTypeMapping = [
         verifiedSourceCode: true,
         removeCopyright: false,
 
-        tokenUrl: 'https://test-bucket-file-parse.s3-ap-southeast-1.amazonaws.com/sample_token_update.zip',
-        estimatedTransactionFee: 10.62,
+        tokenUrl: 'https://raw.githubusercontent.com/OpenDevICON/token-score-factory/master/zips/mintburnpause_irc2.zip',
+        estimatedTransactionFee: 13.51,
         tokenInformation: ['name', 'symbol', 'decimals', 'initialSupply', 'totalSupply']
 
     },
@@ -181,8 +181,8 @@ export const tokenTypeMapping = [
         verifiedSourceCode: true,
         removeCopyright: false,
 
-        tokenUrl: 'https://test-bucket-file-parse.s3-ap-southeast-1.amazonaws.com/sample_token_update.zip',
-        estimatedTransactionFee: 10.62,
+        tokenUrl: 'https://raw.githubusercontent.com/OpenDevICON/token-score-factory/master/zips/complete_irc2.zip',
+        estimatedTransactionFee: 13.54,
         tokenInformation: ['name', 'symbol', 'decimals', 'initialSupply', 'totalSupply']
 
     },
@@ -193,7 +193,7 @@ export const tokenTypeMapping = [
         accessType: 'Permission Based',
         transferType: 'Stoppable',
 
-        burnable: true,
+        burnable: false,
         mintable: true,
         approval: true,
         tokenUri: true,
@@ -201,9 +201,10 @@ export const tokenTypeMapping = [
         verifiedSourceCode: false,
         removeCopyright: true,
 
-        tokenUrl: 'https://test-bucket-file-parse.s3-ap-southeast-1.amazonaws.com/sample_token_update.zip',
-        tokenUrlOnlyOwner: 'https://test-bucket-file-parse.s3-ap-southeast-1.amazonaws.com/sample_token_update1.zip',
-        estimatedTransactionFee: 10.62,
+        tokenUrl: 'https://raw.githubusercontent.com/OpenDevICON/token-score-factory/master/zips/mintable_irc3.zip',
+        tokenUrlOnlyOwner: 'https://raw.githubusercontent.com/OpenDevICON/token-score-factory/master/zips/owner_mintable_irc3.zip',
+        estimatedTransactionFee: 13.35,
+        estimatedTransactionFeeOnlyOwner: 13.38,
         tokenInformation: ['name', 'symbol']
 
     },
@@ -222,9 +223,10 @@ export const tokenTypeMapping = [
         verifiedSourceCode: true,
         removeCopyright: false,
 
-        tokenUrl: 'https://test-bucket-file-parse.s3-ap-southeast-1.amazonaws.com/sample_token_update.zip',
-        tokenUrlOnlyOwner: 'https://test-bucket-file-parse.s3-ap-southeast-1.amazonaws.com/sample_token_update1.zip',
-        estimatedTransactionFee: 10.62,
+        tokenUrl: 'https://raw.githubusercontent.com/OpenDevICON/token-score-factory/master/zips/burnable_irc3.zip',
+        tokenUrlOnlyOwner: 'https://raw.githubusercontent.com/OpenDevICON/token-score-factory/master/zips/owner_burnable_irc3.zip',
+        estimatedTransactionFee: 13.39,
+        estimatedTransactionFeeOnlyOwner: 13.43,
         tokenInformation: ['name', 'symbol']
 
     },
