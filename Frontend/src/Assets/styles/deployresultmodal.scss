@@ -1,0 +1,53 @@
+.deploy-result-modal {
+    // color: white;
+    .modal-content {
+        // background: #49B1B8;
+        .deploy-token-header {
+            font-style: normal;
+            font-weight: 600;
+            font-size: 1.1rem;
+            line-height: 17px;
+            color: rgb(38, 38, 38);
+            display: flex;
+            align-items: center;
+            word-break: break-all;
+
+            img{
+                width: 1.1rem;
+                margin-right: 3px;
+            }
+        }
+
+        .result-row {
+            word-break: break-all;
+            display: flex;
+            align-items: center;
+
+            .result-row-key {
+                font-size: 1rem;
+                font-style: normal;
+                line-height: 15px;
+                color: rgba(38,38,38,.9);
+                
+            }
+
+            .result-row-value {
+                @media screen and (min-width: 992px) {
+                    display: flex;
+                    justify-content: flex-end;
+                }
+            }
+
+            a{
+                font-size: 1rem !important;
+                color: rgb(38, 38, 38);
+                text-decoration: underline;
+            }
+        }
+
+        .result-info {
+            margin-bottom: 20px;
+        }
+    }
+
+}

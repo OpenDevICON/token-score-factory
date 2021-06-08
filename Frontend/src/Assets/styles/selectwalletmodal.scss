@@ -1,0 +1,99 @@
+.select-wallet-col {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.ledger-button {
+    background: #41989D;
+    box-shadow: -4px -4px 4px rgb(27 80 102 / 25%), inset 1px 1px 40px rgb(0 0 0 / 25%);
+}
+
+.iconex-button {
+    background: #49B1B8;
+    box-shadow: -4px -4px 4px rgba(27, 80, 102, 0.25), inset 1px 1px 40px rgba(0, 0, 0, 0.25);
+}
+
+.wallet-button {
+    width: 120px;
+    height: 120px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    img {
+        height: 80%;
+    }
+}
+
+.select-wallet {
+    .modal-content {
+        background: #49B1B8;
+        box-shadow: 5px 5px 34px 14px rgb(0 0 0 / 25%);
+    }
+
+    .modal-body {
+        padding-left: 0;
+        padding-right: 0;
+
+        .row {
+            margin-left: 0 !important;
+            margin-right: 0 !important;
+        }
+
+        .ledger-table {
+            background: #E7E7E7;
+            border-radius: 3px;
+            padding-top: 10px;
+            padding-bottom: 10px;
+
+            .table-row {
+                font-family: Gaegu;
+                font-style: normal;
+                font-weight: bold;
+                font-size: 1rem;
+                color: #49B1B8;
+                border-bottom: 1px solid #888888;
+                padding-left: 20px;
+                cursor: pointer;
+                word-break: break-all;
+            }
+
+            .table-header {
+                color: #888888;
+                text-align: center;
+                cursor: default; 
+                font-size: 1.1rem;              
+            }
+
+            .table-page {
+                font-family: Gaegu;
+                font-style: normal;
+                font-weight: bold;
+                font-size: 1rem;
+                color: #49B1B8;
+                display: flex;
+                justify-content: flex-end;
+
+                .table-page-btn {
+                    border: none;
+                    font: inherit;
+                    color: inherit;
+
+                    &:disabled {
+                        color: grey;
+                    }
+                }
+            }
+
+
+        }
+
+        .please-wait {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+    }
+}
+

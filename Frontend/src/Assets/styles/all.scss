@@ -1,0 +1,20 @@
+$theme-colors: (
+    "create-button":  #237378
+
+);
+
+@media screen and (min-width: 650px) {
+    .modal-mdlg {
+      max-width: 350px !important;
+    }
+
+    .modal-lgxl {
+      max-width: 815px !important;
+    }
+  }
+
+@import "node_modules/bootstrap/scss/bootstrap";
+
+html, body {
+    min-height: 100%
+}

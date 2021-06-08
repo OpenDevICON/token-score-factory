@@ -1,0 +1,58 @@
+.homepage-header {
+    font-family: Gaegu;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 2rem;
+    line-height: 100px;
+    color: #6A6A6A;
+    text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+
+    @media screen and (min-width: 992px) {
+        margin-top: 20px;
+    }
+}
+
+.homepage-header-container {
+    justify-content: center;
+}
+
+.homepage-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 5px;
+
+    img {
+        height: 80px;
+    }
+
+    @media screen and (min-width: 992px) {
+        margin-top: 20px;
+    }
+
+    @media screen and (max-width: 768px) {
+        margin-bottom: 25px;
+    }
+
+    .homepage-info-title {
+        font-family: Nunito Sans;
+        font-style: normal;
+        font-weight: 800;
+        font-size: 1rem;
+        text-align: center;
+        color: #555C5E;
+        margin-top: 15px;
+        margin-bottom: 10px;
+
+    }
+
+    .homepage-info-content {
+        font-family: Nunito Sans;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 1rem;
+        text-align: center;
+        color: #555C5E;
+        word-wrap: break-word;
+    }
+}

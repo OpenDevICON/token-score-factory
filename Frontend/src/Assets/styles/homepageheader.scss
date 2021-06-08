@@ -1,0 +1,121 @@
+.info-header-homepage {
+    min-height: 320px;
+    background: #49B1B8;
+    padding-right: 20px;
+    box-shadow: 10px 9px 32px rgb(0 0 0 / 25%);
+
+    @media screen and (min-width: 992px) {
+        padding-top: 40px;
+        padding-bottom: 35px;       
+    }
+
+    .header-info-container {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+
+        .info-title {
+            text-align: start;
+            font-family: Gaegu;
+            font-style: normal;
+            font-weight: bold;
+            font-size: 1.8rem;
+            color: #FFFFFF;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            text-shadow: 0px 4px 4px rgb(0 0 0 / 25%);
+
+            @media screen and (max-width: 992px) {
+                margin-top: 0;
+            }
+            .info-title-item {
+                margin-left: 12px;
+            }
+        }
+
+        .info-desc {
+            font-family: Nunito Sans;
+            font-style: normal;
+            font-weight: 800;
+            font-size: 1.2rem;
+            color: #555C5E;
+            margin-left: 10px;
+            display: flex;
+            flex-direction: column;
+
+            @media screen and (max-width: 992px) {
+                text-align: center;
+                
+            }
+
+            @media(max-width: 576px) {
+                > span, > div > button {
+                    font-size: 1rem !important;
+                }
+                button {
+                    padding-left: 50px;
+                    padding-right: 50px;
+                }
+            }
+        }
+
+        @media screen and (max-width: 992px) {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        
+        }
+    }
+
+    .info-desc-container {
+        display: flex;
+        align-items: center;
+
+        @media screen and (max-width: 992px) {
+            margin-top: 0;
+        }
+    }
+
+    .tsf-info-image-container {
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        margin-top: 10px;
+        @media screen and (max-width: 992px) {
+            justify-content: center;
+        }
+    
+    }
+
+    .create-now-button {
+        font-size: 1rem;
+        padding-left: 100px;
+        padding-right: 100px;
+
+        @media screen and (min-width: 992px) {
+            margin-top: 15px;
+        }
+    }
+
+    .create-now-button-link {
+        display: flex;
+        justify-content: center;
+        
+        @media(max-width: 992px) {
+            margin-top: 20px;
+        }
+        
+        @media screen and (min-width: 992px) {
+            justify-content: flex-start;
+        }
+    }
+
+    .info-icon-container {
+        @media screen and (min-width: 992px) {
+            margin-left: 70px
+        }
+    }
+
+}
+

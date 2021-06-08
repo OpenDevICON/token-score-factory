@@ -1,0 +1,162 @@
+.form {
+    margin-top: 10px;
+    @media screen and (min-width: 992px) {
+        margin-top: -87px;
+        margin-bottom: -50px;
+    }
+
+    .form-header {
+        font-family: Nunito Sans;
+        font-style: normal;
+        font-weight: 800;
+        font-size: 1.3rem;
+        line-height: 55px;
+        color: #49B1B8;
+    }
+
+    ::placeholder {
+        color: #9A9A9A;
+    }
+
+    label {
+        font-family: Nunito Sans;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 1rem;
+        line-height: 44px;
+
+        color: #5E5E5E;
+        line-height: 1.2;
+    }
+
+    .formKey {
+        font-family: Nunito Sans;
+        font-style: italic;
+        font-weight: 800;
+        font-size: 1rem;
+        color: #5E5E5E;
+    }
+
+    .formValue {
+        font-family: Nunito Sans;
+        font-style: italic;
+        font-weight: 800;
+        font-size: 1rem;
+        color: #383838;
+    }
+
+    .form-check-field-name {
+        font-family: Nunito Sans;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 1rem;
+        color: #5E5E5E;
+        margin-left: 10px;
+    }
+
+    .form-hr {
+        margin-top: 0; 
+        border: 0.25px solid #73DBF2
+    }
+
+    .form-input-info {
+        font-family: Nunito Sans;
+        font-style: italic;
+        font-weight: normal;
+        font-size: 0.8rem;
+        color: #9A9A9A;
+        display: flex;
+        justify-content: flex-end;
+    }  
+    
+    .form-check-field-info {
+        font-family: Nunito Sans;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 0.8rem;
+        margin-left: 10px;
+        color: #5E5E5E;
+    }
+
+    .terms-of-use {
+        .form-check {
+            display: flex;
+            align-items: center;
+        }
+
+        .form-check-label {
+            margin-top: 8px;
+        }
+    }
+
+    .charge-header {
+        display: flex;
+        justify-content: center;
+       
+        @media(max-width: 768px) {
+            > div {
+              font-size: x-large !important;
+            }
+        }
+
+        div {
+            font-family: Nunito Sans;
+            font-style: normal;
+            font-weight: 600;
+            font-size: 30px;
+            text-align: center;
+            color: #E8E8E8;
+            background: #CF4D4D;
+            border-radius: 33px;
+            padding-left: 15px;
+            padding-right: 15px;
+       }
+    }
+
+    .charge-value {
+        font-family: Nunito Sans;
+        font-style: normal;
+        font-weight: 800;
+        font-size: 1rem;
+        color: #5E5E5E;
+    }
+
+    .submit-button-container {
+        display: flex;
+        justify-content: center;
+        
+        button {
+            width: 319px;
+            height: 52px;
+            font-size: 1.4rem;
+        }
+    }
+
+    .chargeRow {
+        margin-top: 30px;
+
+        >div {
+            justify-content: center;
+            display: flex;
+            align-items: center;
+        }
+    }
+
+    .final-steps-left {
+        @media screen and (min-width: 992px) {
+
+            margin-top: 75px;
+        }
+    }
+
+    .basic-token-info-col {
+        @media screen and (max-width: 992px) {
+            margin-bottom: 20px;      
+        }
+    }
+
+}
+
+.form-control:disabled, .form-control[readonly] {
+    opacity: 0.7 !important;
+}
