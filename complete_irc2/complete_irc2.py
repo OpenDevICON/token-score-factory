@@ -237,8 +237,8 @@ class CompleteIRC2(IconScoreBase):
             # If the recipient is SCORE,
             #   then calls `tokenFallback` to hand over control.
             recipient_score = self.create_interface_score(_to, TokenFallbackInterface)
-            recipient_score.tokenFallback(_from, _value, _data)
-        
+            recipient_score.tokenFallback(EOA_ZERO, _value, _data)
+
         self.Transfer(EOA_ZERO, _to, _value, _data)
 
     def _burn(self, _from: Address, _value: int,) -> None:
