@@ -3,6 +3,9 @@ from iconservice import *
 TAG = 'CompleteIRC2'
 DEFAULT_CAP_VALUE = 2 ** 256 - 1
 EOA_ZERO = Address.from_string('hx' + '0' * 40)
+FROM_BLOCK = "from_block"
+BALANCE = "balance"
+
 
 # An interface of ICON Token Standard, IRC-2
 class TokenStandard(ABC):
@@ -59,6 +62,10 @@ class CompleteIRC2(IconScoreBase):
     _BALANCES = 'balances'
     _CAP = 'cap'
     _PAUSED = 'paused'
+    _SNAPSHOT_BALANCES = 'snapshot_balances'
+    _TOTAL_SNAPSHOTS = 'total_snapshots'
+    _SNAPSHOT_TOTAL_SUPPLY = 'snapshot_total_supply'
+    _TOTAL_SUPPLY_SNAPSHOT_COUNT = 'total_supply_snapshot_count'
 
     @eventlog(indexed=3)
     def Transfer(self, _from: Address, _to: Address, _value: int, _data: bytes):
@@ -77,6 +84,10 @@ class CompleteIRC2(IconScoreBase):
         self._total_supply = VarDB(self._TOTAL_SUPPLY, db, value_type=int)
         self._paused = VarDB(self._PAUSED, db, value_type=bool)
         self._cap = VarDB(self._CAP, db, value_type=int)
+        self._snapshot_balances = DictDB(self._SNAPSHOT_BALANCES, db, value_type=int, depth=3)
+        self._total_snapshots = DictDB(self._TOTAL_SNAPSHOTS, db, value_type=int)
+        self._snapshot_total_supply = DictDB(self._SNAPSHOT_TOTAL_SUPPLY, db, value_type=int, depth=2)
+        self._total_supply_snapshot_count = VarDB(self._TOTAL_SUPPLY_SNAPSHOT_COUNT, db, value_type=int)
 
     def on_install(self, _name: str, _symbol: str, _initialSupply: int, _decimals: int, _cap: int = DEFAULT_CAP_VALUE,
                    _paused: bool = False) -> None:
@@ -202,6 +213,8 @@ class CompleteIRC2(IconScoreBase):
             recipient_score = self.create_interface_score(_to, TokenFallbackInterface)
             recipient_score.tokenFallback(_from, _value, _data)
 
+        self._update_balance(_from, self._balances[_from])
+        self._update_balance(_to, self._balances[_to])
         # Emits an event log `Transfer`
         self.Transfer(_from, _to, _value, _data)
 
@@ -219,6 +232,8 @@ class CompleteIRC2(IconScoreBase):
             recipient_score = self.create_interface_score(_to, TokenFallbackInterface)
             recipient_score.tokenFallback(EOA_ZERO, _value, _data)
 
+        self._update_balance(_to, self._balances[_to])
+        self._update_total_supply(self._total_supply.get())
         self.Transfer(EOA_ZERO, _to, _value, _data)
 
     def _burn(self, _from: Address, _value: int, ) -> None:
@@ -230,10 +245,89 @@ class CompleteIRC2(IconScoreBase):
         self._total_supply.set(self._total_supply.get() - _value)
         self._balances[_from] -= _value
 
+        self._update_balance(_from, self._balances[_from])
+        self._update_total_supply(self._total_supply.get())
         self.Transfer(_from, EOA_ZERO, _value, b'burn')
 
     def _beforeTokenTransfer(self, _from: Address, _to: Address, _value: int):
-        if self._paused.get():
-            revert("Token operations paused")
-        if ((self._total_supply.get() + _value) >= self._cap.get()):
-            revert("Cap limit exceeded")
+        require(not self._paused.get(), f"{self.name()}: Token operations paused")
+        require(self.totalSupply() + _value < self._cap.get(), f"{self.name()}: Cap limit exceeded")
+
+    @external(readonly=True)
+    def balanceOfAt(self, _owner: Address, _block_number: int) -> int:
+        require(_block_number < self.block_height, f"{self.name}: Block not yet determined")
+
+        total_snapshots = self._total_snapshots[_owner]
+        if total_snapshots == 0:
+            return 0
+
+        # Check for most recent balance
+        if self._snapshot_balances[_owner][total_snapshots - 1][FROM_BLOCK] <= _block_number:
+            return self._snapshot_balances[_owner][total_snapshots - 1][BALANCE]
+
+        # Check for implicit zero balance
+        if self._snapshot_balances[_owner][0][FROM_BLOCK] > _block_number:
+            return 0
+
+        low: int = 0
+        high: int = total_snapshots - 1
+        while high > low:
+            mid = high - (high - low)//2
+            if self._snapshot_balances[_owner][mid][FROM_BLOCK] == _block_number:
+                return self._snapshot_balances[_owner][mid][BALANCE]
+            elif self._snapshot_balances[_owner][mid][FROM_BLOCK] < _block_number:
+                low = mid
+            else:
+                high = mid - 1
+        return self._snapshot_balances[_owner][low][BALANCE]
+
+    @external(readonly=True)
+    def totalSupplyAt(self, _block_number: int) -> int:
+        require(_block_number < self.block_height, f"{self.name}: Block not yet determined")
+
+        total_snapshots = self._total_supply_snapshot_count.get()
+        if total_snapshots == 0:
+            return 0
+
+        # Check for most recent balance
+        if self._snapshot_total_supply[total_snapshots - 1][FROM_BLOCK] <= _block_number:
+            return self._snapshot_total_supply[total_snapshots - 1][BALANCE]
+
+        # Check for implicit zero balance
+        if self._snapshot_total_supply[0][FROM_BLOCK] > _block_number:
+            return 0
+
+        low: int = 0
+        high: int = total_snapshots - 1
+        while high > low:
+            mid = high - (high - low) // 2
+            if self._snapshot_total_supply[mid][FROM_BLOCK] == _block_number:
+                return self._snapshot_total_supply[mid][BALANCE]
+            elif self._snapshot_total_supply[mid][FROM_BLOCK] < _block_number:
+                low = mid
+            else:
+                high = mid - 1
+        return self._snapshot_total_supply[low][BALANCE]
+
+    def _update_balance(self, _owner: Address, _balance: int):
+
+        block_height = self.block_height
+        total_snapshots = self._total_snapshots[_owner]
+
+        if total_snapshots > 0 and self._snapshot_balances[_owner][total_snapshots - 1][FROM_BLOCK] == block_height:
+            self._snapshot_balances[_owner][total_snapshots - 1][BALANCE] = _balance
+        else:
+            self._snapshot_balances[_owner][total_snapshots - 1][FROM_BLOCK] = block_height
+            self._snapshot_balances[_owner][total_snapshots - 1][BALANCE] = _balance
+            self._total_snapshots[_owner] += 1
+
+    def _update_total_supply(self, _total_supply: int):
+        block_height = self.block_height
+        total_snapshots = self._total_supply_snapshot_count.get()
+
+        if total_snapshots > 0 and self._snapshot_total_supply[total_snapshots - 1][FROM_BLOCK] == block_height:
+            self._snapshot_total_supply[total_snapshots - 1][BALANCE] = _total_supply
+        else:
+            self._snapshot_total_supply[total_snapshots - 1][FROM_BLOCK] = block_height
+            self._snapshot_total_supply[total_snapshots - 1][BALANCE] = _total_supply
+            self._total_supply_snapshot_count.set(total_snapshots + 1)
