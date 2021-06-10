@@ -33,5 +33,5 @@ jobs:
           AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}
           AWS_ACCESS_KEY_ID: ${{ secrets.AWSAccessKeyId }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWSSecretKey }}
-          AWS_REGION: "ap-southeast-1" # optional: defaults to us-east-1
+          AWS_REGION: "ap-southeast-1"
           SOURCE_DIR: "Frontend/build/." # optional: defaults to entire repository
