@@ -21,7 +21,7 @@ jobs:
           node-version: ${{ matrix.node-version }}
       - run: cd Frontend
       - run: npm install
-      - run: npm run build --if-present
+      - run: npm run build
         env:
           CI: true
       - uses: jakejarvis/s3-sync-action@master
