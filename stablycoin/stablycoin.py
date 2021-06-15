@@ -27,6 +27,7 @@ class StablyCoin(IconScoreBase, TokenStandard):
 	_N_ISSUERS = 'number_of_issuers'
 	_ADMIN = "admin"
 	_ISSUERS = "issuers"
+	_ALLOWANCES = "allowances"
 
 	def __init__(self, db: IconScoreDatabase) -> None:
 		'''
@@ -35,9 +36,7 @@ class StablyCoin(IconScoreBase, TokenStandard):
 		super().__init__(db)
 
 		self._admin = VarDB(self._ADMIN, db, value_type=Address)
-		# array or dictDB?
 		self._issuers = ArrayDB(self._ISSUERS, db, value_type=Address)
-
 		self._n_issuers = VarDB(self._N_ISSUERS, db, value_type=int)
 
 		self._name = VarDB(self._NAME, db, value_type=str)
@@ -46,7 +45,7 @@ class StablyCoin(IconScoreBase, TokenStandard):
 
 		self._total_supply = VarDB(self._TOTAL_SUPPLY, db, value_type=int)
 		self._balances = DictDB(self._BALANCES, db, value_type=int)
-
+		self._allowances = DictDB(self._ALLOWANCES,db,value_type=int)
 		self._paused = VarDB(self._PAUSED, db, value_type=bool)
 
 	def on_install(self, _name:str, _symbol:str, _decimals:int, _admin:Address, _issuer:Address, _nIssuers: int = 2) -> None:
@@ -139,10 +138,7 @@ class StablyCoin(IconScoreBase, TokenStandard):
 		'''
 		Returns the list of all the issuers.
 		'''
-		issuers = []
-		for i in range(len(self._issuers)):
-			issuers.append(self._issuers[i])
-		return issuers
+		return [i for i in self._issuers]
 	
 	@external(readonly=True)
 	def isPaused(self) -> bool:
@@ -150,6 +146,15 @@ class StablyCoin(IconScoreBase, TokenStandard):
 		Returns if the score is paused
 		'''
 		return self._paused.get()
+
+	@external(readonly=True)
+	def issuerAllowance(self, _issuer: Address) -> bool:
+		'''
+		Returns amount of tokens that `_issuer` can mint at this point in time.
+
+		:param _issuer: The wallet address of issuer
+		'''
+		return self._allowances[_issuer]
 
 	@external
 	def transfer(self, _to: Address, _value: int, _data: bytes = None):
@@ -191,6 +196,16 @@ class StablyCoin(IconScoreBase, TokenStandard):
 			for i in range(len(self._issuers)):
 				if self._issuers[i] == _issuer:
 					self._issuers[i] = top
+
+	@external
+	def approve(self, _issuer: Address, _value: int) -> None:
+		'''
+		Allow `_issuer` to mint `_value` tokens.
+
+		:param _issuer: The issuer to approve to.
+		:param _value: The amount to approve to issuer to mint.
+		'''
+		self._allowances[_issuer] = _value
 
 	@external
 	def transferOwnership(self, _newAdmin: Address) -> None:
@@ -246,18 +261,6 @@ class StablyCoin(IconScoreBase, TokenStandard):
 		'''
 		self._burn(self.msg.sender, _value)
 
-	@external
-	def burnFrom(self, _from: Address, _value: int) -> None:
-		'''
-		Destroys `_value` number of tokens from the specified `_from` account.
-		Decreases the balance of that account and total supply.
-		Only issuers can call ths method.
-
-		:param _from: The account at which token is to be destroyed.
-		:param _value: Number of tokens to be destroyed at the `_from`.
-		'''
-		self._burn(_from, _value)
-
 	def _transfer(self, _from: Address, _to: Address, _value: int, _data: bytes = None):
 		'''
 		Transfers certain amount of tokens from `_from` to `_to`.
@@ -303,6 +306,9 @@ class StablyCoin(IconScoreBase, TokenStandard):
 		require(self.msg.sender in self.getIssuers(), "Only issuers can mint")
 		require(self.isPaused() == False, "Cannot mint when paused")
 
+		self._allowances[self.msg.sender]-=_value
+		require(self._allowances[self.msg.sender] >= 0, "Allowance amount to mint exceed")
+
 		self._total_supply.set(self.totalSupply() + _value)
 		self._balances[_to] += _value
 
@@ -316,10 +322,9 @@ class StablyCoin(IconScoreBase, TokenStandard):
 		:param _from: The account at which token is to be destroyed.
 		:param _value: Number of tokens to be destroyed at the `_from`.
 		'''
-		require(_from != EOA_ZERO, "Cannot mint to zero address")
+		require(_from != EOA_ZERO, "Cannot burn from zero address")
 		require(_value > 0, "Amount to mint should be greater than zero")
 		require(self._balances[_from] >= _value, "Cannot burn more than balance")
-		require(self.msg.sender in self.getIssuers(), "Only issuers can burn")
 		require(self.isPaused() == False, "Cannot burn when paused")
 
 		self._total_supply.set(self.totalSupply() - _value)
