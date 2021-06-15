@@ -49,13 +49,7 @@ class StablyCoin(IconScoreBase, TokenStandard):
 
 		self._paused = VarDB(self._PAUSED, db, value_type=bool)
 
-	def on_install(self, 
-		_name:str, 
-		_symbol:str,
-		_decimals:int, 
-		_admin:Address,
-		_issuer:Address,
-		_nIssuers: int = 2) -> None:
+	def on_install(self, _name:str, _symbol:str, _decimals:int, _admin:Address, _issuer:Address, _nIssuers: int = 2) -> None:
 		'''
 		Variable Initialization.
 
@@ -71,8 +65,6 @@ class StablyCoin(IconScoreBase, TokenStandard):
 		require(len(_symbol) > 0, "Invalid Token Symbol Name")
 		require(_decimals > 0, "Decimals cannot be less than 0")
 		require(_nIssuers > 0, "1 or more issuers required")
-
-		Logger.debug(f'on_install: total_supply=0')
 
 		self._admin.set(_admin)
 		self._issuers.put(_issuer)
@@ -201,7 +193,6 @@ class StablyCoin(IconScoreBase, TokenStandard):
 		'''
 		Creates `_value` number of tokens, and assigns to caller account.
 		Increases the balance of that account and total supply.
-		See {IRC2-_mint}
 
 		:param _value: Number of tokens to be created at the account.
 		'''
@@ -273,6 +264,13 @@ class StablyCoin(IconScoreBase, TokenStandard):
 		Logger.debug(f'Transfer({_from}, {_to}, {_value}, {_data})', self.name())
 
 	def _mint(self, _to: Address, _value:int) -> None:
+		'''
+		Mints `_value` tokens at `_to` address.
+		Internal Function
+
+		:param _to: The account at which token is to be minted.
+		:param _value: Number of tokens to be minted at the account.
+		'''
 		require(_to != EOA_ZERO, "Cannot mint to zero address")
 		require(_value > 0, "Amount to mint should be greater than zero")
 		require(self.msg.sender in self.getIssuers(), "Only issuers can mint")
@@ -285,7 +283,11 @@ class StablyCoin(IconScoreBase, TokenStandard):
 
 	def _burn(self, _from: Address, _value: int) -> None:
 		'''
-		_from or msg.sender?
+		Burns `_value` amount of tokens from `_from` address.
+		Internal Function
+
+		:param _from: The account at which token is to be destroyed.
+		:param _value: Number of tokens to be destroyed at the `_from`.
 		'''
 		require(_from != EOA_ZERO, "Cannot mint to zero address")
 		require(_value > 0, "Amount to mint should be greater than zero")
