@@ -39,6 +39,9 @@ class TokenFallbackInterface(InterfaceScore):
     def tokenFallback(self, _from: Address, _value: int, _data: bytes):
         pass
 
+def require(condition: bool, error: str):
+    if not condition:
+        revert(f"{error}")
 
 class MintBurnPauseIRC2(IconScoreBase):
 
@@ -71,30 +74,15 @@ class MintBurnPauseIRC2(IconScoreBase):
 
     def on_install(self, _name:str, _symbol:str, _initialSupply: int, _decimals: int, _cap: int = DEFAULT_CAP_VALUE, _paused:bool = False) -> None:
         super().on_install()
-
-        if (len(_symbol) <= 0):
-            revert("Symbol of token should have at least one character")
-
-        if (len(_name) <= 0):
-            revert("Name of token should have at least one character")
-
-        if _initialSupply < 0:
-            revert("Initial supply cannot be less than zero")
-
-        if _decimals < 0:
-            revert("Decimals cannot be less than zero")
-
-        if _cap <= 0:
-            revert("Cap cannot be zero or less")
-
-        if _initialSupply >= _cap:
-            revert("Cannot exceed cap limit")
+        require(len(_symbol) > 0, f"{_symbol}: Symbol of token should have at least one character")
+        require(len(_name) > 0, f"{_name}: Name of token should have at least one character")
+        require(_initialSupply > 0, f"{_initialSupply}: Initial supply cannot be less than zero")
+        require(_decimals > 0, f"{_decimals}: Decimals cannot be less than zero")
+        require(_cap > 0, f"{_cap}: Cap cannot be zero or less")
+        require(_initialSupply < _cap, f"Initial Supply {_initialSupply}, Cap {_cap}: {_name}: Initial supply cannot exceed cap limit")
 
         total_supply = _initialSupply * 10 ** _decimals
         total_cap = _cap * 10 ** _decimals
-
-        Logger.debug(f'on_install: total_supply={total_supply}', TAG)
-        Logger.debug(f'on_install: total_cap={total_cap}', TAG)
 
         self._name.set(_name)
         self._symbol.set(_symbol)
@@ -144,13 +132,13 @@ class MintBurnPauseIRC2(IconScoreBase):
     @external
     def mint(self, _value: int, _data: bytes = None) -> None:
         if _data is None:
-            _data = b'None'
+            _data = b'mint'
         self._mint(self.msg.sender, _value, _data)
 
     @external
     def mintTo(self, _to: Address, _value: int, _data: bytes = None) -> None:
         if _data is None:
-            _data = b'None'
+            _data = b'mintTo'
         self._mint(_to, _value, _data)
 
     @external
@@ -159,36 +147,27 @@ class MintBurnPauseIRC2(IconScoreBase):
 
     @external
     def pause(self) -> None:
-        if self.msg.sender != self.owner:
-            revert("Token can be paused by owner only")
-        if self._paused.get():
-            revert("Token is already in paused state")
-
+        require(self.msg.sender == self.owner, f"{self.name()}: Token can be unpaused by owner only")
+        require(not self.isPaused(), f"{self.name()}: Token is already in paused state")
         self._paused.set(True)
         self.Paused(True)
 
     @external
     def unpause(self) -> None:
-        if self.msg.sender != self.owner:
-            revert("Token can be unpaused by owner only")
-        if not self._paused.get():
-            revert("Token is already in unpaused state")
-
+        require(self.msg.sender == self.owner, f"{self.name()}:Token can be unpaused by owner only")
+        require(self.isPaused(), f"{self.name()}:Token is already in unpaused state" )
         self._paused.set(False)
         self.Paused(False)
 
     def _transfer(self, _from: Address, _to: Address, _value: int, _data: bytes):
 
         # Checks the sending value and balance.
-        if _value < 0:
-            revert("Transferring value cannot be less than zero")
-        if self._balances[_from] < _value:
-            revert("Out of balance")
-
+        require(_value > 0, f"{self.name()}: Cannot transfer zero or less value" )
+        require(self._balances[_from] >= _value, f"{self.name()}: Out of balance")
+        require(not self._paused.get(), f"{self.name()}: Token operations paused")
+        
         self._balances[_from] = self._balances[_from] - _value
         self._balances[_to] = self._balances[_to] + _value
-
-        self._beforeTokenTransfer(_from, _to, _value)
 
         if _to.is_contract:
             # If the recipient is SCORE,
@@ -198,14 +177,13 @@ class MintBurnPauseIRC2(IconScoreBase):
 
         # Emits an event log `Transfer`
         self.Transfer(_from, _to, _value, _data)
-        Logger.debug(f'Transfer({_from}, {_to}, {_value}, {_data})', TAG)
 
     def _mint(self, _to: Address, _value: int, _data: bytes) -> None:
-        if (self.msg.sender != self.owner):
-            revert("Only owner can call mint method")
+        require(self.msg.sender == self.owner, f"{self.name()}: Only owner can call mint method")
+        require(_value > 0, f"{self.name()}: Cannot mint zero or less tokens" )
+        require(not self._paused.get(), f"{self.name()}: Token operations paused")
+        require(self.totalSupply() + _value < self.cap(), f"{self.name()}: Cap limit exceeded")
 
-        self._beforeTokenTransfer(EOA_ZERO, _to, _value)
-        
         self._total_supply.set(self._total_supply.get() + _value)
         self._balances[_to] +=  _value
         
@@ -213,23 +191,14 @@ class MintBurnPauseIRC2(IconScoreBase):
             # If the recipient is SCORE,
             #   then calls `tokenFallback` to hand over control.
             recipient_score = self.create_interface_score(_to, TokenFallbackInterface)
-            recipient_score.tokenFallback(_from, _value, _data)
+            recipient_score.tokenFallback(EOA_ZERO, _value, _data)
         
         self.Transfer(EOA_ZERO, _to, _value, _data)
 
     def _burn(self, _from: Address, _value: int,) -> None:
-        if self.balanceOf(_from) < _value:
-            revert('The amount greater than the balance in the account cannot be burned.')
-
-        self._beforeTokenTransfer(_from, EOA_ZERO, _value)
-        
+        require(self.balanceOf(_from) >= _value, f"{self.name()}: The amount greater than the balance in the account cannot be burned ")
+        require(not self._paused.get(), f"{self.name()}: Token operations paused")
         self._total_supply.set(self._total_supply.get() - _value)
         self._balances[_from] -=  _value
 
         self.Transfer(_from, EOA_ZERO, _value, b'burn')
-
-    def _beforeTokenTransfer(self, _from: Address, _to: Address, _value: int):
-        if self._paused.get():
-            revert("Token operations paused")
-        if ((self._total_supply.get() + _value) >= self._cap.get()):
-            revert("Cap limit exceeded")

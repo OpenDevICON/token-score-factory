@@ -39,6 +39,9 @@ class TokenFallbackInterface(InterfaceScore):
     def tokenFallback(self, _from: Address, _value: int, _data: bytes):
         pass
 
+def require(condition: bool, error: str):
+    if not condition:
+        revert(f"{error}")
 
 class MintBurnIRC2(IconScoreBase):
 
@@ -63,31 +66,16 @@ class MintBurnIRC2(IconScoreBase):
         self._cap = VarDB(self._CAP, db, value_type=int)
 
     def on_install(self, _name:str, _symbol:str, _initialSupply: int, _decimals: int, _cap: int = DEFAULT_CAP_VALUE) -> None:
-        super().on_install()
-
-        if (len(_symbol) <= 0):
-            revert("Symbol of token should have at least one character")
-
-        if (len(_name) <= 0):
-            revert("Name of token should have at least one character")
-
-        if _initialSupply < 0:
-            revert("Initial supply cannot be less than zero")
-
-        if _decimals < 0:
-            revert("Decimals cannot be less than zero")
-
-        if _cap <= 0:
-            revert("Cap cannot be zero or less")
-
-        if _initialSupply >= _cap:
-            revert("Cannot exceed cap limit")
+        super().on_install() 
+        require(len(_symbol) > 0, f"{_symbol}: Symbol of token should have at least one character")
+        require(len(_name) > 0, f"{_name}: Name of token should have at least one character")
+        require(_initialSupply > 0, f"{_initialSupply}: Initial supply cannot be less than zero")
+        require(_decimals > 0, f"{_decimals}: Decimals cannot be less than zero")
+        require(_cap > 0, f"{_cap}: Cap cannot be zero or less")
+        require(_initialSupply < _cap, f"Initial Supply {_initialSupply}, Cap {_cap}: {_name}: Initial supply cannot exceed cap limit")
 
         total_supply = _initialSupply * 10 ** _decimals
         total_cap = _cap * 10 ** _decimals
-
-        Logger.debug(f'on_install: total_supply={total_supply}', TAG)
-        Logger.debug(f'on_install: total_cap={total_cap}', TAG)
 
         self._name.set(_name)
         self._symbol.set(_symbol)
@@ -147,10 +135,8 @@ class MintBurnIRC2(IconScoreBase):
 
     def _transfer(self, _from: Address, _to: Address, _value: int, _data: bytes):
         # Checks the sending value and balance.
-        if _value < 0:
-            revert("Transferring value cannot be less than zero")
-        if self._balances[_from] < _value:
-            revert("Out of balance")
+        require(_value >= 0, f"{self.name()}: Transferring value cannot be less than zero")
+        require(self._balances[_from] >= _value, f"{self.name()}: Out of balance")
 
         self._balances[_from] = self._balances[_from] - _value
         self._balances[_to] = self._balances[_to] + _value
@@ -163,14 +149,11 @@ class MintBurnIRC2(IconScoreBase):
 
         # Emits an event log `Transfer`
         self.Transfer(_from, _to, _value, _data)
-        Logger.debug(f'Transfer({_from}, {_to}, {_value}, {_data})', TAG)
 
     def _mint(self, _to: Address, _value: int, _data: bytes) -> None:
-        if (self.msg.sender != self.owner):
-            revert("Only owner can call mint method")
-
-        if ((self._total_supply.get() + _value) >= self._cap.get()):
-            revert("Cap limit exceeded")
+        require(self.msg.sender == self.owner, f"{self.name()}: Only owner can call mint method")
+        require(self.totalSupply() + _value < self._cap.get(), f"{self.name()}: Cap limit exceeded")
+        require(_value > 0, f"{self.name()}: Cannot mint zero or less tokens" )
         
         self._total_supply.set(self._total_supply.get() + _value)
         self._balances[_to] +=  _value
@@ -179,13 +162,12 @@ class MintBurnIRC2(IconScoreBase):
             # If the recipient is SCORE,
             #   then calls `tokenFallback` to hand over control.
             recipient_score = self.create_interface_score(_to, TokenFallbackInterface)
-            recipient_score.tokenFallback(_from, _value, _data)
+            recipient_score.tokenFallback(EOA_ZERO, _value, _data)
         
         self.Transfer(EOA_ZERO, _to, _value, _data)
 
     def _burn(self, _from: Address, _value: int) -> None:
-        if self.balanceOf(_from) < _value:
-            revert('The amount greater than the balance in the account cannot be burned')
+        require(self.balanceOf(_from) >= _value, f"{self.name()}: The amount greater than the balance in the account cannot be burned ")
         
         self._total_supply.set(self._total_supply.get() - _value)
         self._balances[_from] -=  _value

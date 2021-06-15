@@ -37,7 +37,9 @@ class TokenFallbackInterface(InterfaceScore):
     def tokenFallback(self, _from: Address, _value: int, _data: bytes):
         pass
 
-
+def require(condition: bool, error: str):
+    if not condition:
+        revert(f"{error}")
 
 class PausableIRC2(IconScoreBase):
 
@@ -67,22 +69,13 @@ class PausableIRC2(IconScoreBase):
 
     def on_install(self, _name:str, _symbol:str, _initialSupply: int, _decimals: int, _paused:bool = False) -> None:
         super().on_install()
-
-        if (len(_symbol) <= 0):
-            revert("Symbol of token should have at least one character")
-
-        if (len(_name) <= 0):
-            revert("Name of token should have at least one character")
-
-        if _initialSupply < 0:
-            revert("Initial supply cannot be less than zero")
-
-        if _decimals < 0:
-            revert("Decimals cannot be less than zero")
-
-        total_supply = _initialSupply * 10 ** _decimals
-        Logger.debug(f'on_install: total_supply={total_supply}', TAG)
-
+        require(len(_symbol) > 0, f"{_symbol}: Symbol of token should have at least one character")
+        require(len(_name) > 0, f"{_name}: Name of token should have at least one character")
+        require(_initialSupply > 0, f"{_initialSupply}: Initial supply cannot be less than zero")
+        require(_decimals > 0, f"{_decimals}: Decimals cannot be less than zero")
+        
+        total_supply = _initialSupply * 10 ** _decimals 
+        
         self._name.set(_name)
         self._symbol.set(_symbol)
         self._total_supply.set(total_supply)
@@ -125,20 +118,16 @@ class PausableIRC2(IconScoreBase):
 
     @external
     def pause(self) -> None:
-        if self.msg.sender != self.owner:
-            revert("Token can be paused by owner only")
-        if self._paused.get() == True:
-            revert("Token is already in paused state")
+        require(self.msg.sender == self.owner, f"{self.name()}: Token can be unpaused by owner only")
+        require(not self.isPaused(), f"{self.name()}: Token is already in paused state")
 
         self._paused.set(True)
         self.Paused(True)
 
     @external
     def unpause(self) -> None:
-        if self.msg.sender != self.owner:
-            revert("Token can be unpaused by owner only")
-        if self._paused.get() == False:
-            revert("Token is already in unpaused state")
+        require(self.msg.sender == self.owner, f"{self.name()}:Token can be unpaused by owner only")
+        require(self.isPaused(), f"{self.name()}:Token is already in unpaused state" )
 
         self._paused.set(False)
         self.Paused(False)
@@ -147,13 +136,10 @@ class PausableIRC2(IconScoreBase):
     def _transfer(self, _from: Address, _to: Address, _value: int, _data: bytes):
 
         # Checks the sending value and balance.
-        if _value < 0:
-            revert("Transferring value cannot be less than zero")
-        if self._balances[_from] < _value:
-            revert("Out of balance")
-
-        self._beforeTokenTransfer(_from, _to, _value)
-
+        require(_value > 0, f"{self.name()}: Cannot transfer zero or less value" )
+        require(self._balances[_from] >= _value, f"{self.name()}: Out of balance")
+        require(not self._paused.get(), f"{self.name()}: Token operations paused")
+        
         self._balances[_from] = self._balances[_from] - _value
         self._balances[_to] = self._balances[_to] + _value
 
@@ -165,9 +151,3 @@ class PausableIRC2(IconScoreBase):
 
         # Emits an event log `Transfer`
         self.Transfer(_from, _to, _value, _data)
-        Logger.debug(f'Transfer({_from}, {_to}, {_value}, {_data})', TAG)
-
-    def _beforeTokenTransfer(self, _from: Address, _to: Address, _value: int):
-        # If paused, it returns false. 
-        if self._paused.get():
-            revert("Token operations paused")
