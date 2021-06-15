@@ -129,10 +129,16 @@ class StablyCoin(IconScoreBase, TokenStandard):
 
 	@external(readonly=True)
 	def getAdmin(self) -> Address:
+		'''
+		Returns the wallet address of admin.
+		'''
 		return self._admin.get()
 
 	@external(readonly=True)
 	def getIssuers(self) -> list:    
+		'''
+		Returns the list of all the issuers.
+		'''
 		issuers = []
 		for i in range(len(self._issuers)):
 			issuers.append(self._issuers[i])
@@ -140,6 +146,9 @@ class StablyCoin(IconScoreBase, TokenStandard):
 	
 	@external(readonly=True)
 	def isPaused(self) -> bool:
+		'''
+		Returns if the score is paused
+		'''
 		return self._paused.get()
 
 	@external
@@ -155,11 +164,12 @@ class StablyCoin(IconScoreBase, TokenStandard):
 
 	@external
 	def addIssuer(self, _issuer: Address) -> None:
-        '''
-        Add issuers. Issuers can mint and burn tokens.
-        
-        :param _issuer: The wallet address of issuer to be added
-        '''
+		'''
+		Add issuers. Issuers can mint and burn tokens.
+		Only admin can call this method.
+		
+		:param _issuer: The wallet address of issuer to be added
+		'''
 		require(_issuer not in self._issuers, f"{_issuer} is already an issuer")
 		require(self.msg.sender == self._admin.get(), "Only admin can add issuers")
 		require(len(self.getIssuers()) < self._n_issuers.get(), f"Cannot have more than {self._n_issuers.get()} issuers")
@@ -167,6 +177,12 @@ class StablyCoin(IconScoreBase, TokenStandard):
 
 	@external
 	def removeIssuer(self, _issuer: Address) -> None:
+		'''
+		Remove issuer from the list of issuers.
+		Only admin can call this method.
+
+		:param _issuer: The wallet of address of issuer to remove
+		'''
 		require(self.msg.sender == self._admin.get(), "Only admin can remove issuers")
 		require(_issuer in self._issuers, f"{_issuer} not an issuer")
 
@@ -178,13 +194,21 @@ class StablyCoin(IconScoreBase, TokenStandard):
 
 	@external
 	def transferOwnership(self, _newAdmin: Address) -> None:
+		'''
+		Transfer the admin rights to another `_newAdmin` address
+		Only admin can call this method.
 
+		:param _newAdmin: New wallet address that will now have admin rights
+		'''
 		require(self.msg.sender == self._admin.get(), "Only admin can transfer ownership")
 		self._admin.set(_newAdmin)
 
 	@external
 	def togglePause(self) -> None:
-
+		'''
+		Toggles pause status of the score.
+		Only admin can call this method.
+		'''
 		require(self.msg.sender == self._admin.get(), "Only admin can pause")
 		self._paused.set( not self.isPaused() )
 
@@ -193,6 +217,7 @@ class StablyCoin(IconScoreBase, TokenStandard):
 		'''
 		Creates `_value` number of tokens, and assigns to caller account.
 		Increases the balance of that account and total supply.
+		Only issuers can call ths method.
 
 		:param _value: Number of tokens to be created at the account.
 		'''
@@ -203,6 +228,7 @@ class StablyCoin(IconScoreBase, TokenStandard):
 		'''
 		Creates `_value` number of tokens, and assigns to `_to`.
 		Increases the balance of that account and total supply.
+		Only issuers can call ths method.
 
 		:param _to: The account at which token is to be created.
 		:param _value: Number of tokens to be created at the account.
@@ -214,6 +240,7 @@ class StablyCoin(IconScoreBase, TokenStandard):
 		'''
 		Destroys `_value` number of tokens from the caller account.
 		Decreases the balance of that account and total supply.
+		Only issuers can call ths method.
 
 		:param _value: Number of tokens to be destroyed.
 		'''
@@ -224,6 +251,7 @@ class StablyCoin(IconScoreBase, TokenStandard):
 		'''
 		Destroys `_value` number of tokens from the specified `_from` account.
 		Decreases the balance of that account and total supply.
+		Only issuers can call ths method.
 
 		:param _from: The account at which token is to be destroyed.
 		:param _value: Number of tokens to be destroyed at the `_from`.
@@ -261,7 +289,6 @@ class StablyCoin(IconScoreBase, TokenStandard):
 
 		# Emits an event log `Transfer`
 		self.Transfer(_from, _to, _value, _data)
-		Logger.debug(f'Transfer({_from}, {_to}, {_value}, {_data})', self.name())
 
 	def _mint(self, _to: Address, _value:int) -> None:
 		'''
