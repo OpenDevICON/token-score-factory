@@ -188,6 +188,27 @@ export const tokenTypeMapping = [
     },
 
     {
+        name: 'Token with issuance governance',
+        value: 'stable_irc2',
+        supplyType: 'Uncapped',
+        accessType: 'Permission Based',
+        transferType: 'Stoppable',
+        
+        burnable: true,
+        mintable: true,
+        irc1363: true,
+        pausable: true,
+        tokenRecover: false,
+        verifiedSourceCode: true,
+        removeCopyright: false,
+
+        tokenUrl: 'https://raw.githubusercontent.com/OpenDevICON/token-score-factory/master/zips/complete_irc2.zip',
+        estimatedTransactionFee: 13.54,
+        tokenInformation: ['name', 'symbol', 'decimals', 'initialSupply', 'admin', 'issuer', 'noOfIssuers']
+
+    },
+
+    {
         name: 'Mintable IRC3',
         value: 'mintable_irc3',
         accessType: 'Permission Based',
