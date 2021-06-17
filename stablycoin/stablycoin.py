@@ -48,12 +48,11 @@ class StablyCoin(IconScoreBase, TokenStandard):
 		self._allowances = DictDB(self._ALLOWANCES,db,value_type=int)
 		self._paused = VarDB(self._PAUSED, db, value_type=bool)
 
-	def on_install(self, _name:str, _symbol:str, _decimals:int, _admin:Address, _issuer:Address, _nIssuers: int = 2) -> None:
+	def on_install(self, _name:str, _symbol:str, _decimals:int, _admin:Address, _nIssuers: int = 2) -> None:
 		'''
 		Variable Initialization.
 
 		:param _admin: The admin for the token.
-		:param _issuer: Addresses that can mint and burn tokens.
 		:param _nIssuers: Maximum number of issuers.
 		:param _name: The name of the token.
 		:param _symbol: The symbol of the token.
@@ -66,7 +65,6 @@ class StablyCoin(IconScoreBase, TokenStandard):
 		require(_nIssuers > 0, "1 or more issuers required")
 
 		self._admin.set(_admin)
-		self._issuers.put(_issuer)
 		self._n_issuers.set(_nIssuers)
 
 		self._name.set(_name)
@@ -102,10 +100,6 @@ class StablyCoin(IconScoreBase, TokenStandard):
 		Returns the number of decimals
 		For example, if the decimals = 2, a balance of 25 tokens
 		should be displayed to the user as (25 * 10 ** 2)
-
-		Tokens usually opt for value of 18. It is also the IRC2
-		uses by default. It can be changed by passing required
-		number of decimals during initialization.
 		'''
 		return self._decimals.get()
 
@@ -176,7 +170,7 @@ class StablyCoin(IconScoreBase, TokenStandard):
 		:param _issuer: The wallet address of issuer to be added
 		'''
 		require(_issuer not in self._issuers, f"{_issuer} is already an issuer")
-		require(self.msg.sender == self._admin.get(), "Only admin can add issuers")
+		require(self.msg.sender == self._admin.get(), "Only admin can add issuer")
 		require(len(self.getIssuers()) < self._n_issuers.get(), f"Cannot have more than {self._n_issuers.get()} issuers")
 		self._issuers.put(_issuer)
 
@@ -188,7 +182,7 @@ class StablyCoin(IconScoreBase, TokenStandard):
 
 		:param _issuer: The wallet of address of issuer to remove
 		'''
-		require(self.msg.sender == self._admin.get(), "Only admin can remove issuers")
+		require(self.msg.sender == self._admin.get(), "Only admin can remove issuer")
 		require(_issuer in self._issuers, f"{_issuer} not an issuer")
 
 		top = self._issuers.pop()
@@ -205,6 +199,7 @@ class StablyCoin(IconScoreBase, TokenStandard):
 		:param _issuer: The issuer to approve to.
 		:param _value: The amount to approve to issuer to mint.
 		'''
+		require(self.msg.sender == self._admin.get(), "Only admin can approve amount to issuer")
 		self._allowances[_issuer] = _value
 
 	@external
@@ -255,7 +250,6 @@ class StablyCoin(IconScoreBase, TokenStandard):
 		'''
 		Destroys `_value` number of tokens from the caller account.
 		Decreases the balance of that account and total supply.
-		Only issuers can call ths method.
 
 		:param _value: Number of tokens to be destroyed.
 		'''
@@ -323,8 +317,8 @@ class StablyCoin(IconScoreBase, TokenStandard):
 		:param _value: Number of tokens to be destroyed at the `_from`.
 		'''
 		require(_from != EOA_ZERO, "Cannot burn from zero address")
-		require(_value > 0, "Amount to mint should be greater than zero")
-		require(self._balances[_from] >= _value, "Cannot burn more than balance")
+		require(_value > 0, "Amount to burn should be greater than zero")
+		require(self._balances[_from] >= _value, "Insufficent balance to burn")
 		require(self.isPaused() == False, "Cannot burn when paused")
 
 		self._total_supply.set(self.totalSupply() - _value)
