@@ -69,7 +69,7 @@ const InputForm = ({walletAddress, setWalletAddress}) => {
         .required('Required'),
         admin: selectedTokenMapping?.tokenInformation.includes('admin') && Yup.string().required('Required').trim().matches(/hx[\w\d]{40}/, 'Invalid wallet address' ).max(42, 'Invalid wallet address'),
         issuer: selectedTokenMapping?.tokenInformation.includes('issuer') && Yup.string().required('Required').trim().matches(/hx[\w\d]{40}/, 'Invalid wallet address').max(42, 'Invalid wallet address'),
-        noOfIssuers: selectedTokenMapping?.tokenInformation.includes('noOfIssuers') && Yup.number().required('Required'),
+        noOfIssuers: selectedTokenMapping?.tokenInformation.includes('noOfIssuers') && Yup.number(),
 
         termsOfUseAgreement: Yup.boolean().isTrue('You must agree to the terms of use in order to deploy the token.')    }),
     onSubmit: async (values) => {
