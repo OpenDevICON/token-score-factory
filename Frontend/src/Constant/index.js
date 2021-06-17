@@ -202,7 +202,7 @@ export const tokenTypeMapping = [
         verifiedSourceCode: true,
         removeCopyright: false,
 
-        tokenUrl: 'https://raw.githubusercontent.com/OpenDevICON/token-score-factory/master/zips/complete_irc2.zip',
+        tokenUrl: 'https://raw.githubusercontent.com/OpenDevICON/token-score-factory/stablycoin/stablycoin.zip',
         estimatedTransactionFee: 13.54,
         tokenInformation: ['name', 'symbol', 'decimals', 'admin', 'issuer', 'noOfIssuers']
 
