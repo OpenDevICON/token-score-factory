@@ -27,6 +27,9 @@ export const deployToken = async ({
             '_symbol': getTokenInformation('symbol'),
             '_decimals': getTokenInformationNumericValues('decimals'),
             '_initialSupply': getTokenInformationNumericValues('initialSupply'),
+            '_admin': getTokenInformation('admin'),
+            '_issuer': getTokenInformation('issuer'),
+            '_nIssuers': getTokenInformationNumericValues('noOfIssuers'),
             '_cap': selectedTokenMapping.supplyType !== 'Fixed' ? getTokenInformationNumericValues('totalSupply') : undefined,
         };
     
