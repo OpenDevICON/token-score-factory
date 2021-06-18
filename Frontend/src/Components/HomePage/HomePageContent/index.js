@@ -23,8 +23,8 @@ const HomePageContent = () => {
                 <Col md = "3" className="homepage-info">
                     <img src={iconSvg} alt="" />
                     <span className="homepage-info-title">Get Some ICX</span>
-                    <span className="homepage-info-content">If you are on testnet, you can get some ICX from the faucet. 
-                        {/* <a href="http://faucet.ibriz.ai/" rel="noreferrer" target="_blank">http://faucet.ibriz.ai/</a> */}
+                    <span className="homepage-info-content">If you are on testnet, you can get some ICX from the faucet:&nbsp; 
+                        <a href="http://faucet.ibriz.ai/" rel="noreferrer" target="_blank">https://faucet.ibriz.ai/</a>
                     </span>
                 </Col>
 
