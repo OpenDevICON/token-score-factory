@@ -1,7 +1,7 @@
 from iconservice import *
 from .IIRC2 import TokenStandard
 
-TAG = 'StablyCoin'
+TAG = 'StableCoin'
 EOA_ZERO = Address.from_string('hx' + '0' * 40)
 
 # An interface of tokenFallback.
@@ -16,7 +16,7 @@ def require(condition: bool, error: str):
 	if not condition:
 		revert(f"{error}")
 
-class StablyCoin(IconScoreBase, TokenStandard):
+class StableCoin(IconScoreBase, TokenStandard):
 
 	_NAME = '_name'
 	_SYMBOL = '_symbol'
@@ -78,6 +78,18 @@ class StablyCoin(IconScoreBase, TokenStandard):
 	
 	@eventlog(indexed=3)
 	def Transfer(self, _from: Address, _to: Address, _value: int, _data: bytes):
+		pass
+
+	@eventlog(indexed=1)
+	def Mint(self, _to: Address, _value: int):
+		pass
+
+	@eventlog(indexed=1)
+	def Burn(self, _from: Address, _value: int):
+		pass
+
+	@eventlog(indexed=2)
+	def Approval(self, _from: Address, _to: Address, _value: int):
 		pass
 
 	@external(readonly=True)
@@ -204,16 +216,17 @@ class StablyCoin(IconScoreBase, TokenStandard):
 		require(self.msg.sender == self._admin.get(), "Only admin can approve amount to issuer")
 		require(_issuer in self.getIssuers(), "Only issuers can be approved")
 		self._allowances[_issuer] = _value
+		self.Approval(self.msg.sender, _issuer, _value)
 
 	@external
-	def transferOwnership(self, _newAdmin: Address) -> None:
+	def transferAdminRight(self, _newAdmin: Address) -> None:
 		'''
 		Transfer the admin rights to another `_newAdmin` address
 		Only admin can call this method.
 
 		:param _newAdmin: New wallet address that will now have admin rights
 		'''
-		require(self.msg.sender == self._admin.get(), "Only admin can transfer ownership")
+		require(self.msg.sender == self._admin.get(), "Only admin can transfer their admin right")
 		self._admin.set(_newAdmin)
 
 	@external
@@ -310,6 +323,7 @@ class StablyCoin(IconScoreBase, TokenStandard):
 		self._balances[_to] += _value
 
 		self.Transfer(EOA_ZERO, _to, _value, b'mint')
+		self.Mint(_to, _value)
 
 	def _burn(self, _from: Address, _value: int) -> None:
 		'''
@@ -328,3 +342,4 @@ class StablyCoin(IconScoreBase, TokenStandard):
 		self._balances[_from] -= _value
 
 		self.Transfer(_from, EOA_ZERO, _value, b'burn')
+		self.Burn(_from, _value)
