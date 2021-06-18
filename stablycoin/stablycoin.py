@@ -178,6 +178,7 @@ class StablyCoin(IconScoreBase, TokenStandard):
 	def removeIssuer(self, _issuer: Address) -> None:
 		'''
 		Remove issuer from the list of issuers.
+		Sets the allowance of `_issuer` to zero.
 		Only admin can call this method.
 
 		:param _issuer: The wallet of address of issuer to remove
@@ -190,6 +191,7 @@ class StablyCoin(IconScoreBase, TokenStandard):
 			for i in range(len(self._issuers)):
 				if self._issuers[i] == _issuer:
 					self._issuers[i] = top
+		self._allowances[_issuer] = 0
 
 	@external
 	def approve(self, _issuer: Address, _value: int) -> None:
@@ -200,6 +202,7 @@ class StablyCoin(IconScoreBase, TokenStandard):
 		:param _value: The amount to approve to issuer to mint.
 		'''
 		require(self.msg.sender == self._admin.get(), "Only admin can approve amount to issuer")
+		require(_issuer in self.getIssuers(), "Only issuers can be approved")
 		self._allowances[_issuer] = _value
 
 	@external
@@ -219,7 +222,7 @@ class StablyCoin(IconScoreBase, TokenStandard):
 		Toggles pause status of the score.
 		Only admin can call this method.
 		'''
-		require(self.msg.sender == self._admin.get(), "Only admin can pause")
+		require(self.msg.sender == self._admin.get(), "Only admin can toggle pause")
 		self._paused.set( not self.isPaused() )
 
 	@external
