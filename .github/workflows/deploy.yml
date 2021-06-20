@@ -27,7 +27,6 @@ jobs:
         env:
           CI: true
       - uses: jakejarvis/s3-sync-action@master
-      - name: Deploy to S3
         with:
           args: --acl public-read --follow-symlinks --delete
         env:
