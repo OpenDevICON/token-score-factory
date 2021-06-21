@@ -255,7 +255,7 @@ class CompleteIRC2(IconScoreBase):
 
     @external(readonly=True)
     def balanceOfAt(self, _owner: Address, _block_number: int) -> int:
-        require(_block_number < self.block_height, f"{self.name}: Block not yet determined")
+        require(_block_number < self.block_height, f"{self.name()}: Block not yet determined")
 
         total_snapshots = self._total_snapshots[_owner]
         if total_snapshots == 0:
@@ -283,7 +283,7 @@ class CompleteIRC2(IconScoreBase):
 
     @external(readonly=True)
     def totalSupplyAt(self, _block_number: int) -> int:
-        require(_block_number < self.block_height, f"{self.name}: Block not yet determined")
+        require(_block_number < self.block_height, f"{self.name()}: Block not yet determined")
 
         total_snapshots = self._total_supply_snapshot_count.get()
         if total_snapshots == 0:
