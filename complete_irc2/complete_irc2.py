@@ -109,6 +109,10 @@ class CompleteIRC2(IconScoreBase):
         self._decimals.set(_decimals)
         self._paused.set(_paused)
         self._balances[self.msg.sender] = total_supply
+        self.Transfer(EOA_ZERO, self.msg.sender, total_supply, b"Mint initial supply")
+
+        self._update_balance(self.msg.sender, total_supply)
+        self._update_total_supply(total_supply)
 
     def on_update(self) -> None:
         super().on_update()
