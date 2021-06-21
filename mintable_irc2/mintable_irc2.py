@@ -4,6 +4,7 @@ TAG = 'MintableIRC2'
 DEFAULT_CAP_VALUE = 2 ** 256 - 1
 EOA_ZERO = Address.from_string('hx' + '0' * 40)
 
+
 # An interface of ICON Token Standard, IRC-2
 class TokenStandard(ABC):
     @abstractmethod
@@ -39,12 +40,13 @@ class TokenFallbackInterface(InterfaceScore):
     def tokenFallback(self, _from: Address, _value: int, _data: bytes):
         pass
 
+
 def require(condition: bool, error: str):
     if not condition:
         revert(f"{error}")
 
-class MintableIRC2(IconScoreBase):
 
+class MintableIRC2(IconScoreBase):
     _NAME = '_name'
     _SYMBOL = '_symbol'
     _DECIMALS = 'decimals'
@@ -65,14 +67,16 @@ class MintableIRC2(IconScoreBase):
         self._total_supply = VarDB(self._TOTAL_SUPPLY, db, value_type=int)
         self._cap = VarDB(self._CAP, db, value_type=int)
 
-    def on_install(self, _name:str, _symbol:str, _initialSupply: int, _decimals: int, _cap: int = DEFAULT_CAP_VALUE) -> None:
+    def on_install(self, _name: str, _symbol: str, _initialSupply: int, _decimals: int,
+                   _cap: int = DEFAULT_CAP_VALUE) -> None:
         super().on_install()
         require(len(_symbol) > 0, f"{_symbol}: Symbol of token should have at least one character")
         require(len(_name) > 0, f"{_name}: Name of token should have at least one character")
         require(_initialSupply > 0, f"{_initialSupply}: Initial supply cannot be less than zero")
         require(_decimals > 0, f"{_decimals}: Decimals cannot be less than zero")
         require(_cap > 0, f"{_cap}: Cap cannot be zero or less")
-        require(_initialSupply < _cap, f"Initial Supply {_initialSupply}, Cap {_cap}: {_name}: Initial supply cannot exceed cap limit")
+        require(_initialSupply < _cap,
+                f"Initial Supply {_initialSupply}, Cap {_cap}: {_name}: Initial supply cannot exceed cap limit")
 
         total_supply = _initialSupply * 10 ** _decimals
         total_cap = _cap * 10 ** _decimals
@@ -86,7 +90,7 @@ class MintableIRC2(IconScoreBase):
 
     def on_update(self) -> None:
         super().on_update()
-    
+
     @external(readonly=True)
     def name(self) -> str:
         return self._name.get()
@@ -150,16 +154,15 @@ class MintableIRC2(IconScoreBase):
     def _mint(self, _to: Address, _value: int, _data: bytes) -> None:
         require(self.msg.sender == self.owner, f"{self.name()}: Only owner can call mint method")
         require(self.totalSupply() + _value < self._cap.get(), f"{self.name()}: Cap limit exceeded")
-        require(_value > 0, f"{self.name()}: Cannot mint zero or less tokens" )
-        
+        require(_value > 0, f"{self.name()}: Cannot mint zero or less tokens")
+
         self._total_supply.set(self._total_supply.get() + _value)
-        self._balances[_to] +=  _value
+        self._balances[_to] += _value
 
         if _to.is_contract:
             # If the recipient is SCORE,
             #   then calls `tokenFallback` to hand over control.
             recipient_score = self.create_interface_score(_to, TokenFallbackInterface)
             recipient_score.tokenFallback(EOA_ZERO, _value, _data)
-        
+
         self.Transfer(EOA_ZERO, _to, _value, _data)
-        

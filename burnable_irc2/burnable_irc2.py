@@ -3,6 +3,7 @@ from iconservice import *
 TAG = 'BurnableIRC2'
 EOA_ZERO = Address.from_string('hx' + '0' * 40)
 
+
 # An interface of ICON Token Standard, IRC-2
 class TokenStandard(ABC):
     @abstractmethod
@@ -38,6 +39,7 @@ class TokenFallbackInterface(InterfaceScore):
     def tokenFallback(self, _from: Address, _value: int, _data: bytes):
         pass
 
+
 def require(condition: bool, error: str):
     if not condition:
         revert(f"{error}")
@@ -63,7 +65,7 @@ class BurnableIRC2(IconScoreBase):
         self._balances = DictDB(self._BALANCES, db, value_type=int)
         self._total_supply = VarDB(self._TOTAL_SUPPLY, db, value_type=int)
 
-    def on_install(self, _name:str, _symbol:str, _initialSupply: int, _decimals: int) -> None:
+    def on_install(self, _name: str, _symbol: str, _initialSupply: int, _decimals: int) -> None:
         super().on_install()
 
         require(len(_name) > 0, f"{_name}: Name of token should have at least one character")
@@ -113,17 +115,18 @@ class BurnableIRC2(IconScoreBase):
         self._burn(self.msg.sender, _value)
 
     def _burn(self, _from: Address, _value: int) -> None:
-        require(self.balanceOf(_from) >= _value, f"{self.name()}: The amount greater than the balance in the account cannot be burned ")
+        require(self.balanceOf(_from) >= _value,
+                f"{self.name()}: The amount greater than the balance in the account cannot be burned ")
         
         self._total_supply.set(self._total_supply.get() - _value)
-        self._balances[_from] -=  _value
+        self._balances[_from] -= _value
 
         self.Transfer(_from, EOA_ZERO, _value, b'burn')
 
     def _transfer(self, _from: Address, _to: Address, _value: int, _data: bytes):
         
         # Checks the sending value and balance.
-        require(_value > 0, f"{self.name()}: Cannot transfer zero or less value" )
+        require(_value >= 0, f"{self.name()}: Cannot transfer less than zero value")
         require(self._balances[_from] >= _value, f"{self.name()}: Out of balance")
 
         self._balances[_from] = self._balances[_from] - _value

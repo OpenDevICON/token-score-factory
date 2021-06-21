@@ -4,6 +4,7 @@ TAG = 'MintBurnIRC2'
 DEFAULT_CAP_VALUE = 2 ** 256 - 1
 EOA_ZERO = Address.from_string('hx' + '0' * 40)
 
+
 # An interface of ICON Token Standard, IRC-2
 class TokenStandard(ABC):
     @abstractmethod
@@ -39,12 +40,13 @@ class TokenFallbackInterface(InterfaceScore):
     def tokenFallback(self, _from: Address, _value: int, _data: bytes):
         pass
 
+
 def require(condition: bool, error: str):
     if not condition:
         revert(f"{error}")
 
-class MintBurnIRC2(IconScoreBase):
 
+class MintBurnIRC2(IconScoreBase):
     _NAME = '_name'
     _SYMBOL = '_symbol'
     _DECIMALS = 'decimals'
@@ -65,14 +67,16 @@ class MintBurnIRC2(IconScoreBase):
         self._total_supply = VarDB(self._TOTAL_SUPPLY, db, value_type=int)
         self._cap = VarDB(self._CAP, db, value_type=int)
 
-    def on_install(self, _name:str, _symbol:str, _initialSupply: int, _decimals: int, _cap: int = DEFAULT_CAP_VALUE) -> None:
-        super().on_install() 
+    def on_install(self, _name: str, _symbol: str, _initialSupply: int, _decimals: int,
+                   _cap: int = DEFAULT_CAP_VALUE) -> None:
+        super().on_install()
         require(len(_symbol) > 0, f"{_symbol}: Symbol of token should have at least one character")
         require(len(_name) > 0, f"{_name}: Name of token should have at least one character")
         require(_initialSupply > 0, f"{_initialSupply}: Initial supply cannot be less than zero")
         require(_decimals > 0, f"{_decimals}: Decimals cannot be less than zero")
         require(_cap > 0, f"{_cap}: Cap cannot be zero or less")
-        require(_initialSupply < _cap, f"Initial Supply {_initialSupply}, Cap {_cap}: {_name}: Initial supply cannot exceed cap limit")
+        require(_initialSupply < _cap,
+                f"Initial Supply {_initialSupply}, Cap {_cap}: {_name}: Initial supply cannot exceed cap limit")
 
         total_supply = _initialSupply * 10 ** _decimals
         total_cap = _cap * 10 ** _decimals
@@ -86,7 +90,7 @@ class MintBurnIRC2(IconScoreBase):
 
     def on_update(self) -> None:
         super().on_update()
-    
+
     @external(readonly=True)
     def name(self) -> str:
         return self._name.get()
@@ -118,7 +122,7 @@ class MintBurnIRC2(IconScoreBase):
         self._transfer(self.msg.sender, _to, _value, _data)
 
     @external
-    def mint(self, _value: int, _data: bytes = None ) -> None:
+    def mint(self, _value: int, _data: bytes = None) -> None:
         if _data is None:
             _data = b'None'
         self._mint(self.msg.sender, _value, _data)
@@ -153,23 +157,24 @@ class MintBurnIRC2(IconScoreBase):
     def _mint(self, _to: Address, _value: int, _data: bytes) -> None:
         require(self.msg.sender == self.owner, f"{self.name()}: Only owner can call mint method")
         require(self.totalSupply() + _value < self._cap.get(), f"{self.name()}: Cap limit exceeded")
-        require(_value > 0, f"{self.name()}: Cannot mint zero or less tokens" )
-        
+        require(_value > 0, f"{self.name()}: Cannot mint zero or less tokens")
+
         self._total_supply.set(self._total_supply.get() + _value)
-        self._balances[_to] +=  _value
+        self._balances[_to] += _value
 
         if _to.is_contract:
             # If the recipient is SCORE,
             #   then calls `tokenFallback` to hand over control.
             recipient_score = self.create_interface_score(_to, TokenFallbackInterface)
             recipient_score.tokenFallback(EOA_ZERO, _value, _data)
-        
+
         self.Transfer(EOA_ZERO, _to, _value, _data)
 
     def _burn(self, _from: Address, _value: int) -> None:
-        require(self.balanceOf(_from) >= _value, f"{self.name()}: The amount greater than the balance in the account cannot be burned ")
-        
+        require(self.balanceOf(_from) >= _value,
+                f"{self.name()}: The amount greater than the balance in the account cannot be burned ")
+
         self._total_supply.set(self._total_supply.get() - _value)
-        self._balances[_from] -=  _value
+        self._balances[_from] -= _value
 
         self.Transfer(_from, EOA_ZERO, _value, b'burn')

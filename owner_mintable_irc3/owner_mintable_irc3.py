@@ -3,6 +3,7 @@ from iconservice import *
 TAG = 'OwnerMintableIRC3'
 EOA_ZERO = Address.from_string('hx' + '0' * 40)
 
+
 # An interface of ICON Token Standard, IRC-3
 class TokenStandard(ABC):
     @abstractmethod
@@ -37,8 +38,8 @@ class TokenStandard(ABC):
     def transferFrom(self, _from: Address, _to: Address, _tokenId: int):
         pass
 
-class OwnerMintableIRC3(IconScoreBase):
 
+class OwnerMintableIRC3(IconScoreBase):
     _NAME = 'name'
     _SYMBOL = 'symbol'
     _BALANCES = "balances"
@@ -56,19 +57,19 @@ class OwnerMintableIRC3(IconScoreBase):
 
     def __init__(self, db: IconScoreDatabase) -> None:
         super().__init__(db)
-        self._name = VarDB(self._NAME, db, value_type = str)
-        self._symbol = VarDB(self._SYMBOL, db, value_type = str)
-        self._balances = DictDB(self._BALANCES, db, value_type = int)
-        self._owners = DictDB(self._OWNERS, db, value_type = Address)
-        self._token_URIs = DictDB(self._TOKEN_URIS, db, value_type = str)
-        self._token_approvals = DictDB(self._TOKEN_APPROVALS, db, value_type = Address)
+        self._name = VarDB(self._NAME, db, value_type=str)
+        self._symbol = VarDB(self._SYMBOL, db, value_type=str)
+        self._balances = DictDB(self._BALANCES, db, value_type=int)
+        self._owners = DictDB(self._OWNERS, db, value_type=Address)
+        self._token_URIs = DictDB(self._TOKEN_URIS, db, value_type=str)
+        self._token_approvals = DictDB(self._TOKEN_APPROVALS, db, value_type=Address)
 
     def on_install(self, _name: str, _symbol: str) -> None:
         super().on_install()
-        if (len(_symbol) <= 0):
+        if len(_symbol) <= 0:
             revert("Symbol of token should have at least one character")
 
-        if (len(_name) <= 0):
+        if len(_name) <= 0:
             revert("Name of token should have at least one character")
 
         self._name.set(_name)
@@ -76,7 +77,7 @@ class OwnerMintableIRC3(IconScoreBase):
 
     def on_update(self) -> None:
         super().on_update()
-    
+
     @external(readonly=True)
     def name(self) -> str:
         return self._name.get()
@@ -89,7 +90,7 @@ class OwnerMintableIRC3(IconScoreBase):
     def balanceOf(self, _owner: Address) -> int:
         # zero address check
         if _owner == EOA_ZERO:
-            revert("Balance query for zero addresss")
+            revert("Balance query for zero address")
         return self._balances[_owner]
 
     @external(readonly=True)
@@ -122,9 +123,9 @@ class OwnerMintableIRC3(IconScoreBase):
     @external
     def approve(self, _to: Address, _tokenId: int):
         owner = self._owners[_tokenId]
-        if _to == owner :
+        if _to == owner:
             revert("Cannot approve to token owner")
-        if owner != self.msg.sender :
+        if owner != self.msg.sender:
             revert("You do not own this token")
 
         self._approve(_to, _tokenId)
@@ -171,15 +172,15 @@ class OwnerMintableIRC3(IconScoreBase):
             _tokenURI = ""
         self._token_URIs[_tokenId] = _tokenURI
 
-    def _transfer(self, _from: Address, _to: Address, _tokenId: int ) -> None:
+    def _transfer(self, _from: Address, _to: Address, _tokenId: int) -> None:
         # check if token exists
         self._token_exists(_tokenId)
         owner = self.ownerOf(_tokenId)
 
         if _from != owner:
-            revert("Transfer of token that is not own")  
-        if _to == owner :
-            revert("Cannot approve to token owner")          
+            revert("Transfer of token that is not own")
+        if _to == owner:
+            revert("Cannot approve to token owner")
         if _to == EOA_ZERO:
             revert("Cannot transfer to zero address")
 
@@ -197,13 +198,13 @@ class OwnerMintableIRC3(IconScoreBase):
         self._token_approvals[_tokenId] = _to
         self.Approval(self.msg.sender, _to, _tokenId)
 
-    def _isApprovedOrOwner(self, _spender: Address, _tokenId: int ) -> bool:
+    def _isApprovedOrOwner(self, _spender: Address, _tokenId: int) -> bool:
         # check if token exists
         self._token_exists(_tokenId)
         owner = self.ownerOf(_tokenId)
         approved_to = self.getApproved(_tokenId)
-        return (_spender == owner or _spender == approved_to)
+        return _spender == owner or _spender == approved_to
 
     def _token_exists(self, _tokenId: int) -> bool:
         owner = self._owners[_tokenId]
-        return owner != None
+        return owner is not None

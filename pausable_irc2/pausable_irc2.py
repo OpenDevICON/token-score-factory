@@ -2,6 +2,7 @@ from iconservice import *
 
 TAG = 'PausableIRC2'
 
+
 # An interface of ICON Token Standard, IRC-2
 class TokenStandard(ABC):
     @abstractmethod
@@ -37,12 +38,13 @@ class TokenFallbackInterface(InterfaceScore):
     def tokenFallback(self, _from: Address, _value: int, _data: bytes):
         pass
 
+
 def require(condition: bool, error: str):
     if not condition:
         revert(f"{error}")
 
-class PausableIRC2(IconScoreBase):
 
+class PausableIRC2(IconScoreBase):
     _NAME = '_name'
     _SYMBOL = '_symbol'
     _DECIMALS = 'decimals'
@@ -67,15 +69,15 @@ class PausableIRC2(IconScoreBase):
         self._total_supply = VarDB(self._TOTAL_SUPPLY, db, value_type=int)
         self._paused = VarDB(self._PAUSED, db, value_type=bool)
 
-    def on_install(self, _name:str, _symbol:str, _initialSupply: int, _decimals: int, _paused:bool = False) -> None:
+    def on_install(self, _name: str, _symbol: str, _initialSupply: int, _decimals: int, _paused: bool = False) -> None:
         super().on_install()
         require(len(_symbol) > 0, f"{_symbol}: Symbol of token should have at least one character")
         require(len(_name) > 0, f"{_name}: Name of token should have at least one character")
         require(_initialSupply > 0, f"{_initialSupply}: Initial supply cannot be less than zero")
         require(_decimals > 0, f"{_decimals}: Decimals cannot be less than zero")
-        
-        total_supply = _initialSupply * 10 ** _decimals 
-        
+
+        total_supply = _initialSupply * 10 ** _decimals
+
         self._name.set(_name)
         self._symbol.set(_symbol)
         self._total_supply.set(total_supply)
@@ -85,7 +87,7 @@ class PausableIRC2(IconScoreBase):
 
     def on_update(self) -> None:
         super().on_update()
-    
+
     @external(readonly=True)
     def name(self) -> str:
         return self._name.get()
@@ -127,19 +129,18 @@ class PausableIRC2(IconScoreBase):
     @external
     def unpause(self) -> None:
         require(self.msg.sender == self.owner, f"{self.name()}:Token can be unpaused by owner only")
-        require(self.isPaused(), f"{self.name()}:Token is already in unpaused state" )
+        require(self.isPaused(), f"{self.name()}:Token is already in unpaused state")
 
         self._paused.set(False)
         self.Paused(False)
 
-
     def _transfer(self, _from: Address, _to: Address, _value: int, _data: bytes):
 
         # Checks the sending value and balance.
-        require(_value > 0, f"{self.name()}: Cannot transfer zero or less value" )
+        require(_value > 0, f"{self.name()}: Cannot transfer zero or less value")
         require(self._balances[_from] >= _value, f"{self.name()}: Out of balance")
         require(not self._paused.get(), f"{self.name()}: Token operations paused")
-        
+
         self._balances[_from] = self._balances[_from] - _value
         self._balances[_to] = self._balances[_to] + _value
 

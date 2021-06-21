@@ -97,7 +97,8 @@ class CompleteIRC2(IconScoreBase):
         require(_initialSupply > 0, f"{_initialSupply}: Initial supply cannot be less than zero")
         require(_decimals > 0, f"{_decimals}: Decimals cannot be less than zero")
         require(_cap > 0, f"{_cap}: Cap cannot be zero or less")
-        require(_initialSupply < _cap, f"Initial Supply {_initialSupply}, Cap {_cap}: {_name}: Initial supply cannot exceed cap limit")
+        require(_initialSupply < _cap,
+                f"Initial Supply {_initialSupply}, Cap {_cap}: {_name}: Initial supply cannot exceed cap limit")
 
         total_supply = _initialSupply * 10 ** _decimals
         total_cap = _cap * 10 ** _decimals
