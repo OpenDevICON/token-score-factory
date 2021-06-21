@@ -3,6 +3,9 @@ from iconservice import *
 TAG = 'CompleteIRC2'
 DEFAULT_CAP_VALUE = 2 ** 256 - 1
 EOA_ZERO = Address.from_string('hx' + '0' * 40)
+FROM_BLOCK = "from_block"
+BALANCE = "balance"
+
 
 # An interface of ICON Token Standard, IRC-2
 class TokenStandard(ABC):
@@ -39,10 +42,16 @@ class TokenFallbackInterface(InterfaceScore):
     def tokenFallback(self, _from: Address, _value: int, _data: bytes):
         pass
 
+
 class IRC2Interface(InterfaceScore):
     @interface
     def transfer(self, _to: Address, _value: int, _data: bytes):
         pass
+
+
+def require(condition: bool, error: str):
+    if not condition:
+        revert(f"{error}")
 
 
 class CompleteIRC2(IconScoreBase):
@@ -53,6 +62,10 @@ class CompleteIRC2(IconScoreBase):
     _BALANCES = 'balances'
     _CAP = 'cap'
     _PAUSED = 'paused'
+    _SNAPSHOT_BALANCES = 'snapshot_balances'
+    _TOTAL_SNAPSHOTS = 'total_snapshots'
+    _SNAPSHOT_TOTAL_SUPPLY = 'snapshot_total_supply'
+    _TOTAL_SUPPLY_SNAPSHOT_COUNT = 'total_supply_snapshot_count'
 
     @eventlog(indexed=3)
     def Transfer(self, _from: Address, _to: Address, _value: int, _data: bytes):
@@ -71,32 +84,24 @@ class CompleteIRC2(IconScoreBase):
         self._total_supply = VarDB(self._TOTAL_SUPPLY, db, value_type=int)
         self._paused = VarDB(self._PAUSED, db, value_type=bool)
         self._cap = VarDB(self._CAP, db, value_type=int)
+        self._snapshot_balances = DictDB(self._SNAPSHOT_BALANCES, db, value_type=int, depth=3)
+        self._total_snapshots = DictDB(self._TOTAL_SNAPSHOTS, db, value_type=int)
+        self._snapshot_total_supply = DictDB(self._SNAPSHOT_TOTAL_SUPPLY, db, value_type=int, depth=2)
+        self._total_supply_snapshot_count = VarDB(self._TOTAL_SUPPLY_SNAPSHOT_COUNT, db, value_type=int)
 
-    def on_install(self, _name:str, _symbol:str, _initialSupply: int, _decimals: int, _cap: int = DEFAULT_CAP_VALUE, _paused:bool = False) -> None:
+    def on_install(self, _name: str, _symbol: str, _initialSupply: int, _decimals: int, _cap: int = DEFAULT_CAP_VALUE,
+                   _paused: bool = False) -> None:
         super().on_install()
-        if (len(_symbol) <= 0):
-            revert("Symbol of token should have at least one character")
-
-        if (len(_name) <= 0):
-            revert("Name of token should have at least one character")
-
-        if _initialSupply < 0:
-            revert("Initial supply cannot be less than zero")
-
-        if _decimals < 0:
-            revert("Decimals cannot be less than zero")
-
-        if _cap <= 0:
-            revert("Cap cannot be zero or less")
-
-        if _initialSupply >= _cap:
-            revert("Cannot exceed cap limit")
+        require(len(_symbol) > 0, f"{_symbol}: Symbol of token should have at least one character")
+        require(len(_name) > 0, f"{_name}: Name of token should have at least one character")
+        require(_initialSupply > 0, f"{_initialSupply}: Initial supply cannot be less than zero")
+        require(_decimals > 0, f"{_decimals}: Decimals cannot be less than zero")
+        require(_cap > 0, f"{_cap}: Cap cannot be zero or less")
+        require(_initialSupply < _cap,
+                f"Initial Supply {_initialSupply}, Cap {_cap}: {_name}: Initial supply cannot exceed cap limit")
 
         total_supply = _initialSupply * 10 ** _decimals
         total_cap = _cap * 10 ** _decimals
-
-        Logger.debug(f'on_install: total_supply={total_supply}', TAG)
-        Logger.debug(f'on_install: total_cap={total_cap}', TAG)
 
         self._name.set(_name)
         self._symbol.set(_symbol)
@@ -105,10 +110,14 @@ class CompleteIRC2(IconScoreBase):
         self._decimals.set(_decimals)
         self._paused.set(_paused)
         self._balances[self.msg.sender] = total_supply
+        self.Transfer(EOA_ZERO, self.msg.sender, total_supply, b"Mint initial supply")
+
+        self._update_balance(self.msg.sender, total_supply)
+        self._update_total_supply(total_supply)
 
     def on_update(self) -> None:
         super().on_update()
-    
+
     @external(readonly=True)
     def name(self) -> str:
         return self._name.get()
@@ -146,13 +155,13 @@ class CompleteIRC2(IconScoreBase):
     @external
     def mint(self, _value: int, _data: bytes = None) -> None:
         if _data is None:
-            _data = b'None'
+            _data = b'mint'
         self._mint(self.msg.sender, _value, _data)
 
     @external
     def mintTo(self, _to: Address, _value: int, _data: bytes = None) -> None:
         if _data is None:
-            _data = b'None'
+            _data = b'mintTo'
         self._mint(_to, _value, _data)
 
     @external
@@ -161,99 +170,164 @@ class CompleteIRC2(IconScoreBase):
 
     @external
     def pause(self) -> None:
-        if self.msg.sender != self.owner:
-            revert("Token can be paused by owner only")
-        if self._paused.get():
-            revert("Token is already in paused state")
+        require(self.msg.sender == self.owner, f"{self.name()}: Token can be paused by owner only")
+        require(not self._paused.get(), f"{self.name()}: Token is already in paused state")
 
         self._paused.set(True)
         self.Paused(True)
 
     @external
     def unpause(self) -> None:
-        if self.msg.sender != self.owner:
-            revert("Token can be unpaused by owner only")
-        if not self._paused.get():
-            revert("Token is already in unpaused state")
+        require(self.msg.sender == self.owner, f"{self.name()}: Token can be unpause by owner only")
+        require(self._paused.get(), f"{self.name()}: Token is already in unpause state")
 
         self._paused.set(False)
         self.Paused(False)
 
     @external
-    def tokenRecovery(self, _from: Address, _value: int, _data: bytes = None) -> None:
-        if self.msg.sender != self.owner:
-            revert("Token can be recovered by owner only")
-
-        if (self.balanceOf(self.address) < _value):
-            revert(f"Contract has {self.balanceOf(self.address)} tokens, asked to recover {_value}")
+    def tokenRecovery(self, _token: Address, _value: int, _data: bytes = None) -> None:
+        require(self.msg.sender == self.owner, f"{self.name()}: Token can be recovered by owner only")
+        require(self.balanceOf(self.address) >= _value,
+                f"{self.name()}: Contract has {self.balanceOf(self.address)} tokens, asked to recover {_value}")
+        require(_token.is_contract, f"{self.name()}: {_token} should be a contract.")
 
         if _data is None:
             _data = b'None'
 
-        if not _from.is_contract:
-            revert(f"{_from} should be a contract.")
-
-        token_score = self.create_interface_score(_from, IRC2Interface)
+        token_score = self.create_interface_score(_token, IRC2Interface)
         token_score.transfer(self.owner, _value, _data)
 
     @external
     def tokenFallback(self, _from: Address, _value: int, _data: bytes):
-        if _value < 0:
-            revert("Cannot be less than zero")
+        require(_value >= 0, f"{self.name()}: Tokens received cannot be less than zero")
 
     def _transfer(self, _from: Address, _to: Address, _value: int, _data: bytes):
 
         # Checks the sending value and balance.
-        if _value < 0:
-            revert("Transferring value cannot be less than zero")
-        if self._balances[_from] < _value:
-            revert("Out of balance")
+        require(_value >= 0, f"{self.name()}: Transferring value cannot be less than zero")
+        require(self._balances[_from] >= _value, f"{self.name()}: Out of balance")
+        require(not self._paused.get(), f"{self.name()}: Token operations paused")
 
         self._balances[_from] = self._balances[_from] - _value
         self._balances[_to] = self._balances[_to] + _value
 
-        self._beforeTokenTransfer(_from, _to, _value)
-
         if _to.is_contract:
             # If the recipient is SCORE,
             #   then calls `tokenFallback` to hand over control.
             recipient_score = self.create_interface_score(_to, TokenFallbackInterface)
             recipient_score.tokenFallback(_from, _value, _data)
 
+        self._update_balance(_from, self._balances[_from])
+        self._update_balance(_to, self._balances[_to])
         # Emits an event log `Transfer`
         self.Transfer(_from, _to, _value, _data)
-        Logger.debug(f'Transfer({_from}, {_to}, {_value}, {_data})', TAG)
 
     def _mint(self, _to: Address, _value: int, _data: bytes) -> None:
-        if (self.msg.sender != self.owner):
-            revert("Only owner can call mint method")
+        require(self.msg.sender == self.owner, f"{self.name()}: Only owner can call mint method")        
+        require(not self._paused.get(), f"{self.name()}: Token operations paused")
+        require(self.totalSupply() + _value < self._cap.get(), f"{self.name()}: Cap limit exceeded")
 
-        self._beforeTokenTransfer(EOA_ZERO, _to, _value)
-        
         self._total_supply.set(self._total_supply.get() + _value)
-        self._balances[_to] +=  _value
-        
+        self._balances[_to] += _value
+
         if _to.is_contract:
             # If the recipient is SCORE,
             #   then calls `tokenFallback` to hand over control.
             recipient_score = self.create_interface_score(_to, TokenFallbackInterface)
-            recipient_score.tokenFallback(_from, _value, _data)
-        
+            recipient_score.tokenFallback(EOA_ZERO, _value, _data)
+
+        self._update_balance(_to, self._balances[_to])
+        self._update_total_supply(self._total_supply.get())
         self.Transfer(EOA_ZERO, _to, _value, _data)
 
-    def _burn(self, _from: Address, _value: int,) -> None:
-        if self.balanceOf(_from) < _value:
-            revert('The amount greater than the balance in the account cannot be burned.')
+    def _burn(self, _from: Address, _value: int, ) -> None:
+        require(self.balanceOf(_from) >= _value,
+                f"{self.name()}: The amount greater than the balance in the account cannot be burned.")
 
-        self._beforeTokenTransfer(_from, EOA_ZERO, _value)
-        
+        require(not self._paused.get(), f"{self.name()}: Token operations paused")
+
         self._total_supply.set(self._total_supply.get() - _value)
-        self._balances[_from] -=  _value
+        self._balances[_from] -= _value
 
+        self._update_balance(_from, self._balances[_from])
+        self._update_total_supply(self._total_supply.get())
         self.Transfer(_from, EOA_ZERO, _value, b'burn')
 
-    def _beforeTokenTransfer(self, _from: Address, _to: Address, _value: int):
-        if self._paused.get():
-            revert("Token operations paused")
-        if ((self._total_supply.get() + _value) >= self._cap.get()):
-            revert("Cap limit exceeded")
+    @external(readonly=True)
+    def balanceOfAt(self, _owner: Address, _block_number: int) -> int:
+        require(_block_number < self.block_height, f"{self.name}: Block not yet determined")
+
+        total_snapshots = self._total_snapshots[_owner]
+        if total_snapshots == 0:
+            return 0
+
+        # Check for most recent balance
+        if self._snapshot_balances[_owner][total_snapshots - 1][FROM_BLOCK] <= _block_number:
+            return self._snapshot_balances[_owner][total_snapshots - 1][BALANCE]
+
+        # Check for implicit zero balance
+        if self._snapshot_balances[_owner][0][FROM_BLOCK] > _block_number:
+            return 0
+
+        low: int = 0
+        high: int = total_snapshots - 1
+        while high > low:
+            mid = high - (high - low)//2
+            if self._snapshot_balances[_owner][mid][FROM_BLOCK] == _block_number:
+                return self._snapshot_balances[_owner][mid][BALANCE]
+            elif self._snapshot_balances[_owner][mid][FROM_BLOCK] < _block_number:
+                low = mid
+            else:
+                high = mid - 1
+        return self._snapshot_balances[_owner][low][BALANCE]
+
+    @external(readonly=True)
+    def totalSupplyAt(self, _block_number: int) -> int:
+        require(_block_number < self.block_height, f"{self.name}: Block not yet determined")
+
+        total_snapshots = self._total_supply_snapshot_count.get()
+        if total_snapshots == 0:
+            return 0
+
+        # Check for most recent balance
+        if self._snapshot_total_supply[total_snapshots - 1][FROM_BLOCK] <= _block_number:
+            return self._snapshot_total_supply[total_snapshots - 1][BALANCE]
+
+        # Check for implicit zero balance
+        if self._snapshot_total_supply[0][FROM_BLOCK] > _block_number:
+            return 0
+
+        low: int = 0
+        high: int = total_snapshots - 1
+        while high > low:
+            mid = high - (high - low) // 2
+            if self._snapshot_total_supply[mid][FROM_BLOCK] == _block_number:
+                return self._snapshot_total_supply[mid][BALANCE]
+            elif self._snapshot_total_supply[mid][FROM_BLOCK] < _block_number:
+                low = mid
+            else:
+                high = mid - 1
+        return self._snapshot_total_supply[low][BALANCE]
+
+    def _update_balance(self, _owner: Address, _balance: int):
+
+        block_height = self.block_height
+        total_snapshots = self._total_snapshots[_owner]
+
+        if total_snapshots > 0 and self._snapshot_balances[_owner][total_snapshots - 1][FROM_BLOCK] == block_height:
+            self._snapshot_balances[_owner][total_snapshots - 1][BALANCE] = _balance
+        else:
+            self._snapshot_balances[_owner][total_snapshots - 1][FROM_BLOCK] = block_height
+            self._snapshot_balances[_owner][total_snapshots - 1][BALANCE] = _balance
+            self._total_snapshots[_owner] += 1
+
+    def _update_total_supply(self, _total_supply: int):
+        block_height = self.block_height
+        total_snapshots = self._total_supply_snapshot_count.get()
+
+        if total_snapshots > 0 and self._snapshot_total_supply[total_snapshots - 1][FROM_BLOCK] == block_height:
+            self._snapshot_total_supply[total_snapshots - 1][BALANCE] = _total_supply
+        else:
+            self._snapshot_total_supply[total_snapshots - 1][FROM_BLOCK] = block_height
+            self._snapshot_total_supply[total_snapshots - 1][BALANCE] = _total_supply
+            self._total_supply_snapshot_count.set(total_snapshots + 1)
