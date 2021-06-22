@@ -10,6 +10,7 @@ zip -r zips/mintpause_irc2.zip mintpause_irc2 -x "mintpause_irc2/tests/*"
 zip -r zips/mintburn_irc2.zip mintburn_irc2 -x "mintburn_irc2/tests/*"
 zip -r zips/mintburnpause_irc2.zip mintburnpause_irc2 -x "mintburnpause_irc2/tests/*"
 zip -r zips/complete_irc2.zip complete_irc2 -x "complete_irc2/tests/*"
+zip -r zips/stablecoin.zip stablecoin -x "stablecoin/tests/*"
 
 # IRC3 Zips
 zip -r zips/mintable_irc3.zip mintable_irc3 -x "mintable_irc3/tests/*"
