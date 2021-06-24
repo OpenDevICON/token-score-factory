@@ -176,7 +176,7 @@ class StableCoin(IconScoreBase, TokenStandard):
 	@external
 	def addIssuer(self, _issuer: Address) -> None:
 		'''
-		Add issuers. Issuers can mint and burn tokens.
+		Add issuers. Issuers can mint tokens.
 		Only admin can call this method.
 		
 		:param _issuer: The wallet address of issuer to be added
