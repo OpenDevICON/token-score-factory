@@ -81,7 +81,7 @@ class MintPauseIRC2(IconScoreBase):
         require(_initialSupply > 0, f"{_initialSupply}: Initial supply cannot be less than zero")
         require(_decimals > 0, f"{_decimals}: Decimals cannot be less than zero")
         require(_cap > 0, f"{_cap}: Cap cannot be zero or less")
-        require(_initialSupply < _cap,
+        require(_initialSupply <= _cap,
                 f"Initial Supply {_initialSupply}, Cap {_cap}: {_name}: Initial supply cannot exceed cap limit")
 
         total_supply = _initialSupply * 10 ** _decimals
@@ -184,7 +184,7 @@ class MintPauseIRC2(IconScoreBase):
         require(self.msg.sender == self.owner, f"{self.name()}: Only owner can call mint method")
         require(_value > 0, f"{self.name()}: Cannot mint zero or less tokens")
         require(not self._paused.get(), f"{self.name()}: Token operations paused")
-        require(self.totalSupply() + _value < self.cap(), f"{self.name()}: Cap limit exceeded")
+        require(self.totalSupply() + _value <= self.cap(), f"{self.name()}: Cap limit exceeded")
 
         self._total_supply.set(self._total_supply.get() + _value)
         self._balances[_to] += _value

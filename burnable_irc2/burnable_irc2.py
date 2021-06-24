@@ -115,6 +115,7 @@ class BurnableIRC2(IconScoreBase):
         self._burn(self.msg.sender, _value)
 
     def _burn(self, _from: Address, _value: int) -> None:
+        require(_value > 0, f"{self.name()}: Cannot burn zero or less amount")
         require(self.balanceOf(_from) >= _value,
                 f"{self.name()}: The amount greater than the balance in the account cannot be burned ")
         
