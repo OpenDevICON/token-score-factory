@@ -54,7 +54,7 @@ class StableCoin(IconScoreBase, TokenStandard):
     _ISSUERS = "issuers"
     _ALLOWANCES = "allowances"
     _WHITELIST = "whitelist"
-    _FREE_DAILY_TX_LIMIT = "whitelist"
+    _FREE_DAILY_TX_LIMIT = "free_daily_tx_limit"
 
     def __init__(self, db: IconScoreDatabase) -> None:
         """
@@ -222,7 +222,7 @@ class StableCoin(IconScoreBase, TokenStandard):
     @external(readonly=True)
     def isWhitelisted(self, _owner: Address) -> bool:
         """
-        Returns if wallet address is whitelited.
+        Returns if wallet address is whitelisted.
 
         :param _owner: The account to check if it is whitelisted
         """
