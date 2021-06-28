@@ -50,6 +50,9 @@ class StableCoin(IconScoreBase, TokenStandard):
     _ADMIN = "admin"
     _ISSUERS = "issuers"
     _ALLOWANCES = "allowances"
+    _WHITELIST = "whitelist"
+    _FREE_DAILY_TX_LIMIT = "whitelist"
+    _ICX_AMOUNT_TOuSER = "icx_amount_to_user"
 
     def __init__(self, db: IconScoreDatabase) -> None:
         '''
@@ -70,9 +73,9 @@ class StableCoin(IconScoreBase, TokenStandard):
         self._allowances = DictDB(self._ALLOWANCES,db,value_type=int)
         self._paused = VarDB(self._PAUSED, db, value_type=bool)
 
-        self._whitelist = DictDB('whitelist', db, value_type=int, depth=2)
-        self._free_daily_tx_limit = VarDB('free_daily_tx_limit', db, value_type=int)
-        self._icx_amount_to_user = VarDB('icx_amount_to_user', db, value_type=int)
+        self._whitelist = DictDB(self._WHITELIST, db, value_type=int, depth=2)
+        self._free_daily_tx_limit = VarDB(self._FREE_DAILY_TX_LIMIT, db, value_type=int)
+        self._icx_amount_to_user = VarDB(self._ICX_AMOUNT_TOuSER, db, value_type=int)
 
     def on_install(self, _name:str, _symbol:str, _decimals:int, _admin:Address, _nIssuers: int = 2) -> None:
         '''
@@ -216,6 +219,24 @@ class StableCoin(IconScoreBase, TokenStandard):
                 return self._free_daily_tx_limit.get() - self._whitelist[_owner]['free_tx_count_since_start']
         return 0
 
+    @external(readonly=True)
+    def ICXAmountToUser(self) -> int:
+        '''
+        Returns ICX amount sent to wallet when they are whitelisted.
+        '''
+        return self._icx_amount_to_user.get()
+
+    @external
+    def changeICXAmountToUser(self, _new_amount: int):
+        '''
+        Change icx amount sent to wallet when it is whitelisted
+
+        :param _new_amount: Amount to be sent to wallet on whitelisting it.
+        '''
+        require(_new_amount >= 0, "ICX sent to users cannot be under zero")
+        require(self.msg.sender == self._admin, "Only admin can change ICX amount to users")
+        self._icx_amount_to_user.set(_new_amount)
+
     @set_fee_sharing_percentage
     @external
     def transfer(self, _to: Address, _value: int, _data: bytes = None):
@@ -232,14 +253,12 @@ class StableCoin(IconScoreBase, TokenStandard):
     def changeFreeDailyTxLimit(self, _new_limit: int):
         '''
         Changes daily free transsactions limit for whitelisted users
-        Only score owner can call this method
+        Only admin can call this method
 
         :param _new_limit: 
         '''
-        if _new_limit < 0:
-            revert(f"{self.name()}: Free daily TX limit cannot be below 0")
         require(_new_limit >= 0, f"Free daily transaction limit cannot be under 0.")
-        require(self.msg.sender == self.owner, "Only score owner can change free daily transaction limit")
+        require(self.msg.sender == self._admin, "Only admin can change free daily transaction limit")
 
         self._free_daily_tx_limit.set(_new_limit)
 
