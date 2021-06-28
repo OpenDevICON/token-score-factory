@@ -52,7 +52,6 @@ class StableCoin(IconScoreBase, TokenStandard):
     _ALLOWANCES = "allowances"
     _WHITELIST = "whitelist"
     _FREE_DAILY_TX_LIMIT = "whitelist"
-    _ICX_AMOUNT_TOuSER = "icx_amount_to_user"
 
     def __init__(self, db: IconScoreDatabase) -> None:
         '''
@@ -75,7 +74,6 @@ class StableCoin(IconScoreBase, TokenStandard):
 
         self._whitelist = DictDB(self._WHITELIST, db, value_type=int, depth=2)
         self._free_daily_tx_limit = VarDB(self._FREE_DAILY_TX_LIMIT, db, value_type=int)
-        self._icx_amount_to_user = VarDB(self._ICX_AMOUNT_TOuSER, db, value_type=int)
 
     def on_install(self, _name:str, _symbol:str, _decimals:int, _admin:Address, _nIssuers: int = 2) -> None:
         '''
@@ -103,7 +101,6 @@ class StableCoin(IconScoreBase, TokenStandard):
         self._paused.set(False)
 
         self._free_daily_tx_limit.set(50)
-        self._icx_amount_to_user.set(2 * 10 ** 16)
 
     def on_update(self) -> None:
         super().on_update()
@@ -220,22 +217,13 @@ class StableCoin(IconScoreBase, TokenStandard):
         return 0
 
     @external(readonly=True)
-    def ICXAmountToUser(self) -> int:
-        '''
-        Returns ICX amount sent to wallet when they are whitelisted.
-        '''
-        return self._icx_amount_to_user.get()
+    def isWhitelisted(self, _owner: Address) -> bool:
+        """
+        Returns if wallet address is whitelited.
 
-    @external
-    def changeICXAmountToUser(self, _new_amount: int):
-        '''
-        Change icx amount sent to wallet when it is whitelisted
-
-        :param _new_amount: Amount to be sent to wallet on whitelisting it.
-        '''
-        require(_new_amount >= 0, "ICX sent to users cannot be under zero")
-        require(self.msg.sender == self._admin, "Only admin can change ICX amount to users")
-        self._icx_amount_to_user.set(_new_amount)
+        :param _owner: The account to check if it is whitelisted
+        """
+        return self._whitelist[_owner]['free_tx_start_height'] != 0
 
     @set_fee_sharing_percentage
     @external
@@ -447,6 +435,5 @@ class StableCoin(IconScoreBase, TokenStandard):
         if not self._whitelist[_to]['free_tx_start_height']:
             self._whitelist[_to]['free_tx_start_height'] = self.block_height
             self._whitelist[_to]['free_tx_count_since_start'] = 1
-            self.icx.send(_to, self._icx_amount_to_user.get())
 
             self.WhitelistWallet(_to, _data)
