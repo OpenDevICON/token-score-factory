@@ -225,6 +225,7 @@ class CompleteIRC2(IconScoreBase):
         require(self.msg.sender == self.owner, f"{self.name()}: Only owner can call mint method")        
         require(not self._paused.get(), f"{self.name()}: Token operations paused")
         require(self.totalSupply() + _value <= self._cap.get(), f"{self.name()}: Cap limit exceeded")
+        require(_value > 0, f"{self.name()}: Cannot mint zero or less tokens")
 
         self._total_supply.set(self._total_supply.get() + _value)
         self._balances[_to] += _value
