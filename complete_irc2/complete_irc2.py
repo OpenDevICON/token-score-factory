@@ -318,8 +318,8 @@ class CompleteIRC2(IconScoreBase):
         if total_snapshots > 0 and self._snapshot_balances[_owner][total_snapshots - 1][FROM_BLOCK] == block_height:
             self._snapshot_balances[_owner][total_snapshots - 1][BALANCE] = _balance
         else:
-            self._snapshot_balances[_owner][total_snapshots - 1][FROM_BLOCK] = block_height
-            self._snapshot_balances[_owner][total_snapshots - 1][BALANCE] = _balance
+            self._snapshot_balances[_owner][total_snapshots][FROM_BLOCK] = block_height
+            self._snapshot_balances[_owner][total_snapshots][BALANCE] = _balance
             self._total_snapshots[_owner] += 1
 
     def _update_total_supply(self, _total_supply: int):
@@ -329,6 +329,6 @@ class CompleteIRC2(IconScoreBase):
         if total_snapshots > 0 and self._snapshot_total_supply[total_snapshots - 1][FROM_BLOCK] == block_height:
             self._snapshot_total_supply[total_snapshots - 1][BALANCE] = _total_supply
         else:
-            self._snapshot_total_supply[total_snapshots - 1][FROM_BLOCK] = block_height
-            self._snapshot_total_supply[total_snapshots - 1][BALANCE] = _total_supply
+            self._snapshot_total_supply[total_snapshots][FROM_BLOCK] = block_height
+            self._snapshot_total_supply[total_snapshots][BALANCE] = _total_supply
             self._total_supply_snapshot_count.set(total_snapshots + 1)
