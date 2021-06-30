@@ -32,7 +32,7 @@ def set_fee_sharing_percentage(func):
                 self._whitelist[self.msg.sender]['free_tx_start_height'] = self.block_height
                 self._whitelist[self.msg.sender]['free_tx_count_since_start'] = 1
                 self.set_fee_sharing_proportion(100)
-            elif self._whitelist[self.msg.sender]['free_tx_count_since_start'] <= self._free_daily_tx_limit.get():
+            elif self._whitelist[self.msg.sender]['free_tx_count_since_start'] + 1 <= self._free_daily_tx_limit.get():
                 self._whitelist[self.msg.sender]['free_tx_count_since_start'] = \
                     self._whitelist[self.msg.sender]['free_tx_count_since_start'] + 1
                 self.set_fee_sharing_proportion(100)
