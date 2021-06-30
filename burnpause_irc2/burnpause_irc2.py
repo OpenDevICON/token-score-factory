@@ -161,6 +161,7 @@ class BurnPauseIRC2(IconScoreBase):
         self.Transfer(_from, _to, _value, _data)
 
     def _burn(self, _from: Address, _value: int) -> None:
+        require(_value > 0, f"{self.name()}: Cannot burn zero or less amount")
         require(self.balanceOf(_from) >= _value,
                 f"{self.name()}: The amount greater than the balance in the account cannot be burned ")
         require(not self.isPaused(), f"{self.name()}: Token operations paused")

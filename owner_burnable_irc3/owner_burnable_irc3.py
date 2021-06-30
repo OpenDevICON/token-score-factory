@@ -195,7 +195,8 @@ class OwnerBurnableIRC3(IconScoreBase):
 
     def _transfer(self, _from: Address, _to: Address, _tokenId: int) -> None:
         # check if token exists
-        self._token_exists(_tokenId)
+        if not self._token_exists(_tokenId):
+            revert("Trying to transfer non existent token")
         owner = self.ownerOf(_tokenId)
 
         if _from != owner:
@@ -215,13 +216,15 @@ class OwnerBurnableIRC3(IconScoreBase):
 
     def _approve(self, _to: Address, _tokenId: int):
         # check if token exists
-        self._token_exists(_tokenId)
+        if not self._token_exists(_tokenId):
+            revert("Trying to approve non existent token")
         self._token_approvals[_tokenId] = _to
         self.Approval(self.msg.sender, _to, _tokenId)
 
     def _isApprovedOrOwner(self, _spender: Address, _tokenId: int) -> bool:
         # check if token exists
-        self._token_exists(_tokenId)
+        if not self._token_exists(_tokenId):
+            revert("Query for a non existent token")
         owner = self.ownerOf(_tokenId)
         approved_to = self.getApproved(_tokenId)
         return _spender == owner or _spender == approved_to
