@@ -249,7 +249,7 @@ class StableCoin(IconScoreBase, TokenStandard):
         :param _new_limit:
         """
         require(_new_limit >= 0, f"Free daily transaction limit cannot be under 0.")
-        require(self.msg.sender == self._admin, "Only admin can change free daily transaction limit")
+        require(self.msg.sender == self._admin.get(), "Only admin can change free daily transaction limit")
 
         self._free_daily_tx_limit.set(_new_limit)
 
