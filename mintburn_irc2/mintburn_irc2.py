@@ -75,7 +75,7 @@ class MintBurnIRC2(IconScoreBase):
         require(_initialSupply > 0, f"{_initialSupply}: Initial supply cannot be less than zero")
         require(_decimals > 0, f"{_decimals}: Decimals cannot be less than zero")
         require(_cap > 0, f"{_cap}: Cap cannot be zero or less")
-        require(_initialSupply < _cap,
+        require(_initialSupply <= _cap,
                 f"Initial Supply {_initialSupply}, Cap {_cap}: {_name}: Initial supply cannot exceed cap limit")
 
         total_supply = _initialSupply * 10 ** _decimals
@@ -156,7 +156,7 @@ class MintBurnIRC2(IconScoreBase):
 
     def _mint(self, _to: Address, _value: int, _data: bytes) -> None:
         require(self.msg.sender == self.owner, f"{self.name()}: Only owner can call mint method")
-        require(self.totalSupply() + _value < self._cap.get(), f"{self.name()}: Cap limit exceeded")
+        require(self.totalSupply() + _value <= self._cap.get(), f"{self.name()}: Cap limit exceeded")
         require(_value > 0, f"{self.name()}: Cannot mint zero or less tokens")
 
         self._total_supply.set(self._total_supply.get() + _value)
@@ -171,6 +171,7 @@ class MintBurnIRC2(IconScoreBase):
         self.Transfer(EOA_ZERO, _to, _value, _data)
 
     def _burn(self, _from: Address, _value: int) -> None:
+        require(_value > 0, f"{self.name()}: Cannot burn zero or less tokens")
         require(self.balanceOf(_from) >= _value,
                 f"{self.name()}: The amount greater than the balance in the account cannot be burned ")
 
