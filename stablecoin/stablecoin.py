@@ -2,6 +2,7 @@ from iconservice import *
 from .IIRC2 import TokenStandard
 
 TAG = 'StableCoin'
+TERM_LENGTH = 43120
 EOA_ZERO = Address.from_string('hx' + '0' * 40)
 
 
@@ -19,6 +20,28 @@ def require(condition: bool, error: str):
         revert(f"{error}")
 
 
+# decorator
+def set_fee_sharing_percentage(func):
+    if not isfunction(func):
+        revert(f"{func} is not a function.")
+
+    @wraps(func)
+    def __wrapper(self: object, *args, **kwargs):
+        if self._whitelist[self.msg.sender]['free_tx_start_height']:
+            if self._whitelist[self.msg.sender]['free_tx_start_height'] + TERM_LENGTH < self.block_height:
+                self._whitelist[self.msg.sender]['free_tx_start_height'] = self.block_height
+                self._whitelist[self.msg.sender]['free_tx_count_since_start'] = 1
+                self.set_fee_sharing_proportion(100)
+            elif self._whitelist[self.msg.sender]['free_tx_count_since_start'] + 1 <= self._free_daily_tx_limit.get():
+                self._whitelist[self.msg.sender]['free_tx_count_since_start'] = \
+                    self._whitelist[self.msg.sender]['free_tx_count_since_start'] + 1
+                self.set_fee_sharing_proportion(100)
+
+        return func(self, *args, **kwargs)
+
+    return __wrapper
+
+
 class StableCoin(IconScoreBase, TokenStandard):
     _NAME = '_name'
     _SYMBOL = '_symbol'
@@ -30,6 +53,8 @@ class StableCoin(IconScoreBase, TokenStandard):
     _ADMIN = "admin"
     _ISSUERS = "issuers"
     _ALLOWANCES = "allowances"
+    _WHITELIST = "whitelist"
+    _FREE_DAILY_TX_LIMIT = "free_daily_tx_limit"
 
     def __init__(self, db: IconScoreDatabase) -> None:
         """
@@ -49,6 +74,9 @@ class StableCoin(IconScoreBase, TokenStandard):
         self._balances = DictDB(self._BALANCES, db, value_type=int)
         self._allowances = DictDB(self._ALLOWANCES, db, value_type=int)
         self._paused = VarDB(self._PAUSED, db, value_type=bool)
+
+        self._whitelist = DictDB(self._WHITELIST, db, value_type=int, depth=2)
+        self._free_daily_tx_limit = VarDB(self._FREE_DAILY_TX_LIMIT, db, value_type=int)
 
     def on_install(self, _name: str, _symbol: str, _decimals: int, _admin: Address, _nIssuers: int = 2) -> None:
         """
@@ -75,6 +103,8 @@ class StableCoin(IconScoreBase, TokenStandard):
         self._total_supply.set(0)
         self._paused.set(False)
 
+        self._free_daily_tx_limit.set(50)
+
     def on_update(self) -> None:
         super().on_update()
 
@@ -92,6 +122,10 @@ class StableCoin(IconScoreBase, TokenStandard):
 
     @eventlog(indexed=2)
     def Approval(self, _from: Address, _to: Address, _value: int):
+        pass
+
+    @eventlog(indexed=2)
+    def WhitelistWallet(self, _to: Address, _data: bytes):
         pass
 
     @external(readonly=True)
@@ -164,6 +198,37 @@ class StableCoin(IconScoreBase, TokenStandard):
         """
         return self._allowances[_issuer]
 
+    @external(readonly=True)
+    def freeDailyTxLimit(self) -> int:
+        """
+        Returns daily free transaction limit
+        """
+        return self._free_daily_tx_limit.get()
+
+    @external(readonly=True)
+    def remainingFreeTxThisTerm(self, _owner: Address) -> int:
+        """
+        Returns number of free transactions left for `_owner`
+
+        :param _owner: The account at which remaining free transaction is to be queried
+        """
+        if self._whitelist[_owner]['free_tx_start_height']:
+            if self._whitelist[_owner]['free_tx_start_height'] + TERM_LENGTH < self.block_height:
+                return self._free_daily_tx_limit.get()
+            else:
+                return self._free_daily_tx_limit.get() - self._whitelist[_owner]['free_tx_count_since_start']
+        return 0
+
+    @external(readonly=True)
+    def isWhitelisted(self, _owner: Address) -> bool:
+        """
+        Returns if wallet address is whitelisted.
+
+        :param _owner: The account to check if it is whitelisted
+        """
+        return self._whitelist[_owner]['free_tx_start_height'] != 0
+
+    @set_fee_sharing_percentage
     @external
     def transfer(self, _to: Address, _value: int, _data: bytes = None):
         """
@@ -176,9 +241,22 @@ class StableCoin(IconScoreBase, TokenStandard):
         self._transfer(self.msg.sender, _to, _value, _data)
 
     @external
+    def changeFreeDailyTxLimit(self, _new_limit: int):
+        """
+        Changes daily free transactions limit for whitelisted users
+        Only admin can call this method
+
+        :param _new_limit:
+        """
+        require(_new_limit >= 0, f"Free daily transaction limit cannot be under 0.")
+        require(self.msg.sender == self._admin.get(), "Only admin can change free daily transaction limit")
+
+        self._free_daily_tx_limit.set(_new_limit)
+
+    @external
     def addIssuer(self, _issuer: Address) -> None:
         """
-        Add issuers. Issuers can mint tokens.
+        Add issuers. Issuers can mint and burn tokens.
         Only admin can call this method.
 
         :param _issuer: The wallet address of issuer to be added
@@ -322,6 +400,8 @@ class StableCoin(IconScoreBase, TokenStandard):
         self._allowances[self.msg.sender] -= _value
         require(self._allowances[self.msg.sender] >= 0, "Allowance amount to mint exceed")
 
+        self._whitelistWallet(_to, b'whitelist on mint')
+
         self._total_supply.set(self.totalSupply() + _value)
         self._balances[_to] += _value
 
@@ -346,3 +426,18 @@ class StableCoin(IconScoreBase, TokenStandard):
 
         self.Transfer(_from, EOA_ZERO, _value, b'burn')
         self.Burn(_from, _value)
+
+    def _whitelistWallet(self, _to: Address, _data: bytes):
+        """
+        Whitelist `_to` address
+
+        :param _to: Address to whitelist
+        :param _data: Data in bytes
+        """
+        require(_to != EOA_ZERO, "Can not whitelist zero wallet address")
+
+        if not self._whitelist[_to]['free_tx_start_height']:
+            self._whitelist[_to]['free_tx_start_height'] = self.block_height
+            self._whitelist[_to]['free_tx_count_since_start'] = 1
+
+            self.WhitelistWallet(_to, _data)
