@@ -201,8 +201,7 @@ export const tokenTypeMapping = [
         tokenRecover: false,
         verifiedSourceCode: true,
         removeCopyright: false,
-
-        tokenUrl: 'https://raw.githubusercontent.com/OpenDevICON/token-score-factory/stablycoin/stablecoin.zip',
+        tokenUrl: 'https://raw.githubusercontent.com/OpenDevICON/token-score-factory/master/zips/stablecoin.zip',
         estimatedTransactionFee: 14.03,
         tokenInformation: ['name', 'symbol', 'decimals', 'admin', 'noOfIssuers']
 
