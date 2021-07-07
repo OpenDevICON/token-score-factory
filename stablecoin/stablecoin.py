@@ -190,7 +190,7 @@ class StableCoin(IconScoreBase, TokenStandard):
         return self._paused.get()
 
     @external(readonly=True)
-    def issuerAllowance(self, _issuer: Address) -> bool:
+    def issuerAllowance(self, _issuer: Address) -> int:
         """
         Returns amount of tokens that `_issuer` can mint at this point in time.
 
