@@ -74,7 +74,6 @@ class BasicIRC2(IconScoreBase, TokenStandard):
             revert("Decimals cannot be less than zero")
 
         total_supply = _initialSupply * 10 ** _decimals
-        Logger.debug(f'on_install: total_supply={total_supply}', TAG)
 
         self._name.set(_name)
         self._symbol.set(_symbol)
@@ -130,4 +129,3 @@ class BasicIRC2(IconScoreBase, TokenStandard):
 
         # Emits an event log `Transfer`
         self.Transfer(_from, _to, _value, _data)
-        Logger.debug(f'Transfer({_from}, {_to}, {_value}, {_data})', TAG)
