@@ -178,7 +178,6 @@ class MintPauseIRC2(IconScoreBase):
 
         # Emits an event log `Transfer`
         self.Transfer(_from, _to, _value, _data)
-        Logger.debug(f'Transfer({_from}, {_to}, {_value}, {_data})', TAG)
 
     def _mint(self, _to: Address, _value: int, _data: bytes) -> None:
         require(self.msg.sender == self.owner, f"{self.name()}: Only owner can call mint method")
