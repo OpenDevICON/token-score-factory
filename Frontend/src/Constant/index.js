@@ -275,16 +275,16 @@ export const networkMapping = [
         CONTRACT_STATUS_ADDRESS: 'cx0000000000000000000000000000000000000001',
     },
 
-    // {
-    //     name: 'ICON Testnet (Sejong)',
-    //     value: 'sejong',
-    //     NID: '0x53',
-    //     NODE_URL: 'https://sejong.net.solidwallet.io/api/v3',
-    //     NODE_DEBUG_URL:  'https://sejong.net.solidwallet.io/api/debug/v3',
-    //     TRACKER_URL: 	'https://sejong.tracker.solidwallet.io',
-    //     CONTRACT_DEPLOY_ADDRESS: 'cx0000000000000000000000000000000000000000',
-    //     CONTRACT_STATUS_ADDRESS: 'cx0000000000000000000000000000000000000001'
-    // },
+    {
+        name: 'ICON Testnet (Sejong)',
+        value: 'sejong',
+        NID: '0x53',
+        NODE_URL: 'https://sejong.net.solidwallet.io/api/v3',
+        NODE_DEBUG_URL: 'https://sejong.net.solidwallet.io/api/v3d',
+        TRACKER_URL: 'https://sejong.tracker.solidwallet.io/',
+        CONTRACT_DEPLOY_ADDRESS: 'cx0000000000000000000000000000000000000000',
+        CONTRACT_STATUS_ADDRESS: 'cx0000000000000000000000000000000000000001'
+    },
 
     {
         name: 'ICON Mainnet',
