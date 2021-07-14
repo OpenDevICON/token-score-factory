@@ -7,7 +7,7 @@ import { Col, Form, Row, Button } from 'react-bootstrap';
 const FinalStepsCard = (formik) => {
 
     return (
-        <Card style={{ width: '100%', marginTop: '20px', marginBottom: '20px' }}>
+        <Card style={{ width: '100%', marginTop: '20px', marginBottom: '45px' }}>
             <Card.Body>
 
                 <div className="form-header" style={{ textAlign: 'center' }}>Final Steps</div>
