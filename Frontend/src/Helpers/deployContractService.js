@@ -4,6 +4,9 @@ import { ICONEXResponse } from "./eventHandler";
 import { ERROR_MESSAGES, WALLET_TYPE } from 'Constant';
 import Transport from '@ledgerhq/hw-transport-u2f';
 import AppIcx from '@ledgerhq/hw-app-icx';
+import secp from 'secp256k1';
+import ethUtil from 'ethereumjs-util';
+import {sha3_256} from 'js-sha3';
 
 async function estimateStepForDeployment(from, content, selectedNetworkData) {
   const timestampInDecimal = Date.now() * 1000;
@@ -47,17 +50,55 @@ async function estimateStepForDeployment(from, content, selectedNetworkData) {
   }
 }
 
-const signTransaction = async (transaction, walletPath) => {
+const signTransaction = async (transaction, walletPath, address) => {
   const rawTransaction = IconConverter.toRawTransaction(transaction);
   const hashKey = IconUtil.generateHashKey(rawTransaction);
   const transport = await Transport.create();
   const icx = new AppIcx(transport);
-  const { signedRawTxBase64 } = await icx.signTransaction(walletPath, hashKey);
+  const { signedRawTxBase64, hashHex } = await icx.signTransaction(walletPath, hashKey);
+
+  console.group("Verifying");
+  console.log('signedRawTxBase64', signedRawTxBase64);
+  console.log('hashHex', hashHex);
+
+  // console.log('Validating with signedRawTxBase64');
+  // const validateSignatur = validateSignature(signedRawTxBase64, address, hashKey);
+  // console.log(validateSignatur);
+
+  console.log('Validating with hashHex');
+  const validateSignature2 = validateSignature(hashHex, address, hashKey);
+  console.log(validateSignature2);
+
+  console.groupEnd();
+
   rawTransaction.signature = signedRawTxBase64;
   return {
     getProperties: () => rawTransaction,
     getSignature: () => signedRawTxBase64
   };
+}
+
+const validateSignature = (signature, address, payload) => {
+	const signatureArray = Buffer.from(signature, 'base64');
+	const signatureBuffer = signatureArray.subarray(0, 64);
+	const recoveryBuffer = signatureArray.subarray(64);
+
+	//Genrate the public key from signature, recovery_key and payload
+	const publicKey = secp.ecdsaRecover(signatureBuffer,
+		parseInt(recoveryBuffer.toString('hex')),
+		new Uint8Array(Buffer.from(payload, 'hex')),
+		false);
+	const publicKeyBuffer = ethUtil.toBuffer(publicKey.slice(1));
+
+	console.log('Length of public key buffer:' + publicKeyBuffer.length);
+
+	//Decode the address from public key hash by taking last 40 bytes
+	//Adding hx as prefix for idenitifying the EOA in ICON
+	const decodedAddress = 'hx' + sha3_256(publicKeyBuffer).slice(-40);
+
+	console.log('Requestor address' + decodedAddress);
+
+	return address === decodedAddress;
 }
 
 export async function deployContractService(contractContent, params = {}, selectedNetworkData) {
@@ -112,12 +153,16 @@ export async function deployContractService(contractContent, params = {}, select
             clearInterval(interval);
             resolve(ICONEXResponse.getTxnHash());
           }
-        }, 1000)
+        }, 1000);
       } else if (walletType === WALLET_TYPE.LEDGER) {
+        console.log("ledger found");
+
+        const address = localStorage.getItem('wallet_address');
+
         const provider = new HttpProvider(selectedNetworkData.NODE_URL);
         const iconService = new IconService(provider);  
         const walletPath = localStorage.getItem('ledger_path');
-        const signedTransaction = await signTransaction(txnData, walletPath);
+        const signedTransaction = await signTransaction(txnData, walletPath, address);
         console.log("Signed tx = ", signedTransaction);
         try{
           const res = await iconService.sendTransaction(signedTransaction).execute();
