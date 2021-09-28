@@ -2,6 +2,7 @@ from iconservice import *
 
 TAG = 'BasicIRC2'
 
+
 # An interface of ICON Token Standard, IRC-2
 class TokenStandard(ABC):
     @abstractmethod
@@ -57,13 +58,13 @@ class BasicIRC2(IconScoreBase, TokenStandard):
         self._balances = DictDB(self._BALANCES, db, value_type=int)
         self._total_supply = VarDB(self._TOTAL_SUPPLY, db, value_type=int)
 
-    def on_install(self, _name:str, _symbol:str, _initialSupply: int, _decimals: int) -> None:
+    def on_install(self, _name: str, _symbol: str, _initialSupply: int, _decimals: int) -> None:
         super().on_install()
 
-        if (len(_symbol) <= 0):
+        if len(_symbol) <= 0:
             revert("Symbol of token should have at least one character")
 
-        if (len(_name) <= 0):
+        if len(_name) <= 0:
             revert("Name of token should have at least one character")
 
         if _initialSupply < 0:
@@ -73,7 +74,6 @@ class BasicIRC2(IconScoreBase, TokenStandard):
             revert("Decimals cannot be less than zero")
 
         total_supply = _initialSupply * 10 ** _decimals
-        Logger.debug(f'on_install: total_supply={total_supply}', TAG)
 
         self._name.set(_name)
         self._symbol.set(_symbol)
@@ -129,4 +129,3 @@ class BasicIRC2(IconScoreBase, TokenStandard):
 
         # Emits an event log `Transfer`
         self.Transfer(_from, _to, _value, _data)
-        Logger.debug(f'Transfer({_from}, {_to}, {_value}, {_data})', TAG)
