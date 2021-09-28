@@ -14,8 +14,9 @@
     }
 
     .ibriz-text {
-        color: #FF541E;
+        color: white;
         margin-left: 10px;
+        font-size: 1.2rem;
     }
 
     .footer-middle-col {
@@ -34,5 +35,9 @@
 .developedBy, .supportedBy {
     a:hover {
         text-decoration: none !important;
+    }
+
+    img {
+        width: 200px;
     }
 }

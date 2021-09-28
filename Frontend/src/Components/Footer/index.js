@@ -1,6 +1,5 @@
 import React from 'react';
 import { Col, Row } from 'react-bootstrap';
-import ibrizSvg from 'Assets/svg/ibriz.svg';
 import techflowImg from 'Assets/images/techflow.png';
 import { useLocation } from 'react-router';
 
@@ -12,16 +11,16 @@ const Footer = () => {
             <Row>
                 <Col lg = "6" style={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center', flexDirection: 'column'  }} className = "developedBy">
                     <span className="footer-text">Developed By:</span>
-                    <a style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }} href="https://techflow.space/" target="_blank" rel="noreferrer">
-                        <img src={techflowImg} alt="" style={{height: '2.3rem'}} />
+                    <a style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '50px' }} href="https://techflow.space/" target="_blank" rel="noreferrer">
+                        <img src={techflowImg} alt="" style={{width: '100px'}} />
                     </a>
                 </Col>
 
                 <Col lg = "6" style={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center', flexDirection: 'column' }} className = "supportedBy">
                     <span className="footer-text">Supported By:</span>
-                    <a style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }} href="https://ibriz.ai/" target="_blank" rel="noreferrer">
-                    <img src={ibrizSvg} alt="" />
-                    <span className="footer-text ibriz-text">iBriz.ai</span>
+                    <a style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '50px' }} href="https://ibriz.ai/" target="_blank" rel="noreferrer">
+                    <span className="footer-text ibriz-text">ICONOSPHERE</span>
+
                     </a>
                 </Col>
                     
