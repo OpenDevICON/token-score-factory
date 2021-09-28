@@ -11,15 +11,15 @@ const Footer = () => {
             <Row>
                 <Col lg = "6" style={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center', flexDirection: 'column'  }} className = "developedBy">
                     <span className="footer-text">Developed By:</span>
-                    <a style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '50px' }} href="https://techflow.space/" target="_blank" rel="noreferrer">
-                        <img src={techflowImg} alt="" style={{width: '100px'}} />
+                    <a style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '40px' }} href="https://techflow.space/" target="_blank" rel="noreferrer">
+                        <img src={techflowImg} alt="" style={{width: '90px'}} />
                     </a>
                 </Col>
 
                 <Col lg = "6" style={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center', flexDirection: 'column' }} className = "supportedBy">
                     <span className="footer-text">Supported By:</span>
-                    <a style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '50px' }} href="https://ibriz.ai/" target="_blank" rel="noreferrer">
-                    <span className="footer-text ibriz-text">ICONOSPHERE</span>
+                    <a style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '40px' }} href="https://iconosphere.io/" target="_blank" rel="noreferrer">
+                    <span className="footer-text ibriz-text">ICONOsphere.io</span>
 
                     </a>
                 </Col>
