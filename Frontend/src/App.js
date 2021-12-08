@@ -16,7 +16,7 @@ function App() {
 
   const location = useLocation();
   const [walletAddress, setWalletAddress] = useState(null);
-  const [maintenanceMode, setmaintenanceMode] = useState(true);
+  const maintenanceMode = true;
   return (
     <div style={{ width: '100%', minHeight: '100%', backgroundColor: location.pathname === '/create'?'#EDEDED':'white'}} >
         <Container fluid>
