@@ -12,6 +12,7 @@ import './Assets/styles/faq.scss';
 import './Assets/styles/homepageheader.scss';
 import './Assets/styles/selectwalletmodal.scss';
 import './Assets/styles/deployresultmodal.scss';
+import './Assets/styles/maintenancemodal.scss';
 import 'react-notifications/lib/notifications.css';
 import { BrowserRouter as Router } from 'react-router-dom'
 
