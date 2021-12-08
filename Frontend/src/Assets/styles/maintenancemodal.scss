@@ -1,0 +1,25 @@
+.maintenance-modal {
+    backdrop-filter: blur(5px);
+    .modal-content {
+        background: #49B1B8;
+        box-shadow: 5px 5px 34px 14px rgb(0 0 0 / 25%);
+    }
+
+    .modal-body {
+        .body-content {
+            h3 {
+                color: #fff;
+                text-align: center;
+            }
+            p {
+                margin-bottom: 0;
+                color: #fff;
+                text-align: center;
+            }
+        }
+        
+    }
+
+}
+
+

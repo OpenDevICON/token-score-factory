@@ -1,6 +1,6 @@
 import './App.css';
 import CreatePage from './Pages/CreatePage';
-import { Container } from 'react-bootstrap';
+import { Container, Modal } from 'react-bootstrap';
 import { NotificationContainer } from 'react-notifications';
 import Footer from 'Components/Footer';
 import Header from 'Components/Header';
@@ -16,6 +16,7 @@ function App() {
 
   const location = useLocation();
   const [walletAddress, setWalletAddress] = useState(null);
+  const [maintenanceMode, setmaintenanceMode] = useState(true);
   return (
     <div style={{ width: '100%', minHeight: '100%', backgroundColor: location.pathname === '/create'?'#EDEDED':'white'}} >
         <Container fluid>
@@ -31,6 +32,15 @@ function App() {
 
         </Container>
         <Footer />
+
+        <Modal backdropClassName='maintenance-backdrop' className='maintenance-modal' centered show={maintenanceMode}>
+          <Modal.Body>
+            <div className="body-content">
+              <h3>Site under maintenance...</h3>
+              <p className="maintenance-msg">Python contracts are not accepted currently in ICON mainnet. Token Score Factory will be live soon with Java contracts.</p>
+            </div>
+          </Modal.Body>
+        </Modal>
 
 
         <NotificationContainer />
