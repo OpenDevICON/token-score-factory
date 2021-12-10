@@ -253,50 +253,60 @@ export const tokenTypeMapping = [
 ]
 
 export const networkMapping = [
-    {
-        name: 'ICON Testnet (Yeouido)',
-        value: 'yeouido',
-        NID: `0x3`,
-        NODE_URL: 'https://bicon.net.solidwallet.io/api/v3',
-        NODE_DEBUG_URL: 'https://bicon.net.solidwallet.io/api/debug/v3',
-        TRACKER_URL: 'https://bicon.tracker.solidwallet.io/',
-        CONTRACT_DEPLOY_ADDRESS: 'cx0000000000000000000000000000000000000000',
-        CONTRACT_STATUS_ADDRESS: 'cx0000000000000000000000000000000000000001',
-    },
-
-    {
-        name: 'ICON Testnet (Pagoda)',
-        value: 'pagoda',
-        NID: `0x50`,
-        NODE_URL: 'https://zicon.net.solidwallet.io/api/v3',
-        NODE_DEBUG_URL: 'https://zicon.net.solidwallet.io/api/debug/v3',
-        TRACKER_URL: 'https://zicon.tracker.solidwallet.io/',
-        CONTRACT_DEPLOY_ADDRESS: 'cx0000000000000000000000000000000000000000',
-        CONTRACT_STATUS_ADDRESS: 'cx0000000000000000000000000000000000000001',
-    },
+    // {
+    //     name: 'ICON Testnet (Yeouido)',
+    //     value: 'yeouido',
+    //     NID: `0x3`,
+    //     NODE_URL: 'https://bicon.net.solidwallet.io/api/v3',
+    //     NODE_DEBUG_URL: 'https://bicon.net.solidwallet.io/api/debug/v3',
+    //     TRACKER_URL: 'https://bicon.tracker.solidwallet.io/',
+    //     CONTRACT_DEPLOY_ADDRESS: 'cx0000000000000000000000000000000000000000',
+    //     CONTRACT_STATUS_ADDRESS: 'cx0000000000000000000000000000000000000001',
+    // },
 
     // {
-    //     name: 'ICON Testnet (Sejong)',
-    //     value: 'sejong',
-    //     NID: '0x53',
-    //     NODE_URL: 'https://sejong.net.solidwallet.io/api/v3',
-    //     NODE_DEBUG_URL:  'https://sejong.net.solidwallet.io/api/debug/v3',
-    //     TRACKER_URL: 	'https://sejong.tracker.solidwallet.io',
+    //     name: 'ICON Testnet (Pagoda)',
+    //     value: 'pagoda',
+    //     NID: `0x50`,
+    //     NODE_URL: 'https://zicon.net.solidwallet.io/api/v3',
+    //     NODE_DEBUG_URL: 'https://zicon.net.solidwallet.io/api/debug/v3',
+    //     TRACKER_URL: 'https://zicon.tracker.solidwallet.io/',
     //     CONTRACT_DEPLOY_ADDRESS: 'cx0000000000000000000000000000000000000000',
-    //     CONTRACT_STATUS_ADDRESS: 'cx0000000000000000000000000000000000000001'
+    //     CONTRACT_STATUS_ADDRESS: 'cx0000000000000000000000000000000000000001',
     // },
 
     {
-        name: 'ICON Mainnet',
-        value: 'mainnet',
-        NID: `0x1`,
-        NODE_URL: 'https://ctz.solidwallet.io/api/v3',
-        NODE_DEBUG_URL: 'https://ctz.solidwallet.io/api/debug/v3',
-        TRACKER_URL: 'https://tracker.icon.foundation/',
+        name: 'ICON Testnet (Sejong)',
+        value: 'sejong',
+        NID: '0x53',
+        NODE_URL: 'https://sejong.net.solidwallet.io/api/v3',
+        NODE_DEBUG_URL:  'https://sejong.net.solidwallet.io/api/v3d',
+        TRACKER_URL: 	'https://sejong.tracker.solidwallet.io',
         CONTRACT_DEPLOY_ADDRESS: 'cx0000000000000000000000000000000000000000',
-        CONTRACT_STATUS_ADDRESS: 'cx0000000000000000000000000000000000000001',
+        CONTRACT_STATUS_ADDRESS: 'cx0000000000000000000000000000000000000001'
+    },
+    {
+        name: 'ICON Testnet (Berlin)',
+        value: 'berlin',
+        NID: '0x7',
+        NODE_URL: 'https://berlin.net.solidwallet.io/api/v3',
+        NODE_DEBUG_URL:  'https://berlin.net.solidwallet.io/api/v3d',
+        TRACKER_URL: 	'https://berlin.tracker.solidwallet.io',
+        CONTRACT_DEPLOY_ADDRESS: 'cx0000000000000000000000000000000000000000',
+        CONTRACT_STATUS_ADDRESS: 'cx0000000000000000000000000000000000000001'
+    },
 
-    }
+    // {
+    //     name: 'ICON Mainnet',
+    //     value: 'mainnet',
+    //     NID: `0x1`,
+    //     NODE_URL: 'https://ctz.solidwallet.io/api/v3',
+    //     NODE_DEBUG_URL: 'https://ctz.solidwallet.io/api/debug/v3',
+    //     TRACKER_URL: 'https://tracker.icon.foundation/',
+    //     CONTRACT_DEPLOY_ADDRESS: 'cx0000000000000000000000000000000000000000',
+    //     CONTRACT_STATUS_ADDRESS: 'cx0000000000000000000000000000000000000001',
+
+    // }
 ]
 
 export const WALLET_TYPE = {

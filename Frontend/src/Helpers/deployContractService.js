@@ -5,7 +5,7 @@ import { ERROR_MESSAGES, WALLET_TYPE } from 'Constant';
 import Transport from '@ledgerhq/hw-transport-u2f';
 import AppIcx from '@ledgerhq/hw-app-icx';
 
-async function estimateStepForDeployment(from, content, selectedNetworkData) {
+async function estimateStepForDeployment(from, content, selectedNetworkData, params) {
   const timestampInDecimal = Date.now() * 1000;
   const timestamp = '0x' + timestampInDecimal.toString(16); //to hex string
   const txObj = {
@@ -23,6 +23,7 @@ async function estimateStepForDeployment(from, content, selectedNetworkData) {
       data: {
         contentType: "application/zip",
         content, // compressed SCORE data
+        params,
       }
     }
   }
@@ -68,8 +69,7 @@ export async function deployContractService(contractContent, params = {}, select
 
       const { IconConverter, IconBuilder } = IconService;
       const deployBuilder = new IconBuilder.DeployTransactionBuilder();
-
-      const stepLimitInHex = await estimateStepForDeployment(localStorage.getItem('wallet_address'), contractContent, selectedNetworkData);
+      const stepLimitInHex = await estimateStepForDeployment(localStorage.getItem('wallet_address'), contractContent, selectedNetworkData, params);
       const stepLimit = new BigNumber(stepLimitInHex).toNumber();
 
       const txnData = deployBuilder
