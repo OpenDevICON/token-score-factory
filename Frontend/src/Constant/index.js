@@ -296,17 +296,17 @@ export const networkMapping = [
         CONTRACT_STATUS_ADDRESS: 'cx0000000000000000000000000000000000000001'
     },
 
-    {
-        name: 'ICON Mainnet',
-        value: 'mainnet',
-        NID: `0x1`,
-        NODE_URL: 'https://ctz.solidwallet.io/api/v3',
-        NODE_DEBUG_URL: 'https://ctz.solidwallet.io/api/debug/v3',
-        TRACKER_URL: 'https://tracker.icon.foundation/',
-        CONTRACT_DEPLOY_ADDRESS: 'cx0000000000000000000000000000000000000000',
-        CONTRACT_STATUS_ADDRESS: 'cx0000000000000000000000000000000000000001',
+    // {
+    //     name: 'ICON Mainnet',
+    //     value: 'mainnet',
+    //     NID: `0x1`,
+    //     NODE_URL: 'https://ctz.solidwallet.io/api/v3',
+    //     NODE_DEBUG_URL: 'https://ctz.solidwallet.io/api/debug/v3',
+    //     TRACKER_URL: 'https://tracker.icon.foundation/',
+    //     CONTRACT_DEPLOY_ADDRESS: 'cx0000000000000000000000000000000000000000',
+    //     CONTRACT_STATUS_ADDRESS: 'cx0000000000000000000000000000000000000001',
 
-    }
+    // }
 ]
 
 export const WALLET_TYPE = {
