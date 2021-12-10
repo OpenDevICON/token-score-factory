@@ -48,7 +48,7 @@ function DeployResultModal({ deployResult, ...props }) {
                         <Row className="result-row">
                             <Col lg="3" className="result-row-key">Transaction Hash:</Col>
                             <Col lg="9" className="result-row-value">
-                                <a href={`${deployResult?.selectedNetworkData?.TRACKER_URL}transaction/${deployResult.txHash}`} target="_blank" rel="noreferrer noopener">{deployResult.txHash}</a>
+                                <a href={`${deployResult?.selectedNetworkData?.TRACKER_URL}/transaction/${deployResult.txHash}`} target="_blank" rel="noreferrer noopener">{deployResult.txHash}</a>
                             </Col>
                         </Row> : null
                 }
@@ -58,7 +58,7 @@ function DeployResultModal({ deployResult, ...props }) {
                         <Row className="result-row">
                             <Col lg="3" className="result-row-key">Score Address:</Col>
                             <Col lg="9" className="result-row-value">
-                                <a href={`${deployResult?.selectedNetworkData?.TRACKER_URL}contract/${deployResult.scoreAddress}`} target="_blank" rel="noreferrer noopener">{deployResult.scoreAddress}</a>
+                                <a href={`${deployResult?.selectedNetworkData?.TRACKER_URL}/contract/${deployResult.scoreAddress}`} target="_blank" rel="noreferrer noopener">{deployResult.scoreAddress}</a>
                             </Col>
 
                         </Row> : null
